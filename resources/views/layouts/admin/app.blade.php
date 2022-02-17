@@ -28,6 +28,15 @@
 
     </style>
 
+    <style type="text/css">
+         label {
+        width: 30%;
+    }
+    input[type="radio"]{
+        margin-left: 10%
+    }
+    </style>
+
         <meta name="_t" content="{{ csrf_token() }}" />
         
     <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicons/apple-icon-57x57.png')}}">

@@ -20,32 +20,34 @@ class HomeController
         public function old()
     {
 
+
        $sliders = Slider::where('status','1')->where('start_date','<=',date('Y-m-d'))->where('end_date','>=',date('Y-m-d'))->orderBy('priority','ASC')->get();
 
        $bannerHorizontal = Banner::where('priority','1')->where('status',1)->first();
 
-       $bannerVertical1 = Banner::where('priority','>',1)->limit(2)->get();
+       $bannerVertical1 = Banner::where('priority','>',1)->orderBy('priority','ASC')->limit(2)->get();
 
-       $bannerVertical2 = Banner::where('priority','>',3)->limit(3)->get();
+       $bannerVertical2 = Banner::where('priority','>',3)->orderBy('priority','ASC')->limit(3)->get();
 
-       // var_dump($bannerVertical2); die;
+       // print_r($bannerVertical2); die;
+       // die;
 
        $brands = Brand::where('status','1')->orderBy('priority','ASC')->get();
        $testimonials = Testimonial::where('status','1')->orderBy('id','DESC')->get();
 
        $top_categories = Category::where('is_top',1)->where('status','1')->get();
 
-       $featured_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.is_featured',1)->where('products.status',1)->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('category_product.id')->limit(20)->get();
+       $featured_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.is_featured',1)->where('products.status',1)->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('category_product.product_id')->limit(20)->get();
 
-       $trending_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.is_trending',1)->orderBy('products.id','DESC')->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('category_product.id')->limit(20)->get();
+       $trending_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.is_trending',1)->orderBy('products.id','DESC')->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('category_product.product_id')->limit(20)->get();
 
-       $top_rated_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.is_top_rated',1)->where('products.status',1)->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('category_product.id')->limit(20)->get();
+       $top_rated_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.is_top_rated',1)->where('products.status',1)->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('category_product.product_id')->limit(20)->get();
 
        // var_dump($featured_products); die;
 
-       $sale_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.sale_price','!=',NULL)->where('products.status',1)->orderBy('products.id','DESC')->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('products.id')->limit(20)->get();
+       $sale_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.sale_price','!=',NULL)->where('products.status',1)->orderBy('products.id','ASC')->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('category_product.product_id')->limit(20)->get();
 
-       $best_seller_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.is_best_seller',1)->orderBy('products.id','DESC')->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('products.id')->limit(20)->get();
+       $best_seller_products = Product::JOIN('category_product','category_product.product_id','products.id')->JOIN('categories','categories.id','category_product.category_id')->where('products.is_best_seller',1)->orderBy('products.id','DESC')->select('products.*','categories.name as category_name','categories.slug as category_slug')->distinct('category_product.product_id')->limit(20)->get();
 
         $recent_viewed_products = Product::where('status','1')->orderBy('click_count','DESC')->limit(20)->get();
 

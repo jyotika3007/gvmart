@@ -1,6 +1,7 @@
 @extends('layouts.admin.app')
 
 @section('content')
+
     <!-- Main content -->
     <section class="content">
         @include('layouts.errors-and-messages')
@@ -49,10 +50,14 @@
 
                     <div class="form-group">
                         <label for="status">Status </label>
-                        <select name="status" id="status" class="form-control">
+
+
+<input type="radio" name="status" id="status" value="1" checked /> Enable
+<input type="radio" name="status" id="status" value="0" /> Disable
+                       <!--  <select name="status" id="status" class="form-control">
                             <option value="0">Disable</option>
                             <option value="1">Enable</option>
-                        </select>
+                        </select> -->
                     </div>
                     
                 </div>

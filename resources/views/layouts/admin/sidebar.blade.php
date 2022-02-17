@@ -51,8 +51,8 @@
                 </a>
                 <ul class="treeview-menu">
                      @if($admin->user_role!='vendor')
-                    <li><a href="{{ route('admin.shop_categories.index') }}"> <i class="fa fa-circle-o"></i> Manage Shop Categories</a></li>
-                    <li><a href="{{ route('admin.registered_shops.index') }}"> <i class="fa fa-circle-o"></i> Manage Shops</a></li>
+                    <li><a href="{{ route('admin.shop_categories.index') }}"> <i class="fa fa-circle-o"></i> Manage Vendor Categories</a></li>
+                    <li><a href="{{ route('admin.registered_shops.index') }}"> <i class="fa fa-circle-o"></i> Manage Vendors</a></li>
             <li><a href="{{ route('admin.brands.index') }}"> <i class="fa fa-circle-o"></i> Manage Brands</a></li>
            
             <li><a href="{{ route('admin.pincodes.index' )}}"> <i class="fa fa-circle-o"></i> Manage Pincode</a></li>

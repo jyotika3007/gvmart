@@ -244,6 +244,8 @@ public function vendor_products()
             $data['status'] = 0;
         }
 
+        $data['sku'] = rand(2,50);
+
         $lastProduct = Product::create($data);
 
         if ($request->hasFile('image')) {

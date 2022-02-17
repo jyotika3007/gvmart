@@ -90,7 +90,7 @@
                                                 <input type="hidden" name="price" value="{!! $product->price !!}" required="required">
                                                 <div class="input-group col-sm-6">
                                                     <span class="input-group-addon">{{ config('cart.currency') }}</span>
-                                                    <input type="text" id="price" placeholder="Price" class="form-control" value="{!! $product->price !!}" required="required"  onkeyup="getPrice(this)">
+                                                    <input type="text" id="price" name="price" placeholder="Price" class="form-control" value="{!! $product->price !!}" required="required"  onkeyup="getPrice(this)">
                                                 </div>
 
                                             </div>

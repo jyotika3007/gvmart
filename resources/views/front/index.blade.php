@@ -300,64 +300,7 @@
 	</div>
 	@endif
 	
-	<!--=====  End of Slider with banner ======-->
 
-	<!--=============================================
-	=            Multi sale slider         =
-	=============================================-->
-	<!-- 
-	<div class="slider multisale-slider mb-35">
-		<div class="container-fluid" style="margin: 0 1% !important; width: 98%;">
-			<div class="row">
-				<div class="col-lg-12">
-					
-					<div class="section-title">
-						<h3>gv mart deal of the day</h3>
-					</div>
-					
-					
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					
-					<div class="multisale-slider-wrapper">
-						
-						<div class="gf-product multisale-slider-product">
-							<div class="image">
-								<a href="#">
-									<span class="onsale">Sale!</span>
-									<img src="{{ asset('assets/images/products/product01.jpg') }}" class="img-fluid" alt="">
-								</a>
-								<div class="product-hover-icons">
-									<a href="#" data-tooltip="Add to cart"> <span class="icon_cart_alt"></span></a>
-									<a href="#" data-tooltip="Add to wishlist"> <span class="icon_heart_alt"></span> </a>
-									<a href="#" data-tooltip="Quick view" data-toggle = "modal" data-target="#quick-view-modal-container"> <span class="icon_search"></span> </a>
-								</div>
-							</div>
-							<div class="product-countdown" data-countdown="2021/05/01"></div>
-							<div class="product-content">
-								<div class="product-categories">
-									<a href="#">Fast Foods</a>,
-									<a href="#">Vegetables</a>
-								</div>
-								<h3 class="product-title"><a href="#">Ornare sed consequat nisl eget</a></h3>
-								<div class="price-box">
-									<span class="main-price">$89.00</span>
-									<span class="discounted-price">$80.00</span>
-								</div>
-							</div>
-							
-						</div>
-						
-					</div>
-					
-				</div>
-			</div>
-		</div>
-	</div> -->
-	
-	<!--=====  End of Multi sale slider  ======-->
 
 
 
@@ -626,7 +569,7 @@
 										@else
 										<a href="#">
 										@endif
-					<img src="{{ asset('assets/images/banners/22.jpg') }}" style="width: 100%; height: auto; margin-bottom: 20px; ">
+					<img src="{{ asset('storage/'.$banner->cover) }}" style="width: 100%; height: auto; margin-bottom: 20px; ">
 				</a>
 				</div>
 				@endforeach

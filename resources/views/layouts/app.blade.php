@@ -18,6 +18,15 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style type="text/css">
+         label {
+        width: 30%;
+    }
+    input[type="radio"]{
+        margin-left: 10%
+    }
+    </style>
 </head>
 <body>
     <div id="app">

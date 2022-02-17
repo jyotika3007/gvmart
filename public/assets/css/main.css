@@ -174,10 +174,13 @@ ul {
     overflow: hidden;
     opacity: 0; }
     .tab-content .tab-pane.active {
+      text-align: center;
       height: auto;
       visibility: visible;
       opacity: 1;
-      overflow: visible; }
+      overflow: visible;
+      padding: 20px;
+       }
 
 /*----------  on sale badge  ----------*/
 .onsale {
@@ -3954,7 +3957,11 @@ a#more-btn {
        }
   .single-product-content-container .nav.small-image-slider-single-product a img,
   .single-product-content-container .nav.small-image-slider-single-product-tabstyle-3 a img {
-    width: 100%;
+    /*width: 100%;*/
+    display: flex;
+    align-items: center;
+    margin: auto;
+    height: 100px;
     -webkit-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out; }
