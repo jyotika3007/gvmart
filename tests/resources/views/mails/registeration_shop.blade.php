@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Welcome To {{ config('app.name') }}</title>
+<style>
+.box
+{
+        height: 63px;
+    border: 1px solid #000;
+    background: black;
+    color: #fff;
+    line-height: 32px;
+    margin-left: 15%;
+    margin-right: 15%;
+    padding-left: 11%;
+    border-radius: 10px
+}
+.small-box
+{
+    height: 29px;
+    border: 1px solid #000;
+    background: black;
+    color: #fff;
+    line-height: 28px;
+    margin-left: 42%;
+    margin-right: 15%;
+    padding-left: 5%;
+    border-radius: 10px;
+    width: 44%;
+}
+.snapBox
+{
+        height: 100px;
+    border: 1px solid #000;
+    width: 45%;
+}
+</style>
+</head>
+
+<body>
+<!-- <div width="512" style="text-align:center;">
+    <a href="#">Can't see our images? Click here.</a>
+</div> -->
+<table align="center" border="0" cellspacing="0" cellpadding="0" width="512" style="border:1px solid #e8e8e8;">
+    <tbody>
+        <tr><td colspan="3" height="10"></td></tr>
+        <tr>
+            <td width="10"></td>
+            <td>
+                <table border="0" cellspacing="0" cellpadding="0" width="490">
+                    <tbody>
+                        <tr>
+                          <td colspan="3" height="70" align="center" style="background-color:#eeeeee">
+                            <a href="{{ url('/') }}"> <img src="{{ asset('front/in%20hand%20city%20logo-10.png') }}" width="100" height="65"></a>
+                          </td>
+                        </tr>
+                        <tr><td colspan="3" height="10"></td></tr>
+                        <tr>
+                            <td width="10"></td>
+                            <td>
+                                
+                                <h2>Connect with us form sent successfully</h2>
+                                <br>
+                            </td>
+                            <td width="10"></td>
+                        </tr>
+                        @if($type=='admin')
+                        <tr>
+                            <td width="10"></td>
+                            <td>
+                            
+                                <p> A new vendor fill an application form to connect with us. Details are listed below :   </p>
+                                <br>
+                            </td>
+                            <td width="10"></td>
+                        </tr>
+                        <tr>
+                            <td width="10"></td>
+                            <td>
+                              
+                               <h4>Category : {{$data['category_name'] ?? ''}}</h4>
+                               <h4>Shop Name : {{$data['shop_name'] ?? ''}}</h4>
+                               <h4>Shop Owner : {{$data['owner_name'] ?? ''}} </h4>
+                               <h4>Email : {{$data['email'] ?? ''}} </h4>
+                               <h4>Contact : {{$data['contact'] ?? ''}} </h4>
+                               <h4>Address : {{$data['address'] ?? ''}}, {{ $data['city'] ?? ''}}, {{ $data['state'] ?? '' }} - ({{ $data['pincode'] ?? ''}}) </h4>
+                               
+                                <br>
+                            </td>
+                            <td width="10"></td>
+                        </tr>
+                        @else
+                        <tr>
+                            <td width="10"></td>
+                            <td>
+                            
+                                <p>Hii {{ $data['owner_name'] }}, your request to connect with In Hand City is send Successfully. Our team will contact you soon. </p>
+                                <br>
+                            </td>
+                            <td width="10"></td>
+                        </tr>
+                        <tr>
+                            <td width="10"></td>
+                            <td>
+                                
+                              Submitted Details -<br>
+                               <h4>Category : {{$data['category_name'] ?? ''}}</h4>
+                               <h4>Shop Name : {{$data['shop_name'] ?? ''}}</h4>
+                               <h4>Shop Owner : {{$data['owner_name'] ?? ''}} </h4>
+                               <h4>Email : {{$data['email'] ?? ''}} </h4>
+                               <h4>Contact : {{$data['contact'] ?? ''}} </h4>
+                               <h4>Address : {{$data['address'] ?? ''}}, {{ $data['city'] ?? ''}}, {{ $data['state'] ?? '' }} - ({{ $data['pincode'] ?? ''}}) </h4>
+                               
+                                <br>
+                            </td>
+                            <td width="10"></td>
+                        </tr>
+                        @endif
+                        <tr><td colspan="3" height="10"></td></tr>
+                        <tr><td colspan="3" height="30" style="background-color:#e06f47;"></td></tr>
+                    </tbody>
+                </table>
+            </td>
+            <td width="10"></td>
+        </tr>
+        <tr><td colspan="3" height="10"></td></tr>
+    </tbody>
+</table>
+</body>
+</html>

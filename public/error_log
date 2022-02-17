@@ -1,0 +1,11 @@
+[10-Aug-2020 17:14:33 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/vistahgt/public_html/city.pluslearning.ac.in/app/Http/Controllers/Admin/Bookings/BookingController.php on line 5
+[10-Aug-2020 19:42:30 UTC] PHP Fatal error:  Cannot use StdClass as StdClass because the name is already in use in /home/vistahgt/public_html/city.pluslearning.ac.in/app/Http/Controllers/Front/CheckoutController.php on line 17
+[25-Sep-2020 14:42:54 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Front\AjaxController::submitContactForm() in /home/vistahgt/public_html/gvmart.pluslearning.ac.in/app/Http/Controllers/Front/AjaxController.php on line 317
+[20-Oct-2020 10:08:27 UTC] PHP Warning:  Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+[20-Oct-2020 10:08:27 UTC] PHP Warning:  Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+[20-Oct-2020 10:08:27 UTC] PHP Warning:  Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+[20-Oct-2020 10:08:27 UTC] PHP Warning:  Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+[20-Oct-2020 10:08:27 UTC] PHP Warning:  Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+[20-Oct-2020 10:08:27 UTC] PHP Warning:  Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+[20-Oct-2020 10:08:27 UTC] PHP Warning:  Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+[20-Oct-2020 10:08:27 UTC] PHP Warning:  Maximum number of allowable file uploads has been exceeded in Unknown on line 0
