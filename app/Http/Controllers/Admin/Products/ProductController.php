@@ -244,7 +244,7 @@ public function vendor_products()
             $data['status'] = 0;
         }
 
-        $data['sku'] = rand(2,50);
+        $data['sku'] = "SKU".rand(10,999999999);
 
         $lastProduct = Product::create($data);
 
