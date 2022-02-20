@@ -6746,9 +6746,12 @@ footer {
     height: 210px;
     object-fit: contain;}
 
-.banner-slider-product .image a img{ width: 100%;
-    height: 210px;
-    object-fit: contain;}
+.banner-slider-product .image a img{ 
+  width: auto;
+    margin: auto;
+    max-height: 180px;
+    object-fit: contain;
+  }
 
 
 

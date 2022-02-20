@@ -141,7 +141,7 @@
 									<div class="cart-float-single-item d-flex">
 										<span class="remove-item"><a href="#"><i class="fa fa-times"></i></a></span>
 										<div class="cart-float-single-item-image">
-											<a href="single-product.html"><img src="assets/images/products/product01.jpg" class="img-fluid" alt=""></a>
+											<a href="single-product.html"><img src="#" class="img-fluid" alt=""></a>
 										</div>
 										<div class="cart-float-single-item-desc">
 											<p class="product-title"> <a href="single-product.html">Duis pulvinar obortis eleifend </a></p>
@@ -328,7 +328,7 @@
 									</thead>
 									<tbody>
 										<tr>
-											<td class="pro-thumbnail"><a href="#"><img src="assets/images/products/product01.jpg" class="img-fluid" alt="Product"></a></td>
+											<td class="pro-thumbnail"><a href="#"><img src="#" class="img-fluid" alt="Product"></a></td>
 											<td class="pro-title"><a href="#">Cillum dolore tortor nisl fermentum</a></td>
 											<td class="pro-price"><span>$29.00</span></td>
 											<td class="pro-quantity"><div class="pro-qty"><input type="text" value="1"></div></td> 

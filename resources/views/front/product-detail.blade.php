@@ -141,7 +141,7 @@
                                         <div class="cart-float-single-item d-flex">
                                             <span class="remove-item"><a href="#"><i class="fa fa-times"></i></a></span>
                                             <div class="cart-float-single-item-image">
-                                                <a href="single-product.html"><img src="assets/images/products/product01.jpg" class="img-fluid" alt=""></a>
+                                                <a href="single-product.html"><img src="#" class="img-fluid" alt=""></a>
                                             </div>
                                             <div class="cart-float-single-item-desc">
                                                 <p class="product-title"> <a href="single-product.html">Duis pulvinar obortis eleifend </a></p>
@@ -667,7 +667,7 @@
                             <div class="image">
                                 <a href="single-product.html">
                                     <span class="onsale">Sale!</span>
-                                    <img src="assets/images/products/product01.jpg" class="img-fluid" alt="">
+                                    <img src="#" class="img-fluid" alt="">
                                 </a>
                                 <div class="product-hover-icons">
                                     <a href="#" data-tooltip="Add to cart"> <span class="icon_cart_alt"></span></a>
@@ -850,7 +850,7 @@
                             <div class="image">
                                 <a href="single-product.html">
                                     <span class="onsale">Sale!</span>
-                                    <img src="assets/images/products/product01.jpg" class="img-fluid" alt="">
+                                    <img src="#" class="img-fluid" alt="">
                                 </a>
                                 <div class="product-hover-icons">
                                     <a href="#" data-tooltip="Add to cart"> <span class="icon_cart_alt"></span></a>
@@ -1273,7 +1273,7 @@
                                     <div class="tab-pane fade show active" id="single-slide-quick-1" role="tabpanel" aria-labelledby="single-slide-tab-quick-1">
                                         <!--Single Product Image Start-->
                                         <div class="single-product-img img-full">
-                                            <img src="assets/images/products/product01.jpg" class="img-fluid" alt="">
+                                            <img src="#" class="img-fluid" alt="">
                                         </div>
                                         <!--Single Product Image End-->
                                     </div>
@@ -1304,7 +1304,7 @@
                                 <div class="product-small-image-list"> 
                                     <div class="nav small-image-slider" role="tablist">
                                         <div class="single-small-image img-full">
-                                            <a data-toggle="tab" id="single-slide-tab-quick-1" href="#single-slide-quick-1"><img src="assets/images/products/product01.jpg"
+                                            <a data-toggle="tab" id="single-slide-tab-quick-1" href="#single-slide-quick-1"><img src="#"
                                                 class="img-fluid" alt=""></a>
                                             </div>
                                             <div class="single-small-image img-full">

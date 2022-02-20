@@ -142,12 +142,12 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 	.heading {
     text-align: center;
     color: #454343;
-    font-size: 30px;
-    font-weight: 700;
+    font-size: 25px;
+    font-weight: 500;
     position: relative;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
     color: #000;
-    /*margin-bottom: 70px;*/
+    /* margin-bottom: 70px; */
     text-transform: uppercase;
     z-index: 999;
 }
@@ -163,7 +163,7 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
     width: 180px;
     border-radius: 4px;
     transform: translateX(-50%);
-    background: url(img/heading-line.png);
+    background: url(#);
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -200,14 +200,15 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 
 .testimonial {
     min-height: 375px;
-    margin: 0 6%;
+    margin: 0 6% 25px;
     width: 88%;
     position: relative;
     /*background-image: linear-gradient(rgba(200,200,200,0.5),rgba(200,200,200,0.5)); */
         /*background-image: linear-gradient(rgba(37,182,82,0.5),rgba(37,182,82,0.5)); */
-    background: url(https://i.ibb.co/PTJDkgb/testimonials.jpg);
-    padding-top: 50px;
-    padding-bottom: 50px;
+    background: url('/bg_img/b1.jpg');
+    /*padding-top: 50px;*/
+    padding-top: 35px;
+    padding-bottom: 35px;
     background-position: center;
         background-size: cover;
 }
@@ -345,8 +346,8 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
     top: 0;
     left: 0;
     right: 0;
-    width: 136px;
-    height: 136px;
+    width: 110px;
+    height: 110px;
     margin: auto;
     display: block;
     color: #f2f2f2;
@@ -362,9 +363,9 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 }
 .testimonial4_slide p {
     color: #ffffff;
-    font-size: 20px;
+    font-size: 15px;
     line-height: 1.4;
-    margin: 40px 0 20px 0;
+    margin: 30px 0 20px 0;
 }
 .testimonial4_slide h4 {
   color: #ffffff;
@@ -376,13 +377,18 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 }
 
 .testimonial .carousel {
-	padding-bottom:50px;
+	padding-bottom:0px;
 }
 .testimonial .carousel-control-next-icon, .testimonial .carousel-control-prev-icon {
-    width: 35px;
-    height: 35px;
+    width: 25px;
+    height: 25px;
 }
 /* ------testimonial  close-------*/
+
+#cart-floating-box img{
+	max-width: 75px !important;
+	max-height: 75px !important;
+}
 </style>
 
 
@@ -533,7 +539,7 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 												</a>
 											</div>
 											<div class="cart-float-single-item-desc">
-												<p class="product-title"> <a href="{{ url('productDetail/'.$product->slug ?? '') }}">{{ ucfirst($product->name ?? '') }}</a></p>
+												<p class="product-title"> <a href="{{ url('productDetail/'.$product->slug ?? '') }}">{{ substr(ucfirst($product->name ?? ''),0,25) }}...</a></p>
 												<p class="price"><span class="count">{{ $cart->quantity }}x</span> {{ $cart->unit_price ?? '' }}</p>
 											</div>
 										</div>
@@ -564,7 +570,7 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 												</a>
 											</div>
 											<div class="cart-float-single-item-desc">
-												<p class="product-title"> <a href="{{ url('productDetail/'.$product->slug ?? '') }}">{{ ucfirst($product->name ?? '') }}</a></p>
+												<p class="product-title"> <a href="{{ url('productDetail/'.$product->slug ?? '') }}">{{ substr(ucfirst($product->name ?? ''),0,25) }}...</a></p>
 												<p class="price"><span class="count">{{ $cart->quantity }}x</span> {{ $cart->unit_price ?? '' }}</p>
 											</div>
 										</div>
@@ -1019,7 +1025,7 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 									<div class="tab-pane fade show active" id="single-slide1" role="tabpanel" aria-labelledby="single-slide-tab-1">
 										<!--Single Product Image Start-->
 										<div class="single-product-img img-full">
-											<img src="{{ asset('assets/images/products/product01.jpg') }}" class="img-fluid" alt="" id="mainCoverImage">
+											<img src="{{ asset('#') }}" class="img-fluid" alt="" id="mainCoverImage">
 										</div>
 										<!--Single Product Image End-->
 									</div>
@@ -1038,7 +1044,7 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 									<div class="nav small-image-slider" role="tablist" id="gridViewProductImage">
 										
 										<!-- <div class="single-small-image img-full">
-											<a data-toggle="tab" id="single-slide-tab-1" href="#single-slide1"><img src="{{ asset('assets/images/products/product01.jpg') }}"
+											<a data-toggle="tab" id="single-slide-tab-1" href="#single-slide1"><img src="{{ asset('#') }}"
 												class="img-fluid" alt=""></a>
 											</div> -->
 											
@@ -1128,7 +1134,7 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 							<div class="product-image-slider">
 								<!--Modal Tab Menu Start-->
 
-											<a data-toggle="tab" id="single-slide-tab-1" href="#single-slide1"><img src="{{ asset('assets/images/banners/123.jpg') }}"
+											<a data-toggle="tab" id="single-slide-tab-1" href="#single-slide1"><img src="{{ asset('#') }}"
 												class="img-fluid" alt="" style="height: auto; width: 70%; margin: 0% 10% 3%"></a>
 											</div>
 											

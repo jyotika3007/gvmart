@@ -40,7 +40,7 @@
       
     },
     failure: function (data) {
-     Swal('Something Went Wrong');
+     Swal('Oops...','Something Went Wrong','error');
    }
  });
   });
@@ -177,7 +177,7 @@ function isNumberKey1(evt)
       
     },
     failure: function (data) {
-     Swal('Something Went Wrong');
+     Swal('Oops...','Something Went Wrong','error');
    }
  });
 
@@ -204,13 +204,15 @@ function isNumberKey1(evt)
         postRegister();
       } 
       else{
-        Swal('Invalid OTP');
+        // Swal('Invalid OTP');
+        Swal('Ohh...','Invalid OTP','error');
         $('#email_otp').empty();
       }          
       
     },
     failure: function (data) {
-     Swal('Something Went Wrong');
+      Swal('Oops...','Something Went Wrong','error');
+     // Swal('Something Went Wrong');
    }
  });
 
@@ -224,7 +226,7 @@ function isNumberKey1(evt)
 @if(!empty(session()->get('successNewsletter')))
 <script type="text/javascript">
   // alert();
-  Swal(<?php echo "'".session()->get('successNewsletter')."'";?>);
+  Swal("",<?php echo "'".session()->get('successNewsletter')."'";?>,'success');
 </script>
 @endif
 
@@ -238,7 +240,7 @@ function isNumberKey1(evt)
 @if(!empty(session()->get('shopSuccess')))
 <script type="text/javascript">
   // alert();
-  Swal(<?php echo "'".session()->get('shopSuccess')."'";?>);
+  Swal('Great',<?php echo "'".session()->get('shopSuccess')."'";?>,'success');
 </script>
 @endif
 
@@ -262,7 +264,7 @@ function isNumberKey1(evt)
      data: $('#registerCustomer').serialize(),
      success: function (data) {
 
-      Swal('Registration Successful');
+      Swal("Done",'Registration Successful','success');
       setTimeout(function(){
         window.location.href = '/';       
       }, 3000);
@@ -270,7 +272,8 @@ function isNumberKey1(evt)
       
     },
     failure: function (data) {
-     Swal('Something Went Wrong');
+      Swal('Oops...','Something Went Wrong','error');
+     // Swal('Something Went Wrong');
    }
  });
     
@@ -298,7 +301,7 @@ function isNumberKey1(evt)
     userId = <?php if(!empty(Auth::user()->id)){echo Auth::user()->id;} else {echo 0;}?> ;
 
     if(userId == 0){
-      Swal('Please Login First');
+      Swal('Oops...','Please Login First','warning');
     }
     else{
         // Swal(id);
@@ -308,7 +311,8 @@ function isNumberKey1(evt)
          type: 'POST',
          data: {_token: CSRF_TOKEN, id: id, userId : userId},
          success: function (data) {
-           Swal(data.message);         
+          Swal('Yeah ',data.message,'success');
+           // Swal(data.message);         
 
            
            setTimeout(function(){
@@ -317,7 +321,8 @@ function isNumberKey1(evt)
 
          },
          failure: function (data) {
-           Swal(data);
+           // Swal(data);
+           Swal('Oops...',data,'error');
          }
        });
       }
@@ -448,12 +453,14 @@ function deleteAddress(id){
            // location.reload();
          },
          failure: function (data) {
-           Swal(data.message);
+           // Swal(data.message);
+           Swal('Oops...',data.message,'error');
          }
        });
         }
         else{
-          Swal('Product Out Of Stock.');
+           Swal("Sorry", "Product Out Of Stock.", "warning");
+          // Swal('Product Out Of Stock.');
         }
 
       }
@@ -478,7 +485,7 @@ function addToCart(id){
            success: function (data) {
 
              if(data=='No'){
-              Swal('Cart quantity exceeds the stock limit');
+              Swal('Ohh...','Cart quantity exceeds the stock limit','warning');
             }
             else{
 
@@ -488,8 +495,12 @@ function addToCart(id){
            jQuery('#cartSuccess').text('Product added to cart successfully');
            jQuery("#cartSuccess").hide().slideDown();
            
-           Swal('Product added to cart successfully.');
+           // Swal('Product added to cart successfully.');
+           Swal("Great", "Product added to cart successfully.", "success");
            
+           let audio = new Audio('/notify/Notification.mp3');
+           audio.play();
+
            setTimeout(function(){
             location.reload();      
           }, 3000);
@@ -498,12 +509,14 @@ function addToCart(id){
          }
        },
        failure: function (data) {
-         Swal(data.message);
+         // Swal(data.message);
+         Swal('Oops...',data.message,'error');
        }
      });
         }
         else{
-          Swal('Product Out Of Stock.');
+           Swal("Sorry", "Product Out Of Stock.", "warning");
+          // Swal('Product Out Of Stock.');
         }
       }
 
@@ -598,7 +611,8 @@ function addToCart(id){
 
        },
        failure: function (data) {
-         alert('Something went wrong');
+         // alert('Something went wrong');
+         Swal('Oops...',data,'error');
        }
      });
    }
@@ -662,12 +676,13 @@ function addToCartWishlist(id){
            // location.reload();
          },
          failure: function (data) {
-           Swal(data.message);
+           // Swal(data.message);
+           Swal('Oops...',data.message,'error');
          }
        });
         }
         else{
-          Swal('Product Out Of Stock.');
+          Swal('Ohh..','Product Out Of Stock.','warning');
         }
       }
 
@@ -860,7 +875,8 @@ function addToCartWishlist(id){
            // location.reload();
          },
          failure: function (data) {
-           Swal(data.message);
+           // Swal(data.message);
+           Swal('Oops...',data.message,'error');
          }
        });
 
@@ -888,7 +904,8 @@ function addToCartWishlist(id){
 
        },
        failure: function (data) {
-         Swal(data.message);
+         // Swal(data.message);
+         Swal('Oops...','Something Went Wrong','error');
        }
      });
 

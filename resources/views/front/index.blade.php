@@ -759,20 +759,20 @@
     box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.1);
     margin: 50px 0; padding:30px 10px; }
 </style>
-
+<!-- 
 @if($testimonials)
 <div class="container-fluid" style="margin: 0 5%; width: 90%" id="myslidersec">
 	<div class="row">
 	 <div class="col-lg-12 mx-auto" >
 			<h2>testimonial</h2>
 			<div id="myCarousel" class="carousel slide" data-ride="carousel">
-				<!-- Carousel indicators -->
+				
 				<ol class="carousel-indicators">
 					@foreach($testimonials as $key => $test)
 					<li data-target="#myCarousel" data-slide-to="{{ $key }}" class="@if($key==0){{'active'}}@endif"></li>
 				@endforeach
 				</ol>   
-				<!-- Wrapper for carousel items -->
+				
 				<div class="carousel-inner">
 					@foreach($testimonials as $key => $test)
 					<div class="carousel-item @if($key==0){{'active'}}@endif">
@@ -784,7 +784,7 @@
 				@endforeach
 					
 				</div>
-				<!-- Carousel controls -->
+			
 				<a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
 					<i class="fa fa-angle-left"></i>
 				</a>
@@ -796,47 +796,47 @@
 	</div>
 </div>
 
-@endif
+@endif -->
 
 
 
 <!--=============================================
 	=           Testimonial slider container         =
 	=============================================-->
-	<!--@if($testimonials)-->
+	@if($testimonials)
 	
- <!--<section class="testimonial text-center slider blog-slider mb-35">-->
- <!--       <div class="container-fluid" style="margin: 0 5%; width: 90%">-->
+ <section class="testimonial text-center slider blog-slider ">
+        <div class="container-fluid" style="margin: 0 5%; width: 90%">
 
- <!--           <div class="heading white-heading">-->
- <!--               Testimonial-->
- <!--           </div>-->
- <!--           <div id="testimonial4" class="carousel slide testimonial4_indicators testimonial4_control_button thumb_scroll_x swipe_x" data-ride="carousel" data-pause="hover" data-interval="5000" data-duration="2000">-->
+            <div class="heading white-heading">
+                Testimonial
+            </div>
+            <div id="testimonial4" class="carousel slide testimonial4_indicators testimonial4_control_button thumb_scroll_x swipe_x" data-ride="carousel" data-pause="hover" data-interval="5000" data-duration="2000">
              
- <!--               <div class="carousel-inner" role="listbox">-->
- <!--               	@foreach($testimonials as $key => $test)-->
- <!--                   <div class="carousel-item @if($key == 0){{'active'}}@endif">-->
- <!--                       <div class="testimonial4_slide">-->
- <!--                           <img src="{{ asset('storage/'.$test->cover ?? '') }}" class="img-circle img-responsive" />-->
- <!--                           <p><?php echo $test->description ?></p>-->
- <!--                           <h4>{{ ucfirst($test->name ?? '') }}</h4>-->
- <!--                           <h5>{{ ucfirst($test->profession ?? '') }}</h5>-->
- <!--                       </div>-->
- <!--                   </div>-->
- <!--                   @endforeach-->
+                <div class="carousel-inner" role="listbox">
+                	@foreach($testimonials as $key => $test)
+                    <div class="carousel-item @if($key == 0){{'active'}}@endif">
+                        <div class="testimonial4_slide">
+                            <img src="{{ asset('storage/'.$test->cover ?? '') }}" class="img-circle img-responsive" />
+                           <p><?php echo $test->description ?></p>
+                            <h4>{{ ucfirst($test->name ?? '') }}</h4>
+                            <h5>{{ ucfirst($test->profession ?? '') }}</h5>
+                        </div>
+                    </div>
+                    @endforeach
                    
- <!--               </div>-->
- <!--               <a class="carousel-control-prev" href="#testimonial4" data-slide="prev">-->
- <!--                   <span class="carousel-control-prev-icon"></span>-->
- <!--               </a>-->
- <!--               <a class="carousel-control-next" href="#testimonial4" data-slide="next">-->
- <!--                   <span class="carousel-control-next-icon"></span>-->
- <!--               </a>-->
- <!--           </div>-->
- <!--       </div>-->
- <!--   </section>-->
+                </div>
+                <a class="carousel-control-prev" href="#testimonial4" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#testimonial4" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
+            </div>
+        </div>
+    </section>
 
- <!--   @endif-->
+    @endif
 	
 	<!--=====  End of Testimonial Slider  ======-->
 
@@ -895,23 +895,5 @@
 	<!--=====  End of Brand logo slider  ======-->
 	@endif
 
-
-@endsection
-
-@section('scripts')
-
-@if(!session()->get('store_pincode'))
-
-		<!--<script type="text/javascript">-->
-			
-		<!--	$('document').ready(function(){-->
-				
-				
-		<!--		$('#quick-pincode-modal-button').click();-->
-
-		<!--	});-->
-
-		<!--</script>-->
-		@endif
 
 @endsection
