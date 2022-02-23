@@ -21,6 +21,8 @@ class HomeController
     {
 
 
+        // echo "YEs"; die;
+
        $sliders = Slider::where('status','1')->where('start_date','<=',date('Y-m-d'))->where('end_date','>=',date('Y-m-d'))->orderBy('priority','ASC')->get();
 
        $bannerHorizontal = Banner::where('priority','1')->where('status',1)->first();

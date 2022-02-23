@@ -50,6 +50,13 @@
     h4{
         font-weight: bold;
     }
+
+    .dashboard__inner{
+        margin: 5px;
+        border: 1px solid lightgray;
+        border-radius: 3px;
+        padding: 3%;
+    }
 </style>
 <!-- Main content -->
 <section class="content">
@@ -72,7 +79,7 @@
 
                         <div class="col-sm-6">
 
-                            <div class="row" style="border-bottom: 1px solid #eee; margin-top: 55px; width: 99%;">
+                            <div class="row dashboard__inner">
 
                                 <div class="col-sm-12">
                                     <h4>TOTAL AMOUNT OF SALE THIS MONTH ({{ date('M') }})</h4>
@@ -110,7 +117,7 @@
 
                         <div class="col-sm-6">
                             <!-- Recent Orders -->
-                            <div class="row" style="border-bottom: 1px solid #eee; margin-top: 55px; width: 99%;">
+                            <div class="row dashboard__inner">
 
                                 <div class="col-sm-8">
                                     <h4>TOP 5 PROCESSING ORDERS</h4>
@@ -164,7 +171,7 @@
 
                         <div class="col-sm-6">
 
-                            <div class="row" style="border-bottom: 1px solid #eee; margin-top: 55px; width: 99%;">
+                            <div class="row dashboard__inner">
 
                                 <div class="col-sm-8">
                                     <h4>TOP 5 SHIPPED ORDERS</h4>
@@ -219,7 +226,7 @@
 
                         <div class="col-sm-6">
 
-                            <div class="row" style="border-bottom: 1px solid #eee; margin-top: 55px; width: 95%">
+                            <div class="row dashboard__inner" >
 
                                 <div class="col-sm-8">
                                     <h4>TOP 5 DELIVERED ORDERS</h4>
@@ -268,9 +275,9 @@
                             </div>
                         </div>
 
- <div class="col-sm-6">
+                        <div class="col-sm-6">
 
-                            <div class="row" style="border-bottom: 1px solid #eee; margin-top: 55px; width: 95%">
+                            <div class="row dashboard__inner" >
 
                                 <div class="col-sm-8">
                                     <h4>TOP 5 CANCELLED ORDERS</h4>
@@ -321,7 +328,7 @@
 
  <div class="col-sm-6">
 
-                            <div class="row" style="border-bottom: 1px solid #eee; margin-top: 55px; width: 95%">
+                            <div class="row dashboard__inner" >
 
                                 <div class="col-sm-8">
                                     <h4>TOP 5 RETURNED ORDERS</h4>
