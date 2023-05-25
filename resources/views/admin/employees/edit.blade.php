@@ -10,11 +10,13 @@
         }
     </style>
     <div class="box">
+    <div class="form-title">
+        <h3>Employees >> Edit Employee's Details</h3>
+        </div>
         <form action="{{ route('admin.employees.update',$employee->id) }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
                 {{ csrf_field() }}
 
-                <h3>Edit Employee's Details</h3>
 
                 <input type="hidden" name="_method" value="put">
 
@@ -340,7 +342,7 @@
 
 <!-- <div class="col-sm-6 col-xs-12">
                     
-                    @include('admin.shared.status-select', ['status' => 0])
+                    @include('admin.shared.status-select', ['status' => 1])
                 </div> -->
             </div>
             <!-- /.box-body -->

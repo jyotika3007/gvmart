@@ -9,6 +9,9 @@
     <div class="box">
 
 
+    <div class="form-title">
+            <h3>Bookings >> Booking Detail</h3>
+        </div>
 
         <div class="row">
 
@@ -16,7 +19,7 @@
             <div class="col-sm-7">
                 <form action="{{ route('admin.bookings.update', $booking->id) }}" method="post" class="form">
                     <div class="box-body">
-                        <h3>Booking Detail</h3>
+                        
                         {{ csrf_field() }}
                         <input type="hidden" name="_method" value="put">
 

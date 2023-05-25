@@ -10,6 +10,12 @@
         }
     </style>
     <div class="box">
+
+    
+    <div class="form-title">
+            <h3>Employees >> Add Employee</h3>
+        </div>
+
         <form action="{{ route('admin.employees.store') }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
                 {{ csrf_field() }}
@@ -249,7 +255,7 @@
 
 <!-- <div class="col-sm-6 col-xs-12">
                     
-                    @include('admin.shared.status-select', ['status' => 0])
+                    @include('admin.shared.status-select', ['status' => 1])
                 </div> -->
             </div>
             <!-- /.box-body -->

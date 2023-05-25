@@ -5,13 +5,17 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+
+        
+        <div class="form-title">
+            <h3>Banners >> Edit Banner</h3>
+        </div>
+
             <form action="{{ route('admin.banners.update', $banner->id) }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}
                     <div class="col-md-8">
-                        <h3>Edit Banner's Detail</h3>
-                        <br>
-
+                       
                         <div class="form-group">
                             <label for="category_id">Select Category <span class="text-danger">*</span></label>
                             <select  name="category_id" id="category_id" placeholder="category_id" class="form-control" >

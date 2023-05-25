@@ -5,10 +5,14 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+            
+        <div class="form-title">
+            <h3>CMS >> {{$cms->page ?? ''}} </h3>
+        </div>
+
             <form action="{{ route('admin.cms.update', $cms->id) }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}
-                    <h4>{{$cms->page ?? ''}} </h4>
                     <input type="hidden" name="_method" value="put">
                     <div class="form-group">
                         <label for="name">Page <span class="text-danger">*</span></label>

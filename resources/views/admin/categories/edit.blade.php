@@ -5,12 +5,19 @@
 <section class="content">
     @include('layouts.errors-and-messages')
     <div class="box">
+
+    
+    <div class="form-title">
+            <h3>Categories >> Edit Category</h3>
+        </div>
+
+
         <form action="{{ route('admin.categories.update', $category->id) }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
                 <input type="hidden" name="_method" value="put">
                 {{ csrf_field() }}
-                <h3>Edit Category</h3>
-                <br>
+              
+                
                 <div class="form-group">
                     <label for="parent">Parent Category</label>
                     <select name="parent_id" id="parent_id" class="form-control select2">

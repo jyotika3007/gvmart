@@ -5,16 +5,21 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+
+        
+        <div class="form-title">
+            <h3>Company >> Company Info</h3>
+        </div>
+
             <form action="{{ route('admin.company_detail.store') }}" method="post" class="form" enctype="multipart/form-data">
             
                 <div class="box-body">
                     {{ csrf_field() }}
-                    <br><br>
+                  
                     <input type="hidden" name="user_id" id="user_id" value="{{ $admin->id ?? '' }}">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h4>Company Info</h4>
-                            <br>
+                           
                              <div class="form-group">
                         <label for="company_name">Company Name </label>
                         <input type="text" name="company_name" id="company_name" placeholder="company Name" class="form-control" value="{{ old('company_name') }}">

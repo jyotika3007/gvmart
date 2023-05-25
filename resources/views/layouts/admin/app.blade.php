@@ -19,19 +19,12 @@
 
     <link rel="stylesheet" href="{{ asset('css/admin.min.css') }}">
     @yield('css')
-    <style type="text/css">
-        
-        .form-group{
-            margin-bottom: 35px;
-        }
-
-
-    </style>
+ 
 
     <style type="text/css">
-         label {
+         /* label {
         width: 30%;
-    }
+    } */
     input[type="radio"]{
         margin-left: 10%
     }

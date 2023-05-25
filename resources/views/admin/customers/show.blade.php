@@ -6,14 +6,20 @@
 
         <!-- Default box -->
         <div class="box">
+        <div class="form-title">
+            <h3>Customers >> Customer Detail</h3>
+        </div>
+
             <div class="box-body">
-                <h2>Customer</h2>
+               
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td class="col-md-4">ID</td>
-                        <td class="col-md-4">Name</td>
-                        <td class="col-md-4">Email</td>
+                        <td class="col-md-2">ID</td>
+                        <td class="col-md-2">Name</td>
+                        <td class="col-md-2">Email</td>
+                        <td class="col-md-2">Mobile</td>
+                        <td class="col-md-2">Status</td>
                     </tr>
                     </tbody>
                     <tbody>
@@ -21,6 +27,8 @@
                         <td>{{ $customer->id }}</td>
                         <td>{{ $customer->name }}</td>
                         <td>{{ $customer->email }}</td>
+                        <td>{{ $customer->mobile }}</td>
+                        <td>@if($customer->status==1) Active @else Inactive @endif</td>
                     </tr>
                     </tbody>
                 </table>
@@ -51,7 +59,7 @@
                                     <input type="hidden" name="_method" value="delete">
                                     <div class="btn-group">
                                         <a href="{{ route('admin.customers.addresses.show', [$customer->id, $address->id]) }}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i> Show</a>
-                                        <a href="{{ route('admin.customers.addresses.edit', [$customer->id, $address->id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                        <a href="{{ route('admin.customers.addresses.edit', [$customer->id, $address->id]) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                         <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button>
                                     </div>
                                 </form>

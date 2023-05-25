@@ -6,17 +6,19 @@
     @include('layouts.errors-and-messages')
     <!-- Default box -->
     <div class="box">
+    <div class="form-title">
+            <h3>Daily Product Sales Report (Booked) @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>               
+            <!-- <button type="submit" class="btn btn-warning" style="margin-top: 25px;">Export</button> -->
+        </div>
         <div class="box-body">
 
             <div class="row">
                 <div class="col-sm-9">    
-                    <h3>Daily Product Sales Report (Booked) @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>               
                 </div>
                 <div class="col-sm-3">
                     <form action="{{ url('admin/export_products') }}" method="GET">
                         <input type="hidden" name="start_time" id="start_time" value="@if(!empty($start_time)){{$start_time}}@endif" class="form-control" hidden>
                         <input type="hidden" name="end_time" id="end_time" value="@if(!empty($end_time)){{$end_time}}@endif" class="form-control" hidden>
-                    <button type="submit" class="btn btn-warning" style="margin-top: 25px;">Export</button>
                     </form>
                 </div>
             </div>       
@@ -24,7 +26,7 @@
             <br>
 
             <form action="" method="get">
-                <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                <div class="row"  >
                     <div class="col-sm-4">
                         <div class="row">
                             <div class="col-sm-4">

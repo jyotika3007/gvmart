@@ -5,16 +5,17 @@
 <section class="content">
     @include('layouts.errors-and-messages')
     <div class="box">
+
+    
+    <div class="form-title">
+            <h3>Feedbacks >> Feedback Reply</h3>
+        </div>
+
         <form action="{{ route('admin.complaints.update', $complaint->id) }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
                 {{ csrf_field() }}
 
-                <h3>Feedback Reply</h3>
-                <br>
-
-
                 <input type="hidden" name="category" id="get_category" class="form-control select2" required="required" value="Product Based">
-
 
                 <div class="form-group">
                     <label for="user_name">User Name <span class="text-danger">*</span></label>

@@ -32,7 +32,7 @@
                     <input type="file" name="icons" id="icons" class="form-control">
                 </div>
  -->
-                @include('admin.shared.status-select', ['status' => 0])
+                @include('admin.shared.status-select', ['status' => 1])
                 <!-- @include('admin.shared.featured', ['featured' => 0]) -->
 
             </div>

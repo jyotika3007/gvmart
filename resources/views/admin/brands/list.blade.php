@@ -6,15 +6,16 @@
     @include('layouts.errors-and-messages')
     <!-- Default box -->
             <div class="box">
+
+            
+            <div class="form-title">
+            <h3>Brands >> Brands List @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
+        </div>
+        
                 <div class="box-body">
                    
-
-<h3>Brands @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
-
-                    <br>
-
                     <form action="{{route('admin.brands.search_brands')}}" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row"  >
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -31,7 +32,7 @@
                             <a href="{{ route('admin.brands.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
                         </div>
                         <div class="col-sm-2">
-                            <a href="{{ route('admin.brands.create') }}" class="btn btn-success">Add New</a>
+                            <a href="{{ route('admin.brands.create') }}"  class="btn btn-primary">Add New</a>
                         </div>
                     </div>
                 </form>
@@ -59,9 +60,9 @@
                                     <a href="{{ route('admin.brands.show', $brand->id) }}">{{ $brand->name }}</a>
                                 </td>
                                 <td>
-                                    @if(!empty($brand->cover))
+                                    @if(!empty($brand->cover)&& $brand->cover!='')
                                     <img src="{{ asset('storage/'.$brand->cover ?? '') }}" style="height: 75px;">
-                                    @ENDIF
+                                    @endif
                                 </td>
                                  <td>@include('layouts.status', ['status' => $brand->status])</td>
                                 <td>
@@ -69,7 +70,7 @@
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.brands.edit', $brand->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                            <a href="{{ route('admin.brands.edit', $brand->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                             <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
                                         </div>
                                     </form>

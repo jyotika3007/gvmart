@@ -15,7 +15,7 @@
                 <td>
                     <div class="btn-group">
                         <a href="{{ route('admin.countries.provinces.show', [$country, $province['id']]) }}" class="btn btn-default"><i class="fa fa-eye"></i> Show</a>
-                        <a href="{{ route('admin.countries.provinces.edit', [$country, $province['id']]) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{ route('admin.countries.provinces.edit', [$country, $province['id']]) }}" class="btn btn-primary"><i class="fa fa-edit"></i></a>
                     </div>
                 </td>
             </tr>

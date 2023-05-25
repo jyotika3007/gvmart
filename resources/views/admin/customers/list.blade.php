@@ -7,18 +7,19 @@
     @include('layouts.errors-and-messages')
     <!-- Default box -->
             <div class="box">
+
+            <div class="form-title">
+            <h3>Customers >> Customers List @if(!empty($keyword)) - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif</h3>
+        </div>
+
                 <div class="box-body">
 
-                     <h3>Customers @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
-
-                    <br>
-
                     <form action="{{route('admin.customers.search_customers')}}" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
-                        <div class="col-sm-6">
+                    <div class="row" >
+                        <div class="col-sm-7">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label style="margin-top: 6px; float: right;">Search Here</label>
+                                    <label style="margin-top: 6px; ">Search Here</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by customer's name, email ...">
@@ -26,12 +27,13 @@
                             </div>
                         </div>
                        
-                        <div class="col-sm-4">
+                        <div class="col-sm-2">
                             <button type="submit" name="search" id="search" vaule="search" class="btn btn-primary">Submit</button>
                             <a href="{{ route('admin.customers.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
                         </div>
-                        <div class="col-sm-2">
-                            <a href="{{ route('admin.customers.create') }}" class="btn btn-success">Add New</a>
+                        <div class="col-sm-2" style="float: right">
+                            <a id="export" href="{{ route('admin.customers.export') }}" class="btn btn-default">Export</a>
+                            <a href="{{ route('admin.customers.create') }}" class="btn btn-primary">Add New</a>
                         </div>
                     </div>
                 </form>
@@ -63,8 +65,13 @@
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i> Show</a>
-                                            <a href="{{ route('admin.customers.edit', $customer['id']) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                            <!-- @if($customer['status']==1)
+                                            <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-danger btn-sm"><i class="fa fa-close"></i></a>
+                                            @else
+                                            <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                            @endif -->
+                                             <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
+                                            <a href="{{ route('admin.customers.edit', $customer['id']) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                             <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
                                         </div>
                                     </form>
@@ -83,3 +90,4 @@
     </section>
     <!-- /.content -->
 @endsection
+

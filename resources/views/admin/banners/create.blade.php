@@ -5,13 +5,16 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+
+        <div class="form-title">
+            <h3>Banners >> Add Banner</h3>
+        </div>
+
             <form action="{{ route('admin.banners.store') }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}
                     <div class="col-md-8">
-                        <h3>Add Banner</h3>
-                        <br>
-
+                      
                         <div class="form-group">
                             <label for="category_id">Select Category <span class="text-danger">*</span></label>
                             <select  name="category_id" id="category_id" placeholder="category_id" class="form-control" >
@@ -41,7 +44,7 @@
                         </div>
                       
                     
-                        @include('admin.shared.status-select', ['status' => 0])
+                        @include('admin.shared.status-select', ['status' => 1])
                         
                     </div>
                     

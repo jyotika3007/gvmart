@@ -16,7 +16,7 @@
                     <br>
 
                     <form action="{{url('admin/newsletters/search_complaints')}}" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row"  >
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-3">

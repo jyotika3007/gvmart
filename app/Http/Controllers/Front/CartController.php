@@ -24,7 +24,7 @@ class CartController extends Controller
         $cartProducts = array();
         $grandTotal = 0;
         $shippingTotal = 0;
-        $subTotal;
+        $subTotal=0;
 
 $delivery_dates = array();
 

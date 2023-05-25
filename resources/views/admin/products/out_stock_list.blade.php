@@ -15,7 +15,7 @@
                     <br>
 
                     <form action="{{route('admin.products.search_products')}}" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row"  >
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -77,7 +77,7 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="_method" value="delete">
                         <div class="btn-group">
-                           <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                           <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
                         </div>
                     </form>

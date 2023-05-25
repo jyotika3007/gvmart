@@ -34,7 +34,7 @@
                                 <td>
                                     <div class="btn-group">
                                         <a href="{{ route('admin.countries.show', $country->id) }}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i> Show</a>
-                                        <a href="{{ route('admin.countries.edit', $country->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                        <a href="{{ route('admin.countries.edit', $country->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                     </div>
                                 </td>
                             </tr>

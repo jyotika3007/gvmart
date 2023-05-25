@@ -5,11 +5,15 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+            
+        <div class="form-title">
+            <h3>Brands >> Add Brand</h3>
+        </div>
+
             <form action="{{ route('admin.brands.store') }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}
 
-                     <h3>Add New Brand</h3>
                 <br>
                     <div class="form-group">
                         <label for="name">Name <span class="text-danger">*</span></label>
@@ -18,10 +22,10 @@
 
                      <div class="form-group">
                             <label for="cover">Cover </label>
-                            <input type="file" name="cover" id="cover" class="form-control" required="required">
+                            <input type="file" name="cover" id="cover" class="form-control">
                         </div>
                       
-                        @include('admin.shared.status-select', ['status' => 0])
+                        @include('admin.shared.status-select', ['status' => 1])
                       
                 </div>
                 <!-- /.box-body -->

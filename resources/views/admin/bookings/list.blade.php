@@ -8,8 +8,13 @@
     <!-- Default box -->
         @if($bookings)
             <div class="box">
+                
+            <div class="form-title">
+            <h3>Bookings >> Bookings List </h3>
+        </div>
+
                 <div class="box-body">
-                    <h2>Service Bookings</h2>
+                 
                     @include('layouts.search', ['route' => route('admin.bookings.index')])
                     <table class="table">
                         <thead>

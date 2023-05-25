@@ -16,7 +16,7 @@
                     <br>
 
                     <form action="{{url('admin/newsletter_posts/search_complaints')}}" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row"  >
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -64,7 +64,7 @@
                                     @if( $news->cover != '' )<img src="{{ asset('storage/'.$news->cover) }}" style="height: 75px;"> @endif
                                 </td>
                                 <td> 
-                                    <a href="{{ url('admin/newsletter_posts/'.$news->id.'/edit') }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                                    <a href="{{ url('admin/newsletter_posts/'.$news->id.'/edit') }}" class="btn btn-primary"><i class="fa fa-edit"></i></a>
                                     @if($news->mail_sent == 0)
                                     <a href="{{ url('admin/newsletter_posts/'.$news->id.'/send') }}" class="btn btn-success"> Send</a>
                                     @else

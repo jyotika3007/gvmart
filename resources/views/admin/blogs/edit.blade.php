@@ -5,13 +5,16 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+            
+        <div class="form-title">
+            <h3>Blogs >> Edit Blog</h3>
+        </div>
+
             <form action="{{ route('admin.blogs.update', $blog->id) }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     <div class="row">
                         {{ csrf_field() }}
-                        <h3>Edit Blog Detail</h3>
-                        <br>
-                        
+                       
                         <input type="hidden" name="_method" value="put">
                         <div class="col-md-12">
                             <!-- Nav tabs -->

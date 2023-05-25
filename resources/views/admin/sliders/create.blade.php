@@ -5,11 +5,13 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+        <div class="form-title">
+            <h3>Add Slider</h3>
+        </div>
             <form action="{{ route('admin.sliders.store') }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}
                     <div class="col-md-8">
-                        <h3>Add Slider</h3>
                         <br>
 
                         <div class="form-group">
@@ -43,7 +45,7 @@
                         </div>
                       
                     
-                        @include('admin.shared.status-select', ['status' => 0])
+                        @include('admin.shared.status-select', ['status' => 1])
                         
                     </div>
                     

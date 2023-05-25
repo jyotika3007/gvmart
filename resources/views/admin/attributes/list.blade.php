@@ -6,9 +6,37 @@
     @include('layouts.errors-and-messages')
     <!-- Default box -->
     <div class="box">
+        
+    <div class="form-title">
+            <h3>Attributes >> Attributes List</h3>
+        </div>
+
         <div class="box-body">
-            <h2>Attributes</h2>
-            @if($attributes->total() > 0)
+            
+        <form action="{{route('admin.brands.search_brands')}}" method="get">
+                    <div class="row"  >
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label style="margin-top: 6px; float: right;">Search Here</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by brand name ...">
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="col-sm-4">
+                            <button type="submit" name="search" id="search" vaule="search" class="btn btn-primary">Submit</button>
+                            <a href="{{ route('admin.brands.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
+                        </div>
+                        <div class="col-sm-2">
+                            <a href="{{ route('admin.attributes.create') }}"  class="btn btn-primary">Add New</a>
+                        </div>
+                    </div>
+                </form>
+                    <br>
+
             <table class="table">
                 <thead>
                     <tr>
@@ -16,25 +44,27 @@
                         <td></td>
                     </tr>
                 </thead>
+                @if(count($attributes) > 0)
                 <tbody>
+                    
                 @foreach ($attributes as $attribute)
                     <tr>
                         <td>
-                            <a href="{{ route('admin.attributes.show', $attribute->id) }}">{{ $attribute->name }} <strong>({{ $attribute->values->count() }})</strong></a>
+                            <a href="{{ route('admin.attributes.show', $attribute->id) }}">{{ $attribute->name }}</a>
                         </td>
                         <td>
                             <form action="{{ route('admin.attributes.destroy', $attribute->id) }}" method="post" class="form-horizontal">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="_method" value="delete">
                                 <div class="btn-group">
-                                    <a href="{{ route('admin.attributes.values.create', $attribute->id) }}" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Add values</a>
-                                    <a href="{{ route('admin.attributes.edit', $attribute->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
-                                    <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button>
+                                    <a href="{{ url('admin/attribute-values/add/'.$attribute->id) }}" class="btn btn-success btn-sm textWhite"><i class="fa fa-plus textWhite"></i> &nbsp;Add Value</a>
                                 </div>
-                            </form>
+                                </form>
                         </td>
                     </tr>
                 @endforeach
+                
+            @endif
                 </tbody>
             </table>
             <div class="row">
@@ -42,14 +72,7 @@
                     <div class="pull-left">{{ $attributes->links() }}</div>
                 </div>
             </div>
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-primary" href="{{ route('admin.attributes.create') }}"><i class="fa fa-plus"></i> Create attribute</a>
-                    </div>
-                </div>
-            @else
-                <p class="alert alert-warning">No attribute yet. <a href="{{ route('admin.attributes.create') }}">Create one</a></p>
-            @endif
+            
         </div>
         <!-- /.box-body -->
     </div>

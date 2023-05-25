@@ -5,13 +5,14 @@
 <section class="content">
     @include('layouts.errors-and-messages')
     <div class="box">
+
+        <div class="form-title">
+        <h3>Inventory >> Edit Inventory</h3>
+        </div>
+
         <form action="{{ route('admin.inventories.update',$inventory->id) }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
                 {{ csrf_field() }}
-
-
-                <h3>Edit Inventory</h3>
-                <br>
 
                 <div class="col-sm-4">
 

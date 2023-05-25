@@ -17,8 +17,12 @@
     </style>
        
                  <div class="box">
+
+                 <div class="form-title">
+                     <h3>Inventory Details</h3>
+        </div>
+
                 <div class="box-body">
-                    <h3>Inventory Details</h3>
                     
                     <div class="container">
                         <div class="row">

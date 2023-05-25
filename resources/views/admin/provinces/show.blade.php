@@ -24,7 +24,7 @@
                                 <td>@include('layouts.status', ['status' => $province->status])</td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('admin.countries.provinces.edit', [$countryId, $province->id]) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                                        <a href="{{ route('admin.countries.provinces.edit', [$countryId, $province->id]) }}" class="btn btn-primary"><i class="fa fa-edit"></i></a>
                                     </div>
                                 </td>
                             </tr>

@@ -5,11 +5,16 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+        <div class="form-title">
+            <h3>Customers >> Update Customer</h3>
+        </div>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-5">
             <form action="{{ route('admin.customers.update', $customer->id) }}" method="post" class="form">
                 <div class="box-body">
                     {{ csrf_field() }}
-                    <h3>Edit Customer's Detail</h3>
-                    <br>
+                   
                     <input type="hidden" name="_method" value="put">
                     <div class="form-group">
                         <label for="name">Name <span class="text-danger">*</span></label>
@@ -30,11 +35,20 @@
                         <label for="password">Password <span class="text-danger">*</span></label>
                         <input type="password" name="password" id="password" placeholder="xxxxx" class="form-control">
                     </div>
+
+                    <div class="form-group">
+                            <label for="password">Role <span class="text-danger">*</span></label>
+                            <select name="user_role" id="user_role" class="form-control" required>
+                                <option value="admin" @if($customer->user_role == 'admin') selected="selected" @endif>Admin</option>
+                                <option value="customer" @if($customer->user_role == 'customer') selected="selected" @endif>Customer</option>
+                            </select>
+                        </div>
+
                     <div class="form-group">
                         <label for="status">Status </label>
                         <select name="status" id="status" class="form-control">
-                            <option value="0" @if($customer->status == 0) selected="selected" @endif>Disable</option>
-                            <option value="1" @if($customer->status == 1) selected="selected" @endif>Enable</option>
+                            <option value="1" @if($customer->status == 1) selected="selected" @endif>Active</option>
+                            <option value="0" @if($customer->status == 0) selected="selected" @endif>Inactive</option>
                         </select>
                     </div>
                 </div>
@@ -46,6 +60,7 @@
                     </div>
                 </div>
             </form>
+        </div>
         </div>
         <!-- /.box -->
 

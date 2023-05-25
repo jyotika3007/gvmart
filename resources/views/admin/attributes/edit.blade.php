@@ -5,6 +5,12 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+
+        
+        <div class="form-title">
+            <h3>Attributes >> Edit Attribute</h3>
+        </div>
+
             <form action="{{ route('admin.attributes.update', $attribute->id) }}" method="post" class="form">
                 <div class="box-body">
                     <div class="row">
@@ -12,7 +18,7 @@
                         <input type="hidden" name="_method" value="put">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="name">Attribute name <span class="text-danger">*</span></label>
+                                 <label for="name">Attribute name <span class="text-danger">*</span></label>
                                 <input type="text" name="name" id="name" placeholder="Attribute name" class="form-control" value="{!! $attribute->name  !!}">
                             </div>
                         </div>

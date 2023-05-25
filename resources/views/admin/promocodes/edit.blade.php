@@ -5,11 +5,13 @@
 <section class="content">
     @include('layouts.errors-and-messages')
     <div class="box">
+    <div class="form-title">
+            <h3>Edit Promocode Details</h3>
+        </div>
         <form action="{{ route('admin.promocodes.update',$promocode->id) }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
                 {{ csrf_field() }}
                 <div class="col-md-12">
-                    <h3>Edit Promocode Details</h3>
                     <br>
 
                     <div class="row"></div>

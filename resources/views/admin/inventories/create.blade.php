@@ -11,13 +11,14 @@
     </style>
     @include('layouts.errors-and-messages')
     <div class="box">
+
+    <div class="form-title">
+        <h3>Inventory >> Add Inventory</h3>
+        </div>
+
         <form action="{{ route('admin.inventories.store') }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
                 {{ csrf_field() }}
-
-
-                <h3>Add Inventory</h3>
-                <br>
 
 
                 <div class="col-sm-12">

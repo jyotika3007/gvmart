@@ -43,6 +43,7 @@ class LoginController extends Controller
 
  
     public function getlogin(){
+        // print_r('Login'); die;
         return view('auth.admin.login');
     }
 

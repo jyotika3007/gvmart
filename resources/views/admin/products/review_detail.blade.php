@@ -13,7 +13,7 @@
                     <br>
 
                     <form action="{{url('admin/product_reviews/search_reviews')}}" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row"  >
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -30,7 +30,7 @@
                             <a href="{{ url('admin/product_reviews') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
                         </div>
                         <div class="col-sm-2">
-                            <a href="{{ route('admin.categories.create') }}" class="btn btn-success">Add New</a>
+                            <a href="{{ route('admin.categories.create') }}"  class="btn btn-primary">Add New</a>
                         </div>
                     </div>
                 </form>

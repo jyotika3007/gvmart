@@ -107,7 +107,7 @@ $service_based = ShopCategory::where('category','Service Based')->get();
                             <p style="color: red" id="shopPasswordError"></p>
                         </div>
 
-                        @include('admin.shared.status-select', ['status' => 0])
+                        @include('admin.shared.status-select', ['status' => 1])
 
 
                     </div>

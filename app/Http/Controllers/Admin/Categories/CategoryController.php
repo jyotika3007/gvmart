@@ -24,6 +24,13 @@ class CategoryController extends Controller
             $list = Category::where('parent_id',NULL)->orderBy('id', 'asc')->paginate(50);        
         }
 
+
+        $cat1 = Category::where('parent_id',NULL)->orderBy('id', 'asc')->get();
+
+        foreach($cat1 as $c1){
+            
+        }
+
           $previous = $_SERVER['REQUEST_URI'];
          session()->put('previous_url',$previous);
 

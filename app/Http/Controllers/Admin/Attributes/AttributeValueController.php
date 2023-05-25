@@ -3,76 +3,39 @@
 namespace App\Http\Controllers\Admin\Attributes;
 
 use App\Http\Controllers\Controller;
-use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
-use App\Shop\AttributeValues\AttributeValue;
-use App\Shop\AttributeValues\Repositories\AttributeValueRepository;
-use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
-use App\Shop\AttributeValues\Requests\CreateAttributeValueRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Shop\Attributes\Attribute;
+
 
 class AttributeValueController extends Controller
 {
-    /**
-     * @var AttributeRepositoryInterface
-     */
-    private $attributeRepo;
-
-    /**
-     * @var AttributeValueRepositoryInterface
-     */
-    private $attributeValueRepo;
-
-    /**
-     * AttributeValueController constructor.
-     * @param AttributeRepositoryInterface $attributeRepository
-     * @param AttributeValueRepositoryInterface $attributeValueRepository
-     */
-    public function __construct(
-        AttributeRepositoryInterface $attributeRepository,
-        AttributeValueRepositoryInterface $attributeValueRepository
-    ) {
-        $this->attributeRepo = $attributeRepository;
-        $this->attributeValueRepo = $attributeValueRepository;
-    }
-
+    
     public function create($id)
     {
+        $attribute = Attribute::find($id);
+        // print_r($attribute); die;
+
+        $values = DB::table('attribute_values')->where('attribute_id',$id)->get();
+
         return view('admin.attribute-values.create', [
-            'attribute' => $this->attributeRepo->findAttributeById($id)
+            'attribute' => $attribute,
+            'values' => $values
         ]);
     }
 
-    /**
-     * @param CreateAttributeValueRequest $request
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(CreateAttributeValueRequest $request, $id)
+    public function store(Request $request, $id)
     {
-        $attribute = $this->attributeRepo->findAttributeById($id);
 
-        $attributeValue = new AttributeValue($request->except('_token'));
-        $attributeValueRepo = new AttributeValueRepository($attributeValue);
+        $data = $request->all();
+        
+        $values = DB::table('attribute_values')->insert([
+            'attribute_id'=>$id,
+            'value' => $data['value']?? '',
+            'code' => $data['code'] ?? ''
+        ]);
 
-        $attributeValueRepo->associateToAttribute($attribute);
-
-        $request->session()->flash('message', 'Attribute value created');
-
-        return redirect()->route('admin.attributes.show', $attribute->id);
+        return redirect()->back()->with('message','Attribute value added successfully');
     }
 
-    /**
-     * @param $attributeId
-     * @param $attributeValueId
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy($attributeId, $attributeValueId)
-    {
-        $attributeValue = $this->attributeValueRepo->findOneOrFail($attributeValueId);
-
-        $attributeValueRepo = new AttributeValueRepository($attributeValue);
-        $attributeValueRepo->dissociateFromAttribute();
-
-        request()->session()->flash('message', 'Attribute value removed!');
-        return redirect()->route('admin.attributes.show', $attributeId);
-    }
 }

@@ -5,6 +5,13 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+
+        
+        <div class="form-title">
+            <h3>Customers >> Address </h3>
+        </div>
+
+
             <form action="{{ route('admin.addresses.update', $address->id) }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}

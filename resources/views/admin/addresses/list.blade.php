@@ -7,6 +7,11 @@
     <!-- Default box -->
         @if($addresses)
             <div class="box">
+
+            <div class="form-title">
+            <h3>Customers >> Address List</h3>
+        </div>
+
                 <div class="box-body">
                     <h2>Addresses</h2>
                     @include('layouts.search', ['route' => route('admin.addresses.index')])
@@ -36,7 +41,7 @@
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.addresses.edit', $address->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                            <a href="{{ route('admin.addresses.edit', $address->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                             <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button>
                                         </div>
                                     </form>

@@ -8,6 +8,11 @@
     <!-- Default box -->
         @if($blog)
             <div class="box">
+                
+            <div class="form-title">
+            <h3>Blogs >> Blog Detail</h3>
+        </div>
+
                 <div class="box-body">
                     <table class="table">
                         <thead>

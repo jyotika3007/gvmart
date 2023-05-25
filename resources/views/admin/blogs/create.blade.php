@@ -5,13 +5,16 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+
+        <div class="form-title">
+            <h3>Blogs >> Add Blog</h3>
+        </div>
+
             <form action="{{ route('admin.blogs.store') }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}
                     <div class="col-md-8">
-                        <h3>Add Blog</h3>
-                        <br>
-                        
+                      
                         <div class="form-group">
                             <label for="title">Title <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" placeholder="Title" class="form-control" value="{{ old('title') }}" required="required">
@@ -33,7 +36,7 @@
                         </div>
                       
                     
-                        @include('admin.shared.status-select', ['status' => 0])
+                        @include('admin.shared.status-select', ['status' => 1])
                         
                     </div>
                     

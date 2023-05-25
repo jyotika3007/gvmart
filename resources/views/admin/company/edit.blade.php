@@ -5,6 +5,11 @@
 <section class="content">
     @include('layouts.errors-and-messages')
     <div class="box">
+        
+    <div class="form-title">
+            <h3>Company >> Company Info</h3>
+        </div>
+
         <form action="{{ route('admin.company_detail.update',$company_detail->id) }}" method="post" class="form" enctype="multipart/form-data">
 
             <div class="box-body">
@@ -12,8 +17,7 @@
                 <br><br>
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4>Company Info</h4>
-                        <br>
+                      
                         <div class="form-group">
                             <label for="company_name">Company Name </label>
                             <input type="text" name="company_name" id="company_name" placeholder="company Name" class="form-control" value="{{ $company_detail->company_name ?? '' }}">
@@ -25,7 +29,7 @@
                         </div>
 
                         <div class="form-group">
-                            <img src="{{ asset('storage/'.$company_detail->company_logo) }}" style="height: 150px; width: auto">
+                            <img src="{{ asset('storage/'.$company_detail->company_logo) }}" style="height: 100px; width: auto">
                         </div>
 
                         <div class="form-group">

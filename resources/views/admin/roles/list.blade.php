@@ -16,7 +16,7 @@
                     <br>
 
                     <form action="" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row"  >
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -33,7 +33,7 @@
                             <a href="{{ route('admin.roles.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
                         </div>
                         <div class="col-sm-2">
-                            <a href="{{ route('admin.roles.create') }}" class="btn btn-success">Add New</a>
+                            <a href="{{ route('admin.roles.create') }}"  class="btn btn-primary">Add New</a>
                         </div>
                     </div>
                 </form>
@@ -71,7 +71,7 @@
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                            <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                             <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
                                         </div>
                                     </form>

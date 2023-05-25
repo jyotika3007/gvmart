@@ -6,14 +6,15 @@
     @include('layouts.errors-and-messages')
     <!-- Default box -->
     <div class="box">
+
+    
+    <div class="form-title">
+            <h3>Categories >> Categories List @if(!empty($keyword)) - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif</h3>
+        </div>
         <div class="box-body">
-           
-<h3>Categories  @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
-
-                    <br>
-
+          
                     <form action="{{route('admin.categories.search_categories')}}" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -26,11 +27,11 @@
                         </div>
                        
                         <div class="col-sm-4">
-                            <button type="submit" name="search" id="search" vaule="search" class="btn btn-primary">Submit</button>
-                            <a href="{{ route('admin.categories.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
+                            <!-- <button type="submit" name="search" id="search" vaule="search" class="btn btn-primary">Submit</button>
+                            <a href="{{ route('admin.categories.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a> -->
                         </div>
                         <div class="col-sm-2">
-                            <a href="{{ route('admin.categories.create') }}" class="btn btn-success">Add New</a>
+                            <a href="{{ route('admin.categories.create') }}"  class="btn btn-primary">Add New</a>
                         </div>
                     </div>
                 </form>
@@ -66,7 +67,7 @@
                             </td>
                                 <td>
                                     @if(isset($category->cover))
-                                    <img src="{{ asset("storage/$category->cover") }}" alt="" class="img-responsive" style="100px;">
+                                    <img src="{{ asset('storage/'.$category->cover) }}" alt="" class="img-responsive" style="height:100px;">
                                     @endif
                                 </td>
                                 <td>@include('layouts.status', ['status' => $category->status])</td>
@@ -77,7 +78,7 @@
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                             <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
                                         </div>
                                     </form>

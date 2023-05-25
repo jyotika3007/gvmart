@@ -16,8 +16,12 @@
     @include('layouts.errors-and-messages')
     <!-- Default box -->
             <div class="box">
+
+            <div class="form-title">
+                <h3>{{ $order_type }}</h3>
+        </div>
+
                 <div class="box-body">
-                    <h3>{{ $order_type }}</h3>
 
 
 
@@ -25,7 +29,7 @@
                     <br>
 
                     <form action="" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row"  >
                         <div class="col-sm-4">
                             <div class="row">
                                 <div class="col-sm-4">

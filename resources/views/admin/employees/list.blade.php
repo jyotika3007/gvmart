@@ -8,17 +8,16 @@
         <!-- Default box -->
         @if($employees)
         <div class="box">
+
+        <div class="form-title">
+            <h3>Employees >> Employees List</h3>
+        </div>
+
             <div class="box-body">
                 
 
-
-                       <h3>Employees</h3>
-
-
-                    <br>
-
                     <form action="" method="get">
-                    <div class="row" style="border: 1px solid #ddd; width: 98%; margin: 1% 1%;padding: 15px; ">
+                    <div class="row"  >
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -35,7 +34,7 @@
                             <a href="{{ route('admin.employees.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
                         </div>
                         <div class="col-sm-2">
-                            <a href="{{ route('admin.employees.create') }}" class="btn btn-success">Add New</a>
+                            <a href="{{ route('admin.employees.create') }}"  class="btn btn-primary">Add New</a>
                         </div>
                     </div>
                 </form>
@@ -70,7 +69,7 @@
                                     <input type="hidden" name="_method" value="delete">
                                     <div class="btn-group">
                                         <!-- <a href="{{ route('admin.employees.show', $employee->id) }}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i> Show</a> -->
-                                        <a href="{{ route('admin.employees.edit', $employee->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                        <a href="{{ route('admin.employees.edit', $employee->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                         <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
                                     </div>
                                 </form>

@@ -8,8 +8,12 @@
     <!-- Default box -->
         @if($category)
             <div class="box">
+                
+            <div class="form-title">
+            <h3>Categories >> Category Detail</h3>
+        </div>
                 <div class="box-body">
-                    <h2>Category</h2>
+                  
                     <table class="table">
                         <thead>
                         <tr>
@@ -24,7 +28,7 @@
                                 <td>{{ $category->description }}</td>
                                 <td>
                                     @if(isset($category->cover))
-                                        <img src="{{asset("storage/$category->cover")}}" alt="category image" class="img-thumbnail">
+                                        <img src="{{asset('storage/$category->cover')}}" alt="category image" class="img-thumbnail">
                                     @endif
                                 </td>
                             </tr>
@@ -50,7 +54,7 @@
                                         <td><a href="{{route('admin.categories.show', $cat->id)}}">{{ $cat->name }}</a></td>
                                         <td>{{ $cat->description }}</td>
                                         <td>@if(isset($cat->cover))<img src="{{asset("storage/$cat->cover")}}" alt="category image" class="img-thumbnail">@endif</td>
-                                        <td><a class="btn btn-primary" href="{{route('admin.categories.edit', $cat->id)}}"><i class="fa fa-edit"></i> Edit</a></td>
+                                        <td><a class="btn btn-primary" href="{{route('admin.categories.edit', $cat->id)}}"><i class="fa fa-edit"></i></a></td>
                                     </tr>
                                 @endforeach
                             </tbody>
