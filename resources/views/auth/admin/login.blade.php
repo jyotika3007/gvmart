@@ -133,6 +133,7 @@ cursor: pointer
     </style>
 </head>
 
+
 <body class="hold-transition skin-purple login-page">
 
     <div class="login-box">
@@ -147,6 +148,7 @@ cursor: pointer
             <p class="login-box-msg">Sign in to start your session</p>
 
             <form action="{{ route('admin.login') }}" method="post">
+<!-- <input type="hidden" name="_method" value="put"> -->
                 {{ csrf_field() }}
                 <div class="form-group has-feedback">
                     <span class="fa fa-envelope form-control-feedback"></span>

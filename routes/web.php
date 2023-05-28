@@ -18,7 +18,7 @@ Route::get('generate-pdf', 'Front\TestViewController@generatePDF');
 Route::get('test', 'Front\TestViewController@getTestMail');
 
 Route::get('/', 'Auth\LoginController@getlogin')->name('login');
-// Route::get('admin/login', 'Auth\LoginController@getlogin')->name('login');
+Route::get('admin/login', 'Auth\LoginController@getlogin')->name('login');
 Route::post('admin/login', 'Auth\LoginController@login')->name('admin.login');
 
 Route::post('checkCustomerEmail', 'Front\AjaxController@checkCustomerEmail');

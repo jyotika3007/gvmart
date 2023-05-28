@@ -45,6 +45,15 @@ Route::namespace('Api')->group(function () {
 
     // Company Detail
     Route::get('companyDetail','CmsController@companyDetail');
+
+    
+    // Offers Api
+    Route::get('offersList','OfferController@getAllOffers');
+
+
+    // Apple services Detail
+    Route::get('appleServices','AppleServiceController@getAppleServices');
+    Route::get('appleServicesDetail/{id}','AppleServiceController@getAppleServiceDetail');
     
     
     //User Dashboard

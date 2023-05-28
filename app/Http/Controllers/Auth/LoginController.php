@@ -51,6 +51,8 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+
+        // print_r($request->all()); die;
         if (Auth::attempt([
             'email' => $request->email,
             'password' => $request->password
@@ -64,17 +66,16 @@ class LoginController extends Controller
                         'credentials' , 'This Account has been blocked. Please contact to Admin'
                             );
                 }
-                
                 else{
                     return redirect('/admin/login')->with(
-                                'credentials' , 'Please, check your credentials'
+                                'credentials' , 'You can not access this account'
                             );
                 }
 
         }
         else
             return redirect('admin/login')->with(
-                                'credentials' , 'Please, check your credentials'
+                                'credentials' , 'Please check your credentials'
                             );
             
     

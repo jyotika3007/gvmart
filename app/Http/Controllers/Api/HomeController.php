@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Shop\Products\Product;
 use App\Shop\Slider\Slider;
 use App\Shop\Categories\Category;
+use App\Shop\Banners\Banner;
+use App\Shop\Testimonial\Testimonial;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -69,8 +71,8 @@ class HomeController extends Controller
     public function home_main()
     {
         $sliders = Slider::where('status',1)->where('type','slider')->get(['id','title','cover','priority']);
-        // $offers = Product::where('is_trending',1)->get(['id','slug','name','cover','price','sale_price','discount']);
-      
+        $offers = Banner::where('status',1)->orderBy('priority','ASC')->limit(3)->get();
+        $testimonials = Testimonial::where('status',1)->orderBy('id','DESC')->get();      
         $categories = Category::where('parent_id',NULL)->where('status',1)->get();
         $products = [];
         foreach($categories as $cat){
@@ -108,8 +110,9 @@ class HomeController extends Controller
             'message' => 'Home page detail fetched successfully',
             'data' => [
                 'sliders' => $sliders,
-                // 'offers' => $offers,
-                'explore_categories' => $products
+                'offers' => $offers,
+                'explore_categories' => $products,
+                'testimonials' =>  $testimonials
             ]
         ]);
     }

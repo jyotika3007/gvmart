@@ -208,7 +208,7 @@ $company = DB::table('company_details')->first();
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="{{ route('admin.sliders.index') }}"> Manage Sliders</a></li>
-                    <li><a href="{{ route('admin.banners.index') }}"> Manage Banners</a></li>
+                    <li><a href="{{ route('admin.banners.index') }}"> Manage Offer Banners</a></li>
                     <li><a href="{{ route('admin.testimonials.index') }}"> Manage Testimonial</a></li>
                     <li><a href="{{ route('admin.cms.index') }}"> Manage CMS</a></li>
                     <li><a href="{{ route('admin.company_detail.edit',$company->id) }}"> Manage Company Details</a></li>
