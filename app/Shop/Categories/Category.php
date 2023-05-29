@@ -16,7 +16,8 @@ class Category extends Model
         'parent_id',
         'user_id',
         'is_featured',
-        'is_top'
+        'is_top',
+        'is_prelaunched'
     ];
 
     

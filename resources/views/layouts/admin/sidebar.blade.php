@@ -117,6 +117,22 @@ $company = DB::table('company_details')->first();
                 </ul>
             </li>
 
+
+            <!-- For Sales -->
+
+            <li class="treeview @if(request()->segment(2) == 'our_store') active @endif">
+                <a href="#" class="side-menu">
+                    <i class="  fa fa-ambulance"></i> <span>Our Store</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ route('admin.our_store.create') }}"> Add Our Srore</a></li>
+                <li><a href="{{ route('admin.our_store.index') }}"> Our  Store List</a></li>
+                </ul>
+            </li>
+
             <!-- For Sales -->
 
             <li class="treeview @if(request()->segment(2) == 'orders') active @endif">

@@ -50,6 +50,10 @@ Route::namespace('Api')->group(function () {
     // Offers Api
     Route::get('offersList','OfferController@getAllOffers');
 
+    
+    // Our Stores aPI
+    Route::get('ourStores','OurStoreController@getOurStoresList');
+
 
     // Apple services Detail
     Route::get('appleServices','AppleServiceController@getAppleServices');

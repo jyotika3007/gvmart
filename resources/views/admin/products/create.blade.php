@@ -87,6 +87,12 @@
                     </div>
                     <br />
                     <div class="form-group">
+                        <label for="price">
+                            <h4>Prelaunch ? &nbsp; &nbsp;<input type="checkbox" name="is_prelaunched" id="is_prelaunched" value="1" style="width: 15px; height: 15px" >    </h4> 
+                        </label>
+                    </div>
+
+                    <div class="form-group">
                         <label for="price">MRP <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-addon">{{ config('cart.currency') }}</span>
@@ -123,8 +129,8 @@
                             Select Service
                         </label>
                         <select name="related_services" id="related_services" class="form-control" multiple>
-                                @foreach($related_accessories as $service)
-                            <option value="{{ $service->id ?? ''}}">{{ $service->name ?? '' }}</option>
+                                @foreach($services as $service)
+                            <option value="{{ $service->id ?? ''}}">{{ $service->service_name ?? '' }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -138,7 +144,7 @@
                     <br />
                     <div class="form-group">
                         <label for="cover">
-                            Select Accessory
+                            Select Accessories
                         </label>
                         <select name="related_accessories" id="related_accessories" class="form-control" multiple>
                             @foreach($related_accessories as $access)
@@ -336,6 +342,11 @@
         $('#sale_price').val(sale_price);
         // alert(sale_price);
 
+    });
+
+
+    $('#is_prelaunched').on('click', function(){
+        
     })
 
     

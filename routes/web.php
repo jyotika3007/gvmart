@@ -399,11 +399,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('offer/{id}/delete', 'OfferController@destroy')->name('offers.destroy');
         });
 
-
-
-
-
-
+        //Our Store
+        Route::namespace('OurStore')->group(function () {
+            Route::resource('our_store', 'OurStoreController');
+        });
 
 
 

@@ -19,44 +19,48 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function categories(){
-        $categories = Category::where('parent_id',NULL)->where('status',1)->get(['id','name','slug']);
+    public function categories()
+    {
+        $categories = Category::where('parent_id', NULL)->where('status', 1)->get(['id', 'name', 'slug', 'is_prelaunched']);
         $products = [];
-       
-        foreach($categories as $cat){
+
+        foreach ($categories as $cat) {
             $parent1 = [];
             $parent2 = [];
             $parent3 = [];
-           
-            $sub_categories = Category::where('parent_id',$cat->id)->where('status',1)->get(['id','name','slug']);
-           
-            foreach($sub_categories as $sub_cat){
-              
-                $child_categories = Category::where('parent_id',$sub_cat->id)->where('status',1)->get(['id','name','slug']);
-                
-                foreach($child_categories as $child_cat){
-                    array_push($parent3,[
+
+            $sub_categories = Category::where('parent_id', $cat->id)->where('status', 1)->get(['id', 'name', 'slug', 'is_prelaunched']);
+
+            foreach ($sub_categories as $sub_cat) {
+
+                $child_categories = Category::where('parent_id', $sub_cat->id)->where('status', 1)->get(['id', 'name', 'slug', 'is_prelaunched']);
+
+                foreach ($child_categories as $child_cat) {
+                    array_push($parent3, [
                         "category_id" => $child_cat->id,
                         "category_name" => $child_cat->name ?? '',
                         "category_slug" => $child_cat->slug ?? '',
+                        'is_prelaunched' => $child_cat->is_prelaunched ?? 0
                     ]);
                 }
                 $parent2 = [[
                     "category_id" => $sub_cat->id,
                     "category_name" => $sub_cat->name ?? '',
                     "category_slug" => $sub_cat->slug ?? '',
+                    'is_prelaunched' => $sub_cat->is_prelaunched ?? 0,
                     "child" => $parent3
                 ]];
             }
 
-            $parent1= [
+            $parent1 = [
                 "category_id" => $cat->id,
                 "category_name" => $cat->name ?? '',
-                    "category_slug" => $cat->slug ?? '',
-                    "child" => $parent2
+                "category_slug" => $cat->slug ?? '',
+                'is_prelaunched' => $cat->is_prelaunched ?? 0,
+                "child" => $parent2
             ];
-          
-            array_push($products,$parent1);
+
+            array_push($products, $parent1);
         }
 
         // print_r($products); die;
@@ -70,26 +74,26 @@ class HomeController extends Controller
 
     public function home_main()
     {
-        $sliders = Slider::where('status',1)->where('type','slider')->get(['id','title','cover','priority']);
-        $offers = Banner::where('status',1)->orderBy('priority','ASC')->limit(3)->get();
-        $testimonials = Testimonial::where('status',1)->orderBy('id','DESC')->get();      
-        $categories = Category::where('parent_id',NULL)->where('status',1)->get();
+        $sliders = Slider::where('status', 1)->where('type', 'slider')->get(['id', 'title', 'cover', 'priority']);
+        $offers = Banner::where('status', 1)->orderBy('priority', 'ASC')->limit(3)->get();
+        $testimonials = Testimonial::where('status', 1)->orderBy('id', 'DESC')->get();
+        $categories = Category::where('parent_id', NULL)->where('status', 1)->get();
         $products = [];
-        foreach($categories as $cat){
-            $product_count=0;
-            $cat_product = DB::table('category_product')->join('products','products.id','category_product.product_id')->where('products.status',1)->where('category_id',$cat->id)->count();
-            $product_count+=$cat_product;
-            $sub_categories = Category::where('parent_id',$cat->id)->where('status',1)->get();
-           
-            foreach($sub_categories as $sub_cat){
-                $sub_cat_product = DB::table('category_product')->join('products','products.id','category_product.product_id')->where('products.status',1)->where('category_id',$sub_cat->id)->count();
-                $product_count+=$sub_cat_product;
+        foreach ($categories as $cat) {
+            $product_count = 0;
+            $cat_product = DB::table('category_product')->join('products', 'products.id', 'category_product.product_id')->where('products.status', 1)->where('category_id', $cat->id)->count();
+            $product_count += $cat_product;
+            $sub_categories = Category::where('parent_id', $cat->id)->where('status', 1)->get();
 
-                $child_categories = Category::where('parent_id',$sub_cat->id)->where('status',1)->get();
-           
-                foreach($child_categories as $child_cat){
-                    $child_cat_product = DB::table('category_product')->join('products','products.id','category_product.product_id')->where('products.status',1)->where('category_id',$child_cat->id)->count();
-                    $product_count+=$child_cat_product;
+            foreach ($sub_categories as $sub_cat) {
+                $sub_cat_product = DB::table('category_product')->join('products', 'products.id', 'category_product.product_id')->where('products.status', 1)->where('category_id', $sub_cat->id)->count();
+                $product_count += $sub_cat_product;
+
+                $child_categories = Category::where('parent_id', $sub_cat->id)->where('status', 1)->get();
+
+                foreach ($child_categories as $child_cat) {
+                    $child_cat_product = DB::table('category_product')->join('products', 'products.id', 'category_product.product_id')->where('products.status', 1)->where('category_id', $child_cat->id)->count();
+                    $product_count += $child_cat_product;
                 }
             }
 
@@ -101,10 +105,9 @@ class HomeController extends Controller
                 "product_count" => $product_count
             ];
 
-        array_push($products,$result);
-        
+            array_push($products, $result);
         }
-            
+
         return response()->json([
             'status' => 1,
             'message' => 'Home page detail fetched successfully',
@@ -119,9 +122,9 @@ class HomeController extends Controller
 
     public function home_products()
     {
-        $sale_products = Product::where('is_top_rated',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount','stock_quantity']);
-        $new_arrival_products = Product::where('is_trending',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount','stock_quantity']);
-        $best_seller_products = Product::where('is_best_seller',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount','stock_quantity']);
+        $sale_products = Product::where('is_top_rated', 1)->limit(15)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        $new_arrival_products = Product::where('is_trending', 1)->limit(15)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        $best_seller_products = Product::where('is_best_seller', 1)->limit(15)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
 
         return response()->json([
             'status' => 1,
@@ -133,5 +136,4 @@ class HomeController extends Controller
             ]
         ]);
     }
-
 }

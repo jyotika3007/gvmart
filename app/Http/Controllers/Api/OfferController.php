@@ -13,7 +13,7 @@ class OfferController extends Controller
         return response()->json([
             'status' => 1,
             'message' => 'Offers List fetched successfully',
-            'date' => $offers
+            'data' => $offers
         ]);
     }
 }

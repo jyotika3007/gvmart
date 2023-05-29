@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Products;
 
+use App\AppleService;
 use App\Shop\Attributes\Attribute;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\Products\Product;
@@ -187,6 +188,7 @@ class ProductController extends Controller
         }
 
         $categories = Category::orderBy('id','DESC')->get();
+        $services = AppleService::all();
         // $categories = $this->getCategories();
         $res_products = Product::where('status', 1)->get(['id', 'name']);
         $res_assessories = DB::table('products')->join('category_product', 'category_product.product_id', 'products.id')->where('category_product.category_id', 5)->where('products.status', 1)->get(['products.id', 'products.name']);
@@ -202,7 +204,8 @@ class ProductController extends Controller
             'product' => new Product,
             'attributes' => $attributes,
             'related_products' => $res_products,
-            'related_accessories' => $res_assessories
+            'related_accessories' => $res_assessories,
+            'services' => $services
         ]);
     }
 
