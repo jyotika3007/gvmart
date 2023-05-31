@@ -49,6 +49,7 @@
                         <td>Cover</td>
                         <td>Status</td>
                         <td>Is Featured</td>
+                        <td>Is Prelaunched</td>
                         <td>Top Categories</td>
                         <td>Actions</td>
                     </tr>
@@ -72,6 +73,7 @@
                                 </td>
                                 <td>@include('layouts.status', ['status' => $category->status])</td>
                                 <td>@include('layouts.status', ['status' => $category->is_featured])</td>
+                                <td>@include('layouts.status', ['status' => $category->is_prelaunched])</td>
                                 <td>@include('layouts.status', ['status' => $category->is_top])</td>
                                 <td>
                                     <form action="{{ route('admin.categories.destroy', $category->id) }}" method="post" class="form-horizontal">

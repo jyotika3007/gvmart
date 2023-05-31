@@ -254,15 +254,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
         Route::namespace('Products')->group(function () {
 
-
-
-
             Route::get('updateProductBrand', 'ProductController@updateProductBrand');
 
-
-
-
-            Route::get('products/{id}/variants', 'ProductController@addVariants');
+            Route::get('variants/{product_id}', 'ProductController@variantsList');
+            Route::get('colors/{product_id}', 'ProductController@colorsList');
+            Route::get('variants/{product_id}/add', 'ProductController@addVariants');
+            Route::post('variants/{product_id}/store', 'ProductController@storeVariants');
             Route::get('getSkuCode', 'ProductController@getSkuCode');
             Route::get('productVariants', 'ProductController@getAttributes');
 

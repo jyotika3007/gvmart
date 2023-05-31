@@ -187,14 +187,14 @@ class ProductController extends Controller
             $brands = Brand::all();
         }
 
-        $categories = Category::orderBy('id','DESC')->get();
+        $categories = Category::orderBy('id', 'DESC')->get();
         $services = AppleService::all();
         // $categories = $this->getCategories();
         $res_products = Product::where('status', 1)->get(['id', 'name']);
         $res_assessories = DB::table('products')->join('category_product', 'category_product.product_id', 'products.id')->where('category_product.category_id', 5)->where('products.status', 1)->get(['products.id', 'products.name']);
         $attributes = Attribute::all();
-   
-// print_r($categories[0]->id); die;
+
+        // print_r($categories[0]->id); die;
 
         return view('admin.products.create', [
             'categories' => $categories,
@@ -218,16 +218,16 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->except('_token', '_method', 'units');
+        $data = $request->except('_token', '_method', 'units', 'related_services', 'related_products', 'related_accessories');
 
-        // print_r(1); die;
+        // print_r($data); die;
 
         // $units = $request->units ?? '';
         // $weights = $request->weights ?? '';
         // $weight_prices = $request->weight_prices ?? '';
 
-        $sizes = $data['size'] ?? 0;
-        $prices = $data['product_prices']  ?? 0;
+        // $sizes = $data['size'] ?? 0;
+        // $prices = $data['product_prices']  ?? 0;
 
         // if(count($data['size'])>0){
         //     $data['size'] = implode(',',$data['size']);
@@ -244,17 +244,24 @@ class ProductController extends Controller
 
         $data['user_id'] = Auth::user()->id;
 
-        if ($data['user_id'] > 2) {
-            $data['status'] = 0;
+        // if ($data['user_id'] > 2) {
+        // }
+
+        $data['status'] = 1;
+
+        // print_r($data); die;
+
+        // $data['sku'] = "SKU" . rand(10, 999999999);
+
+        try {
+            $lastProduct = Product::create($data);
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
         }
-
-        $data['sku'] = "SKU" . rand(10, 999999999);
-
-        $lastProduct = Product::create($data);
-        // print_r(1); die;
+        // print_r($lastProduct->id); die;
 
         if ($request->hasFile('image')) {
-            $images = $request->image;
+            $images = $request->image ?? [];
             foreach ($images as $img) {
                 $newImage = new ProductImage;
 
@@ -272,45 +279,39 @@ class ProductController extends Controller
             }
         }
 
-        // if ($request->has('categories')) {
-        //     foreach($request->categories as $cat)
-        //         $proCat = DB::table('category_product')->insert([
-        //             'product_id' => $lastProduct->id,
-        //             'category_id' => $cat
-        //         ]);
+        if ($request->has('related_products')) {
+            foreach ($request->related_products as $pro) {
+                // print_r($pro); die;
+                $proCat = DB::table('related_products')->insert([
+                    'product_id' => $lastProduct->id,
+                    'related_product_id' => $pro,
+                    'type' => 'product'
+                ]);
+            }
+        }
 
-        // }        
+        if ($request->has('related_services')) {
+            foreach ($request->related_services as $pro) {
+                // print_r($pro); die;
+                $proCat = DB::table('related_products')->insert([
+                    'product_id' => $lastProduct->id,
+                    'related_product_id' => $pro,
+                    'type' => 'apple_service'
+                ]);
+            }
+        }
 
-        // if(!empty($data['size']) and count($sizes)>0){
+        if ($request->has('related_accessories')) {
+            foreach ($request->related_accessories as $pro) {
+                $proCat = DB::table('related_products')->insert([
+                    'product_id' => $lastProduct->id,
+                    'related_product_id' => $pro,
+                    'type' => 'accessory'
+                ]);
+            }
+        }
 
-        //     foreach($sizes as $key => $value){
-
-        //         $newData = new ProductSize;
-
-        //         $newData->product_id = $lastProduct->id;
-        //         $newData->product_size = $value;
-        //         $newData->product_price = $prices[$key];
-
-        //         $newData->save();
-
-        //     } 
-        // } 
-
-        // if(!empty($request->weights[0])){
-
-        //     foreach($weights as $key => $value){
-
-        //         $newData = new ProductWeight;
-
-        //         $newData->product_id = $lastProduct->id;
-        //         $newData->product_weight = $value;
-        //         $newData->product_price = $weight_prices[$key];
-        //         $newData->weight_unit = $units[$key];
-
-        //         $newData->save();
-        //     } 
-
-        // }
+        // print_r(1); die;
 
         return redirect()->route('admin.products.index', $lastProduct->id)->with('message', 'Create successful');
     }
@@ -359,7 +360,6 @@ class ProductController extends Controller
         $attributes = '';
 
         $images = ProductImage::where('product_id', $id)->orderBy('priority', 'ASC')->get();
-
 
         $previous = session()->get('previous_url');
         // var_dump($previous); die;
@@ -414,7 +414,6 @@ class ProductController extends Controller
             'units',
             'weights',
             'weight_prices'
-
         );
 
         $units = $request->units ?? '';
@@ -503,10 +502,6 @@ class ProductController extends Controller
                 $newData->save();
             }
         }
-
-
-
-
 
         // return redirect()->route('admin.products.index')
         return redirect()->back()
@@ -693,13 +688,103 @@ class ProductController extends Controller
     }
 
 
-    public function addVariants(Request $request, $id)
+    public function variantsList(Request $request, $product_id)
     {
-        $attributes = Attribute::all();
-        return view('admin.products.create-attributes', [
-            'attributes' => $attributes
+
+        if (isset($_GET['type']) && $_GET['type'] == 'Storage') {
+            try {
+
+                $list = DB::table('attribute_value_product_attribute')
+                    ->JOIN('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
+                    ->where('attribute_value_product_attribute.attribute_id', 3)
+                    ->where('attribute_value_product_attribute.product_id', $product_id)
+                    ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+            } catch (\Throwable $e) {
+                dd($e->getMessage());
+            }
+        }
+
+        // dd($list);
+        // $attributes = Attribute::all();
+        return view('admin.products.attributes-list', [
+            'attributes' => $list,
+            'product_id' => $product_id,
+            'type' => 'Storage'
         ]);
     }
+
+    public function colorsList(Request $request, $product_id)
+{
+            try {
+                $list = DB::table('attribute_values')
+                    ->JOIN('product_images', 'attribute_values.id', 'product_images.color_id')
+                    ->where('attribute_values.attribute_id', 1)
+                    ->where('product_images.product_id', $product_id)
+                    ->get(['attribute_values.*']);
+            } catch (\Throwable $e) {
+                dd($e->getMessage());
+            }
+        
+            return view('admin.products.colors-list', [
+            'colors' => $list,
+            'product_id' => $product_id,
+            'type' => 'Storage'
+        ]);
+    }
+
+    public function addVariants(Request $request, $product_id)
+    {
+        // print_r(1); die;
+        if (isset($_GET['type']) && $_GET['type'] != '') {
+            try {
+                $storage = DB::table('attribute_values')
+                    ->JOIN('attributes', 'attributes.id', 'attribute_values.attribute_id')
+                    ->where('attributes.name', $_GET['type'])
+                    ->get(['attribute_values.id', 'attribute_values.value']);
+            } catch (\Throwable $e) {
+                dd($e->getMessage());
+            }
+        }
+
+        // dd($storage);
+        // $attributes = Attribute::all();
+        return view('admin.products.create-attributes', [
+            'attributes' => $storage,
+            'product_id' => $product_id,
+            'type' => $_GET['type']
+
+        ]);
+    }
+
+    public function storeVariants(Request $request, $product_id)
+    {
+
+        $data = $request->except('_method', '_token', 'type');
+
+        if (isset($_GET['type']) && $_GET['type'] == 'Storage') {
+            $data['attribute_id'] = 3;
+            $data['product_id'] = $product_id;
+            try {
+                DB::table('attribute_value_product_attribute')->insert($data);
+            } catch (\Throwable $e) {
+                dd($e->getMessage());
+            }
+            return redirect('admin/variants/' . $product_id . '?type=' . $_GET['type'])->with('message', 'Variant added successfully');
+        } else if (isset($_GET['type']) && $_GET['type'] == 'Color') {
+            $data['attribute_id'] = $_GET['type_id'];
+            $data['product_id'] = $product_id;
+            try {
+                DB::table('attribute_value_product_attribute')->insert($data);
+            } catch (\Throwable $e) {
+                dd($e->getMessage());
+            }
+            return redirect('admin/variants/' . $product_id . '?type=' . $_GET['type'])->with('message', 'Variant added successfully');
+        }
+
+        
+    }
+
+
 
 
     public function getAttributes()

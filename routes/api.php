@@ -60,8 +60,15 @@ Route::namespace('Api')->group(function () {
     Route::get('appleServicesDetail/{id}','AppleServiceController@getAppleServiceDetail');
     
     
+    // States & Cities API
+    Route::get('statesList','UserDashboardController@getAllStates');
+    Route::get('citiesList/{state_id}','UserDashboardController@getAllCities');
+    
+    
     //User Dashboard
     Route::get('userProfile/{userid}','UserDashboardController@userProfile');
+    Route::get('userSavedAddress/{userid}','UserDashboardController@getUsersSavedAddresses');
+    Route::post('storeUserAddress/{userid}','UserDashboardController@postUserAddress');
     Route::post('addToCart','UserDashboardController@productAddToCart');
     Route::get('userCart/{userid}','UserDashboardController@userCartProducts');
     Route::post('addToWishlist','UserDashboardController@productAddToWishlist');

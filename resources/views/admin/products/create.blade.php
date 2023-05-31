@@ -93,10 +93,18 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="prelaunch_price">Prelaunch amount <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-addon">{{ config('cart.currency') }}</span>
+                            <input type="number" name="prelaunch_price" id="prelaunch_price" placeholder="Price" class="form-control" value="{{ old('prelaunch_price') }}" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="price">MRP <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-addon">{{ config('cart.currency') }}</span>
-                            <input type="number" name="price" id="price" placeholder="Price" class="form-control" value="{{ old('price') }}" required="required" onkeyup="getPrice(this)">
+                            <input type="number" name="price" id="price" placeholder="Price" class="form-control" value="{{ old('price') }}"  onkeyup="getPrice(this)">
                         </div>
                     </div>
 
@@ -104,7 +112,7 @@
                         <label for="price">Discount (in %) <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-addon">{{ config('cart.currency') }}</span>
-                            <input type="number" name="discount" id="discount" placeholder="Discount" class="form-control" value="" min='0' max='100' required="required" onkeyup="handleDiscount(this)" disabled>
+                            <input type="number" name="discount" id="discount" placeholder="Discount" class="form-control" value="" min='0' max='100' onkeyup="handleDiscount(this)" disabled>
                         </div>
                     </div>
 
@@ -128,7 +136,7 @@
                         <label for="cover">
                             Select Service
                         </label>
-                        <select name="related_services" id="related_services" class="form-control" multiple>
+                        <select name="related_services[]" id="related_services" class="form-control" multiple>
                                 @foreach($services as $service)
                             <option value="{{ $service->id ?? ''}}">{{ $service->service_name ?? '' }}</option>
                             @endforeach
@@ -146,7 +154,7 @@
                         <label for="cover">
                             Select Accessories
                         </label>
-                        <select name="related_accessories" id="related_accessories" class="form-control" multiple>
+                        <select name="related_accessories[]" id="related_accessories" class="form-control" multiple>
                             @foreach($related_accessories as $access)
                             <option value="{{ $access->id ?? ''}}">{{ $access->name ?? '' }}</option>
                             @endforeach
@@ -164,7 +172,7 @@
                         <label for="cover">
                             Select Products
                         </label>
-                        <select name="related_products" id="related_products" class="form-control" multiple>
+                        <select name="related_products[]" id="related_products" class="form-control" multiple>
                             @foreach($related_products as $prod)
                             <option value="{{ $prod->id ?? ''}}">{{ $prod->name ?? '' }}</option>
                             @endforeach
@@ -344,10 +352,6 @@
 
     });
 
-
-    $('#is_prelaunched').on('click', function(){
-        
-    })
 
     
 </script>

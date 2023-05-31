@@ -53,23 +53,23 @@ class UserDashboardController extends Controller
         if ($header) {
             $data = $request->all();
 
-            if(count($data)>0){
-                for($i=0 ; $i<count($data) ; $i++){
+            if (count($data) > 0) {
+                for ($i = 0; $i < count($data); $i++) {
                     if ($data[$i]['user_id'] == '' || $data[$i]['product_id'] == '' || $data[$i]['quantity'] == '' || $data[$i]['unit_price'] == '' || $data[$i]['total_price'] == '') {
 
                         return response()->json([
                             "status" => "0",
                             "message" => "Missing Parameters. User ID, Product Id, Product Quantity, Unit Price & Total Price are mendatory"
-        
+
                         ]);
                     } else {
-        
+
                         $last_id = Cart::insertGetId($data[$i]);
                         if ($last_id) {
                             return response()->json([
                                 "status" => "1",
                                 "message" => "Product add to cart successfully.",
-        
+
                             ]);
                         } else {
                             return response()->json([
@@ -80,7 +80,6 @@ class UserDashboardController extends Controller
                     }
                 }
             }
-
         } else {
             return response()->json([
                 "status" => "400",
@@ -277,8 +276,116 @@ class UserDashboardController extends Controller
             "data" => $orders
         ]);
 
-        print_r($orders);
-        die;
-        $items = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $orderId)->select('products.cover', 'products.description', 'order_product.*')->get();
+        // print_r($orders);
+        // die;
+        // $items = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $orderId)->select('products.cover', 'products.description', 'order_product.*')->get();
     }
+
+
+    public function getAllStates()
+    {
+        try {
+            $states = DB::table('states')->where('countries_id', 101)->get(['id','name as state_name']);
+        }
+        catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'States fetched successfully',
+            'data' => $states
+        ]);
+    }
+
+    public function getAllCities($state_id)
+    {
+        try {
+            $cities = DB::table('cities')->where('state_id', $state_id)->get(['id', 'name as city_name']);
+        }
+        catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Cities fetched successfully',
+            'data' => $cities
+        ]);
+    }
+
+
+    public function getUsersSavedAddresses(Request $request, $user_id)
+    {
+        $header = $request->header('Authorization');
+
+        if ($header) {
+
+            try {
+                $addresses = DB::table('addresses')
+                ->join('states', 'states.id', 'addresses.state_code', 'left')
+                ->join('cities', 'cities.id', 'addresses.city', 'left')
+                ->where('customer_id', $user_id)
+                ->get(['addresses.id', 'addresses.alias','addresses.address_1', 'addresses.address_2', 'addresses.zip as pincode', 'addresses.phone as conatct_no', 'addresses.landmark', 'cities.name as city_name', 'states.name as state_name']);
+            }
+            catch (\Throwable $e) {
+                dd($e->getMessage());
+            }
+            
+            return response()->json([
+                'status' => 1,
+                'message' => 'User saved addresses fetched successfully',
+                'data' => $addresses
+            ]);
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
+    }
+
+
+    public function postUserAddress(Request $request, $user_id){
+
+        $header = $request->header('Authorization');
+        if ($header) {
+            
+            $data = $request->all();
+            
+            $saveData = array(
+                'alias' => $data['alias'] ?? '',
+                'address_1' => $data['address_1'] ?? '',
+                'address_2' => $data['address_2'] ?? '',
+                'landmark' => $data['landmark'] ?? '',
+                'zip' => $data['pincode'] ?? '',
+                'state_code' => $data['state_id'] ?? '',
+                'city' => $data['city_id'] ?? '',
+                'country_id' => 101,
+                'status' => 1,
+                'delivery_address' => 0,
+                'customer_id' => $user_id,
+                'phone' => $data['contact_no'] ?? '',
+            );
+            // print_r($saveData); die;
+            
+            try {
+                DB::table('addresses')->insert($saveData);
+            }
+            catch (\Throwable $e) {
+                dd($e->getMessage());
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => "User's address saved successfully"
+            ]);
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
+    }
+
 }

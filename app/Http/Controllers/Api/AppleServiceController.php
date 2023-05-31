@@ -17,7 +17,7 @@ class AppleServiceController extends Controller
         return response()->json([
             "status" => 1,
             "message" => "Apple services fetched successfully.",
-            "date" => $services
+            "data" => $services
         ]);
     }
 
@@ -27,7 +27,7 @@ class AppleServiceController extends Controller
         return response()->json([
             "status" => 1,
             "message" => "Apple services fetched successfully.",
-            "date" => $services
+            "data" => $services
         ]);
     }
 }

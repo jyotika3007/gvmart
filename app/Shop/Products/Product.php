@@ -80,7 +80,10 @@ class Product extends Model
         'purchase_quantity',
         'return_order',
         'cancel_order',
-        'discount'
+        'discount',
+        'is_prelaunched',
+        'prelaunch_price',
+        'delivery_days'
     ];
 
     /**
