@@ -9,7 +9,7 @@
     <div class="box">
 
         <div class="form-title">
-            <h3>Products >> Storage List @if(!empty($keyword)) - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
+            <h3>Products >> Storage List for {{$product->name ?? ''}} </h3>
         </div>
 
         <div class="box-body">
@@ -29,11 +29,12 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <button type="submit" name="search" id="search" vaule="search" class="btn btn-primary">Submit</button>
                         <a href="{{ route('admin.products.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-default">Back To Products</a>
                         <a href="{{ url('admin/variants/'.$product_id.'/add?type='.$type) }}" class="btn btn-primary">Add New</a>
                     </div>
                 </div>
@@ -63,7 +64,7 @@
                         <td>{{ $attr->offer_price ?? 0.00 }}</td>
 
                         <td>
-                            <a href="{{ url('admin/variants/'.$attr->product_id.'/add?type=Color&type_id='.$attr->id ) }}" class="btn btn-success btn">Add</a>
+                            <a href="{{ url('admin/colors/'.$attr->product_id.'?type=Color&type_id='.$attr->id ) }}" class="btn btn-success btn">Add</a>
                         </td>
                         <td>
 

@@ -255,11 +255,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::namespace('Products')->group(function () {
 
             Route::get('updateProductBrand', 'ProductController@updateProductBrand');
-
             Route::get('variants/{product_id}', 'ProductController@variantsList');
             Route::get('colors/{product_id}', 'ProductController@colorsList');
+            Route::get('colors/{product_id}/add', 'ProductController@addColorVariants');
+            Route::get('colors/{product_id}/add-images/{color_id}', 'ProductController@addColorImages');
+            Route::post('colors/{product_id}/store-image/{color_id}', 'ProductController@storeColorImages');
             Route::get('variants/{product_id}/add', 'ProductController@addVariants');
             Route::post('variants/{product_id}/store', 'ProductController@storeVariants');
+            Route::post('colors/{product_id}/store', 'ProductController@storeColorVariants');
             Route::get('getSkuCode', 'ProductController@getSkuCode');
             Route::get('productVariants', 'ProductController@getAttributes');
 

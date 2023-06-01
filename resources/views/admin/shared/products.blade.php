@@ -7,7 +7,7 @@
             <td>Cover</td>
             <!--<td>Quantity</td>-->
             <!-- <td>Price</td> -->
-            <td>Remaining Stock</td>
+            <!-- <td>Remaining Stock</td> -->
             <td>Is New Arrival</td>
             <td>Is Best Seller</td>
             <td>Is Deal Item</td>
@@ -23,9 +23,7 @@
             <!--<td>{{ $product->id }}</td>-->
             <!-- <td></td> -->
             <td>
-
                 <a href="{{ route('admin.products.show', $product->id) }}">{{ $product->name }}</a>
-
             </td>
             <td>
                 @if(!empty($product->cover) && $product->cover!='')
@@ -34,7 +32,7 @@
             </td>
             <!--<td>{{ $product->quantity }}</td>-->
             <!-- <td>{{ config('cart.currency') }} {{ $product->price }}</td> -->
-            <td>{{ $product->stock_quantity }}</td>
+            <!-- <td>{{ $product->stock_quantity }}</td> -->
             <td>@include('layouts.featured', ['status' => $product->is_trending])</td>
             <td>@include('layouts.featured', ['status' => $product->is_best_seller])</td>
             <td>@include('layouts.featured', ['status' => $product->is_top_rated])</td>

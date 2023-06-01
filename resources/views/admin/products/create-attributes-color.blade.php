@@ -5,55 +5,46 @@
 <section class="content">
     @include('layouts.errors-and-messages')
     <div class="box">
-
         <div class="form-title">
-            <h3>Prodiucts >> Add Storage for {{$product->name ?? ''}}</h3>
+            <h3>Prodiucts >> Add Color for {{ $product->name ?? '' }}</h3>
         </div>
-
+        
         <div class="box-body">
-
+            
             <div class="row">
                 <div class="col-sm-6">
-
-                    <form action="{{ url('admin/variants/'.$product_id.'/store?type='.$type) }}" method="post" class="form" enctype="multipart/form-data">
+                    
+                    <form action="{{ url('admin/colors/'.$product_id.'/store?type='.$type.'&type_id='.$type_id) }}" method="post" class="form" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <br>
                         <div class="row">
                             <div class="form-group">
-                                <label for="name">Storage <span class="text-danger">*</span></label>
-                                <select name="attribute_value_id" id="attribute_value_id" class="form-control">
-                                    <option value="">Select Storage</option>
+                                <label for="name">Color <span class="text-danger">*</span></label>
+                                <select name="attribute_value_id" id="attribute_value_id" class="form-control" required>
+                                    <option value="">Select Color</option>
                                     @foreach($attributes as $attr)
                                     <option value="{{ $attr->id ?? ''}}">{{ $attr->value ?? '' }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-
+                        
                         <div class="form-group">
-                            <label for="quantity">Quantity</label>
-                            <input type="text" name="quantity" id="quantity" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price </label>
-                            <input type="text" name="price" id="price" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="offer_price">Offer Price </label>
-                            <input type="text" name="offer_price" id="offer_price" class="form-control">
+                            <label for="images">Images</label>
+                            <input type="file" name="images[]" id="images" class="form-control" multiple required>
+                            <p>To select multiple images, press CTRL + image</p>
                         </div>
 
                         @include('admin.shared.status-select', ['status' => 1])
 
                         <div class="box-footer">
                             <div class="btn-group">
-                                <a href="{{ url('admin/variants/'.$product_id.'?type=Storage') }}" class="btn btn-default">Back</a>
+                                <a href="{{ url('admin/colors/'.$product_id.'?type=Color&type_id='.$type_id) }}" class="btn btn-default">Back</a>
                                 <button type="submit" class="btn btn-primary">Create</button>
                             </div>
                         </div>
+                        
                     </form>
-                   
                 </div>
             </div>
             <div class="col-sm-6"></div>

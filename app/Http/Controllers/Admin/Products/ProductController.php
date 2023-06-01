@@ -691,6 +691,7 @@ class ProductController extends Controller
     public function variantsList(Request $request, $product_id)
     {
 
+        $product = Product::find($product_id);
         if (isset($_GET['type']) && $_GET['type'] == 'Storage') {
             try {
 
@@ -704,37 +705,75 @@ class ProductController extends Controller
             }
         }
 
-        // dd($list);
-        // $attributes = Attribute::all();
         return view('admin.products.attributes-list', [
             'attributes' => $list,
             'product_id' => $product_id,
-            'type' => 'Storage'
+            'type' => 'Storage',
+            'product' => $product
         ]);
     }
 
     public function colorsList(Request $request, $product_id)
-{
-            try {
-                $list = DB::table('attribute_values')
-                    ->JOIN('product_images', 'attribute_values.id', 'product_images.color_id')
-                    ->where('attribute_values.attribute_id', 1)
-                    ->where('product_images.product_id', $product_id)
-                    ->get(['attribute_values.*']);
-            } catch (\Throwable $e) {
-                dd($e->getMessage());
+    {
+        $product = Product::find($product_id);
+        try {
+            $ids = [];
+
+            $products = DB::table('product_images')->where('storage_id',$_GET['type_id'])->where('product_id',$product_id)->select('color_id')->distinct()->get();
+
+            foreach($products as $pro){
+                array_push($ids, $pro->color_id);
             }
-        
-            return view('admin.products.colors-list', [
+
+            $list = DB::table('attribute_values')
+            ->whereIn('id', $ids)
+            ->get();
+
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
+
+        return view('admin.products.colors-list', [
             'colors' => $list,
             'product_id' => $product_id,
-            'type' => 'Storage'
+            'type' => $_GET['type'],
+            'type_id' => $_GET['type_id'],
+            'product' => $product
+        ]);
+
+    }
+
+    
+    public function addColorImages(Request $request, $product_id, $color_id)
+    {
+        $product = Product::find($product_id);
+        
+        try {
+            $images = DB::table('product_images')
+            ->JOIN('attribute_values', 'attribute_values.id', 'product_images.color_id')
+            ->where('product_images.storage_id', $_GET['type_id'])
+            ->where('product_images.color_id', $color_id)
+            ->where('product_images.product_id', $product_id)
+            ->get(['attribute_values.code', 'attribute_values.value', 'product_images.src','product_images.id','product_images.status']);
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
+        // dd($images);
+        
+        return view('admin.products.product-images', [
+            'images' => $images,
+            'product_id' => $product_id,
+            'color_id' => $color_id,
+            'type_id' => $_GET['type_id'],
+            'product' => $product
         ]);
     }
+
 
     public function addVariants(Request $request, $product_id)
     {
         // print_r(1); die;
+        $product = Product::find($product_id);
         if (isset($_GET['type']) && $_GET['type'] != '') {
             try {
                 $storage = DB::table('attribute_values')
@@ -746,13 +785,34 @@ class ProductController extends Controller
             }
         }
 
-        // dd($storage);
-        // $attributes = Attribute::all();
         return view('admin.products.create-attributes', [
             'attributes' => $storage,
             'product_id' => $product_id,
-            'type' => $_GET['type']
+            'type' => $_GET['type'],
+            'product' => $product
+        ]);
+    }
 
+    public function addColorVariants(Request $request, $product_id)
+    {
+        $product = Product::find($product_id);
+        if (isset($_GET['type']) && $_GET['type'] != '') {
+            try {
+                $storage = DB::table('attribute_values')
+                ->JOIN('attributes', 'attributes.id', 'attribute_values.attribute_id')
+                ->where('attributes.name', $_GET['type'])
+                ->get(['attribute_values.id', 'attribute_values.value']);
+            } catch (\Throwable $e) {
+                dd($e->getMessage());
+            }
+        }
+
+        return view('admin.products.create-attributes-color', [
+            'attributes' => $storage,
+            'product_id' => $product_id,
+            'type' => $_GET['type'],
+            'product' => $product,
+            'type_id' => $_GET['type_id']
         ]);
     }
 
@@ -780,12 +840,81 @@ class ProductController extends Controller
             }
             return redirect('admin/variants/' . $product_id . '?type=' . $_GET['type'])->with('message', 'Variant added successfully');
         }
+    }
 
+    public function storeColorVariants(Request $request, $product_id)
+    {
+        
+        $data = $request->except('_method', '_token', 'type', 'type_id');
+        $images = $request->images;
+        
+        if ($request->hasFile('images')) {
+            foreach ($images as $img) {
+                $newImage = new ProductImage;
+                
+                $file = $img;
+
+                $file_name = time() . $file->getClientOriginalName();
+                $file->move(public_path() . '/storage/products/', $file_name);
+
+                // $file->move(public_path(). '/storage/products/', time().$file->getClientOriginalName());   
+                $newImage->src = 'products/' . $file_name;
+
+                $newImage->product_id = $product_id;
+                $newImage->priority = 1;
+                $newImage->status = 1;
+                $newImage->storage_id = $_GET['type_id'];
+                $newImage->color_id = $data['attribute_value_id'];
+
+                // dd($newImage);
+                try {
+                    $newImage->save();
+                } catch (\Throwable $e) {
+                    dd($e->getMessage());
+                }
+
+            }
+        }
+            return redirect('admin/colors/' . $product_id . '?type=' . $_GET['type'] . '&type_id=' . $_GET['type_id'])->with('message', 'Variant added successfully');
         
     }
 
+    public function storeColorImages(Request $request, $product_id, $color_id)
+    {
+        
+        $data = $request->except('_method', '_token', 'type', 'type_id');
+        $images = $request->images;
+        
+        if ($request->hasFile('images')) {
+            foreach ($images as $img) {
+                $newImage = new ProductImage;
+                
+                $file = $img;
 
+                $file_name = time() . $file->getClientOriginalName();
+                $file->move(public_path() . '/storage/products/', $file_name);
 
+                // $file->move(public_path(). '/storage/products/', time().$file->getClientOriginalName());   
+                $newImage->src = 'products/' . $file_name;
+
+                $newImage->product_id = $product_id;
+                $newImage->priority = 1;
+                $newImage->status = 1;
+                $newImage->storage_id = $_GET['type_id'];
+                $newImage->color_id = $color_id;
+
+                // dd($newImage);
+                try {
+                    $newImage->save();
+                } catch (\Throwable $e) {
+                    dd($e->getMessage());
+                }
+
+            }
+        }
+            return redirect('admin/colors/' . $product_id . '/add-images/' . $color_id . '?type=' . $_GET['type'] . '&type_id=' . $_GET['type_id'])->with('message', 'Image added successfully');
+        
+    }
 
     public function getAttributes()
     {

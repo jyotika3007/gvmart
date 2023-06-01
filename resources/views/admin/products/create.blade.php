@@ -69,7 +69,7 @@
                         <input type="text" name="sku" id="sku" placeholder="xxxxxxxxx" class="form-control product_slug_insert" value="" required="required">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="quantity">Min Purchase Quantity <span class="text-danger">*</span></label>
                         <input type="number" name="quantity" id="quantity" placeholder="Quantity" class="form-control" value="1" required="required">
                     </div>
@@ -77,7 +77,7 @@
                     <div class="form-group">
                         <label for="stock_quantity">Stock Quantity <span class="text-danger">*</span></label>
                         <input type="number" name="stock_quantity" id="stock_quantity" placeholder="Quantity" class="form-control" value="1" required="required">
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -99,30 +99,30 @@
                             <input type="number" name="prelaunch_price" id="prelaunch_price" placeholder="Price" class="form-control" value="{{ old('prelaunch_price') }}" >
                         </div>
                     </div>
-
+<!-- 
                     <div class="form-group">
                         <label for="price">MRP <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-addon">{{ config('cart.currency') }}</span>
                             <input type="number" name="price" id="price" placeholder="Price" class="form-control" value="{{ old('price') }}"  onkeyup="getPrice(this)">
                         </div>
-                    </div>
-
+                    </div> -->
+<!-- 
                     <div class="form-group">
                         <label for="price">Discount (in %) <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-addon">{{ config('cart.currency') }}</span>
                             <input type="number" name="discount" id="discount" placeholder="Discount" class="form-control" value="" min='0' max='100' onkeyup="handleDiscount(this)" disabled>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="sale_price">Sale Price</label>
                         <div class="input-group">
                             <span class="input-group-addon">{{ config('cart.currency') }}</span>
                             <input type="text" name="sale_price" id="sale_price" placeholder="Sale Price" class="form-control" value="{{ $product->sale_price }}" disabled>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -192,11 +192,11 @@
                         <input type="file" name="cover" id="cover" class="form-control">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="image">Images</label>
                         <input type="file" name="image[]" id="image" class="form-control" multiple>
                         <small class="text-warning">You can use ctr (cmd) to select multiple images</small>
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -300,7 +300,12 @@
                         @include('admin.shared.status-select', ['status' => 1])
                     </div>
                 </div>
-
+                <div class="box-footer">
+                    <div class="btn-group">
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-default">Back</a>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
 
             </div>
             <div class="col-md-4">
@@ -323,12 +328,7 @@
                     @endif
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.products.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </div>
+                
     </form>
     <!-- </div> -->
     <!-- /.box -->
