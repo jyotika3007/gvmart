@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Shop\CompanyDetail\CompanyDetail;
+use App\Shop\Cms\Cms;
 
 class CmsController extends Controller
 {
@@ -24,69 +25,33 @@ class CmsController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+public function getCmsDetail(){
+    if(isset($_GET['page']) && $_GET['page']!=''){
+        $cms = CMS::where('page',$_GET['page'])->first();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if($cms){
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+            return response()->json([
+                "status" => 1,
+                "message" => $cms->title ?? '' +" Detail fetched successfully",
+                "data" => $cms
+            ]);
+        }
+        else{
+            return response()->json([
+                "status" => 0,
+                "message" => "No record found for this page"
+            ]);
+        }
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    else{
+        return response()->json([
+            "status" => 0,
+            "message" => "Page name is required"
+        ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }
+
+
+   }

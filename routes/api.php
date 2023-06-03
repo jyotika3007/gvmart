@@ -41,10 +41,13 @@ Route::namespace('Api')->group(function () {
 
     // Product Detail
     Route::get('productDetail/{id}','ProductController@index');
+    Route::get('reviewsList/{product_id}','ProductController@getAllReviews');
+    Route::post('addReview','ProductController@storeProductReview');
 
 
     // Company Detail
     Route::get('companyDetail','CmsController@companyDetail');
+    Route::get('pageDetail','CmsController@getCmsDetail');
 
     
     // Offers Api

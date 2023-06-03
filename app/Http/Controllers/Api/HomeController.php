@@ -122,10 +122,23 @@ class HomeController extends Controller
 
     public function home_products()
     {
-        $sale_products = Product::where('is_top_rated', 1)->limit(15)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        $sales = Product::where('is_top_rated', 1)->where('status',1)->get();
+
+
+        // var_dump($sales); die;
+        
+        $sale_products = Product::where('is_top_rated', 1)->JOIN("attribute_value_product_attribute", "attribute_value_product_attribute.product_id", "products.id", "left")->limit(15)->get(['products.id', 'products.slug', 'products.name', 'products.cover', 'products.price', 'products.sale_price', 'products.discount', 'products.stock_quantity']);
+        
+        
+        
         $new_arrival_products = Product::where('is_trending', 1)->limit(15)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        
+        
+        
         $best_seller_products = Product::where('is_best_seller', 1)->limit(15)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
 
+        
+        
         return response()->json([
             'status' => 1,
             'message' => 'Products fetched successfully',
@@ -135,5 +148,6 @@ class HomeController extends Controller
                 'best_seller_products' => $best_seller_products
             ]
         ]);
+
     }
 }

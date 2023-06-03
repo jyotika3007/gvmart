@@ -33,7 +33,7 @@
                                 </td>
 
                                 <td>
-                                    <a href="{{ route('admin.cms.show', $page->id) }}">{{ substr($page->description ?? '',0,100) }}...</a>
+                                    <a href="{{ route('admin.cms.show', $page->id) }}"><?php echo substr($page->description ?? '',0,100) ?>...</a>
                                 </td>
                                 <td>
                                     <form action="{{ route('admin.cms.destroy', $page->id) }}" method="post" class="form-horizontal">
@@ -41,7 +41,7 @@
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
                                             <a href="{{ route('admin.cms.edit', $page->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                                            
+                        
                                         </div>
                                     </form>
                                 </td>

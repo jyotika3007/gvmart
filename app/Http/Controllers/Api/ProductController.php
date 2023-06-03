@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Shop\ProductImages\ProductImage;
+use App\Shop\ProductReviews\ProductReview;
 use Illuminate\Http\Request;
 use App\Shop\Products\Product;
 use Illuminate\Support\Facades\DB;
@@ -196,69 +197,42 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+  public function getAllReviews($product_id){
+    $reviews = ProductReview::where('product_id',$product_id)->get();
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Product reviews fetched successfully.',
+            'data' => $reviews
+        ]);
+  }
+
+
+  public function storeProductReview(Request $request){
+    $data = $request->all();
+
+    $data['status'] = 1;
+
+    try{
+        $result = ProductReview::create($data);
+    }
+    catch (\Throwable $e) {
+        dd($e->getMessage());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    if($result){
+        return response()->json([
+            'status' => 1,
+            'message' => 'Product review added successfully.'
+        ]);
+    }
+    else{
+        return response()->json([
+            'status' => 0,
+            'message' => 'Something went wrong.'
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

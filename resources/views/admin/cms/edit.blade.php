@@ -7,7 +7,7 @@
         <div class="box">
             
         <div class="form-title">
-            <h3>CMS >> {{$cms->page ?? ''}} </h3>
+            <h3>CMS >> {{$cms->title ?? ''}} </h3>
         </div>
 
             <form action="{{ route('admin.cms.update', $cms->id) }}" method="post" class="form" enctype="multipart/form-data">
