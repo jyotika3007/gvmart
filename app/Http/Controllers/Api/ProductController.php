@@ -93,6 +93,7 @@ class ProductController extends Controller
 
                 
                 $variants_data = [
+                    'Storage_id' => $st->id ?? '',
                     'Storage' => $st->value ?? '',
                     "price" => $st->price ?? 0,
                     "stock_quantity" => $st->quantity ?? 0,

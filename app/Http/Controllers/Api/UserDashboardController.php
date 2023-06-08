@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\AppleService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
@@ -9,6 +10,9 @@ use App\Shop\Cart\Cart;
 use App\Shop\Wishlist\Wishlist;
 use Illuminate\Support\Facades\DB;
 use App\Shop\Orders\Order;
+use App\Shop\Addresses\Address;
+use App\Shop\OrderStatuses\OrderStatus;
+use App\Shop\Products\Product;
 
 class UserDashboardController extends Controller
 {
@@ -285,9 +289,8 @@ class UserDashboardController extends Controller
     public function getAllStates()
     {
         try {
-            $states = DB::table('states')->where('countries_id', 101)->get(['id','name as state_name']);
-        }
-        catch (\Throwable $e) {
+            $states = DB::table('states')->where('countries_id', 101)->get(['id', 'name as state_name']);
+        } catch (\Throwable $e) {
             dd($e->getMessage());
         }
 
@@ -302,8 +305,7 @@ class UserDashboardController extends Controller
     {
         try {
             $cities = DB::table('cities')->where('state_id', $state_id)->get(['id', 'name as city_name']);
-        }
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             dd($e->getMessage());
         }
 
@@ -323,15 +325,14 @@ class UserDashboardController extends Controller
 
             try {
                 $addresses = DB::table('addresses')
-                ->join('states', 'states.id', 'addresses.state_code', 'left')
-                ->join('cities', 'cities.id', 'addresses.city', 'left')
-                ->where('customer_id', $user_id)
-                ->get(['addresses.id', 'addresses.alias','addresses.address_1', 'addresses.address_2', 'addresses.zip as pincode', 'addresses.phone as conatct_no', 'addresses.landmark', 'cities.name as city_name', 'states.name as state_name']);
-            }
-            catch (\Throwable $e) {
+                    ->join('states', 'states.id', 'addresses.state_code', 'left')
+                    ->join('cities', 'cities.id', 'addresses.city', 'left')
+                    ->where('customer_id', $user_id)
+                    ->get(['addresses.id', 'addresses.alias', 'addresses.address_1', 'addresses.address_2', 'addresses.zip as pincode', 'addresses.phone as conatct_no', 'addresses.landmark', 'cities.name as city_name', 'states.name as state_name']);
+            } catch (\Throwable $e) {
                 dd($e->getMessage());
             }
-            
+
             return response()->json([
                 'status' => 1,
                 'message' => 'User saved addresses fetched successfully',
@@ -346,13 +347,14 @@ class UserDashboardController extends Controller
     }
 
 
-    public function postUserAddress(Request $request, $user_id){
+    public function postUserAddress(Request $request, $user_id)
+    {
 
         $header = $request->header('Authorization');
         if ($header) {
-            
+
             $data = $request->all();
-            
+
             $saveData = array(
                 'alias' => $data['alias'] ?? '',
                 'address_1' => $data['address_1'] ?? '',
@@ -368,11 +370,10 @@ class UserDashboardController extends Controller
                 'phone' => $data['contact_no'] ?? '',
             );
             // print_r($saveData); die;
-            
+
             try {
                 DB::table('addresses')->insert($saveData);
-            }
-            catch (\Throwable $e) {
+            } catch (\Throwable $e) {
                 dd($e->getMessage());
             }
 
@@ -388,4 +389,114 @@ class UserDashboardController extends Controller
         }
     }
 
+    public function getOrderDetail($orderId)
+    {
+
+        $data = [];
+        $data['order'] = Order::where('id', $orderId)->first();
+
+        $data['billing_address'] = Address::where('id', $data['order']->address_id)->first();
+        $data['delivery_address'] = Address::where('id', $data['order']->delivery_address)->first();
+
+        $data['items'] = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $orderId)->get(['order_product.*', 'products.cover']);
+
+        $data['order_statuses'] = DB::table('order_statuses')->get();
+        $data['currentStatus'] = DB::table('order_statuses')->where('id', $data['order']->order_status_id)->first();
+        $data['customer'] = User::where('id', $data['order']->customer_id)->first();
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Order detail fetched successfully',
+            'data' => $data
+        ]);
+    }
+
+
+    public function getOrdersList($user_id)
+    {
+
+        $orders = [];
+        $data = [];
+        $orders_list = Order::where('customer_id', $user_id)->where('order_status_id', '<=', 5)->orderBy('id', 'DESC')->get();
+        $i = 0;
+
+        $order_statuses = OrderStatus::limit(5)->get();
+
+        if ($orders_list) {
+            foreach ($orders_list as $order) {
+                $orders[$i]['order'] = $order;
+
+                $items = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $order->id)->get(['order_product.*', 'products.cover', 'products.slug']);
+
+                $orders[$i]['items'] = $items;
+
+                $billing_address = Address::where('id', $order->address_id)->first();
+                $orders[$i]['billing_address'] = $billing_address;
+
+                $delivery_address = Address::where('id', $order->delivery_address)->first();
+                $orders[$i]['delivery_address'] = $delivery_address;
+
+
+                $i++;
+            }
+        }
+        // dd(1);
+
+        $data['orders'] = $orders;
+        $data['order_statuses'] = $order_statuses;
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Orders List fetched successfully',
+            'data' => $data
+        ]);
+    }
+
+    public function getCartRelatedItems(Request $request)
+    {
+        $data = $request->all();
+
+        $related_products = [];
+        $related_services = [];
+
+        for ($i = 0; $i < count($data); $i++) {
+
+            $products = DB::table('related_products')->where('product_id', $data['product_ids'][$i])->where('type','product')->get(['related_products.related_product_id as id']);
+            $services = DB::table('related_products')->where('product_id', $data['product_ids'][$i])->where('type','apple_service')->get(['related_products.related_product_id as id']);
+
+            $ids = [];
+            $service_id = [];
+
+            for($j=0 ; $j<count($products) ; $j++){
+                array_push($ids, $products[$j]->id);
+            }
+
+            for($j=0 ; $j<count($services) ; $j++){
+                array_push($service_id, $services[$j]->id);
+            }
+
+            $products_array = Product::whereIn('id', $ids)->get(['id','slug','name','cover','price','sale_price','discount','stock_quantity']);
+            $apple_services = AppleService::whereIn('id', $service_id)->get();
+            
+            if($products_array){
+                foreach($products_array as $pro)
+                    array_push($related_products,$pro);
+            }
+
+            if($apple_services){
+                foreach($apple_services as $app)
+                    array_push($related_services,$app);
+            }
+
+        }
+
+        $data_new['related_products'] = $related_products;
+        $data_new['related_services'] = $related_services;
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Related items fetched successfully.',
+            'data' => $data_new
+        ]);
+    }
 }

@@ -96,12 +96,6 @@ class CustomerAddressController extends Controller
 
         return redirect()->route('dashboard')
             ->with('message', 'Address creation successful');
-    }
-
-
-
- 
-
-    
+    }   
 
 }

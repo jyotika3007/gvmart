@@ -7,51 +7,118 @@ use Illuminate\Http\Request;
 use App\Shop\Categories\Category;
 use App\Shop\Products\Product;
 use App\Shop\Attributes\Attribute;
+use App\Shop\ProductImages\ProductImage;
+use Dompdf\Css\Color;
 use Illuminate\Support\Facades\DB;
 
 class CategoryProductController extends Controller
 {
-   
+
     // Get products based on categories
     public function index($cat_id)
     {
         $ids = [];
-        $categories = Category::where('id',$cat_id)->where('status',1)->get(['id']);
+        $final_sales_products = [];
+        $categories = Category::where('id', $cat_id)->where('status', 1)->get(['id']);
 
-        // print_r($categories); die;
-        
-        foreach($categories as $cat){
+        foreach ($categories as $cat) {
             array_push($ids, $cat->id);
-            $sub_categories = Category::where('parent_id',$cat->id)->where('status',1)->get(['id']);
-            
-            foreach($sub_categories as $sub_cat){
-                // print_r($cat->id); die;
+            $sub_categories = Category::where('parent_id', $cat->id)->where('status', 1)->get(['id']);
+
+            foreach ($sub_categories as $sub_cat) {
+
                 array_push($ids, $sub_cat->id);
-                $child_categories = Category::where('parent_id',$sub_cat->id)->where('status',1)->get(['id']);
-                
-                foreach($child_categories as $child_cat){
+                $child_categories = Category::where('parent_id', $sub_cat->id)->where('status', 1)->get(['id']);
+
+                foreach ($child_categories as $child_cat) {
                     array_push($ids, $child_cat[0]->id);
                 }
             }
         }
-        // print_r($ids);
 
-        $products = Product::JOIN('category_product','category_product.product_id','products.id')->whereIn('category_product.category_id',$ids)->get(['products.id','products.slug','products.name','products.cover','products.price','products.sale_price','products.discount','products.stock_quantity']);
+        $products = Product::JOIN('category_product', 'category_product.product_id', 'products.id')->whereIn('category_product.category_id', $ids)->get(['products.id', 'products.slug', 'products.name', 'products.cover', 'products.price', 'products.sale_price', 'products.discount', 'products.stock_quantity']);
+
+        foreach ($products as $sp) {
+            $attributes = DB::table('attribute_value_product_attribute')
+                ->join('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
+                ->where('attribute_value_product_attribute.product_id', $sp->id)
+                ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+
+
+
+            if (count($attributes) > 0) {
+                foreach ($attributes as $attr) {
+
+                    $prods = clone $sp;
+
+                    $prods->storage = $attr->value;
+                    $prods->storage_id = $attr->id;
+                    $prods->price = $attr->price ?? 0;
+                    $prods->offer_price = $attr->offer_price ?? 0;
+                    $prods->stock_quantity = $attr->quantity ?? 0;
+
+                    // $colors = DB::table('product_images')
+                    //     ->JOIN('attribute_values', 'attribute_values.id', 'product_images.color_id')
+                    //     ->where('product_id', $prods->id)
+                    //     ->where('storage_id', $attr->id)
+                    //     ->distinct('color_id')
+                    //     ->get(['product_images.id', 'product_images.src', 'attribute_values.value', 'attribute_values.code']);
+
+                    $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
+
+
+                    // dd($color_ids);
+
+                    if (count($color_ids) > 0) {
+                        foreach ($color_ids as $col) {
+                            $color_products = clone $prods;
+                            $product_img = ProductImage::where('product_id', $prods->id)->where('color_id', $col->color_id)->first(['src']);
+                            $color_code = DB::table('attribute_values')->where('id', $col->color_id)->first(['value', 'code']);
+                            // dd($color_code);
+                            if($product_img)
+                                $color_products->cover = $product_img->src ?? '';
+                            else
+                                $color_products->cover = '';
+
+                            if($color_code){
+                                $color_products->color = $color_code->value ?? '';
+                                $color_products->color_code = $color_code->code ?? '';
+                            }
+                            else{
+                                $color_products->color = '';
+                                $color_products->color_code = '';
+                            }
+
+                            array_push($final_sales_products, $color_products);
+                        }
+                    } else {
+                        $prods->color = '';
+                        $prods->color_code = '';
+                        array_push($final_sales_products, $prods);
+                    }
+
+                    // dd($final_sales_products);
+                }
+            } else {
+                array_push($final_sales_products, $sp);
+            }
+        }
 
         return response()->json([
             'status' => 1,
             'message' => 'Products fetched successfully',
-            'data' => $products
+            'data' => $final_sales_products
         ]);
     }
 
-    public function getVariants(){
-        $colors = Attribute::JOIN('attribute_values','attribute_values.attribute_id','attributes.id')->where('attributes.name','Color')->get([ 'attribute_values.value', 'attribute_values.code']);
+    public function getVariants()
+    {
+        $colors = Attribute::JOIN('attribute_values', 'attribute_values.attribute_id', 'attributes.id')->where('attributes.name', 'Color')->get(['attribute_values.value', 'attribute_values.code']);
         // $colors = Attribute::JOIN('attribute_values','attribute_values.attribute_id','attributes.id')->where('attributes.name','Color')->get();
-        $storage = Attribute::JOIN('attribute_values','attribute_values.attribute_id','attributes.id')->where('attributes.name','Storage')->get(['attribute_values.value', 'attribute_values.code']);
-        $min_price = Product::orderBy('price','ASC')->first(['price']);
+        $storage = Attribute::JOIN('attribute_values', 'attribute_values.attribute_id', 'attributes.id')->where('attributes.name', 'Storage')->get(['attribute_values.value', 'attribute_values.code']);
+        $min_price = Product::orderBy('price', 'ASC')->first(['price']);
         // print_r($min_price); die;
-        $max_price = Product::orderBy('price','DESC')->first('price');
+        $max_price = Product::orderBy('price', 'DESC')->first('price');
 
         $data['min_price'] = $min_price->price ?? 0;
         $data['max_price'] = $max_price->price ?? 0;
@@ -64,5 +131,4 @@ class CategoryProductController extends Controller
             'data' => $data
         ]);
     }
-
 }

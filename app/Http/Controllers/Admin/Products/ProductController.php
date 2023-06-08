@@ -192,7 +192,7 @@ class ProductController extends Controller
         // $categories = $this->getCategories();
         $res_products = Product::where('status', 1)->get(['id', 'name']);
         $res_assessories = DB::table('products')->join('category_product', 'category_product.product_id', 'products.id')->where('category_product.category_id', 5)->where('products.status', 1)->get(['products.id', 'products.name']);
-        $attributes = Attribute::all();
+        $attributes = Attribute::whereNotIn('id',[1,3])->get();
 
         // print_r($categories[0]->id); die;
 
@@ -311,9 +311,37 @@ class ProductController extends Controller
             }
         }
 
+
+
+        if($request->has('attributeKey') && $request->has('attributeValue')){
+            $attributeValues = $request->attributeValue;
+              foreach($request->attributeKey as $k=>$v){
+
+                try {
+                    $arrtId = DB::table('attribute_values')->insertGetId([
+                        'attribute_id' => $v,
+                        'value'=> $attributeValues[$k]
+                        ]);
+
+                        // dd($arrtId);
+        
+                        DB::table('attribute_value_product_attribute')->insertGetId([
+                            'product_id' => $lastProduct->id,
+                            'attribute_id' => $v,
+                            'attribute_value_id' => $arrtId,
+                            'status' => 1
+                        ]);
+                } catch (\Throwable $e) {
+                    dd($e->getMessage());
+                }
+
+                 
+            }
+        }
+
         // print_r(1); die;
 
-        return redirect()->route('admin.products.index', $lastProduct->id)->with('message', 'Create successful');
+        return redirect()->route('admin.products.index')->with('message', 'Create successful');
     }
 
 
@@ -326,62 +354,43 @@ class ProductController extends Controller
 
     public function edit(int $id)
     {
-        $product_sizes = ProductSize::where('product_id', $id)->get();
-        $product_weights = ProductWeight::where('product_id', $id)->get();
+        
         $product = Product::find($id);
-        $productAttributes = "";
+        
+        $categories = Category::orderBy('id', 'DESC')->get();
+        $services = AppleService::all();
+        
+        $res_products = Product::where('status', 1)->whereNotIn('id',$id)->get(['id', 'name']);
+        $res_assessories = DB::table('products')->join('category_product', 'category_product.product_id', 'products.id')->where('category_product.category_id', 5)->where('products.status', 1)->get(['products.id', 'products.name']);
+        
+        dd(1);
+        $attributes = Attribute::whereNotIn('id',[1,3])->get();
+       
+        $related_accessories = DB::table('related_products')->where('type','accessory')->where('product_id',$id)->get(['products.id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        $related_products = DB::table('related_products')->where('type','product')->where('product_id',$id)->get(['products.id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        $related_services = DB::table('related_products')->where('type','apple_service')->where('product_id',$id)->get(['apple_services.id', 'service_name', 'service_cover', 'service_description', 'service_price']);
+
 
         $brands = '';
         $user = Auth::user();
 
-        if ($user->user_role == 'vendor') {
-            $brands = Brand::where('user_id', $user->id)->get();
-        } else {
             $brands = Brand::all();
-        }
-
-        // $qty = $productAttributes->map(function ($item) {
-        //     return $item->quantity;
-        // })->sum();
-
-        $qty = 0;
-
-        $categories = $this->getCategories();
-
-        $category_products = DB::table('category_product')->where('product_id', $id)->get();
-        $selectedIds = array();
-        if ($category_products) {
-            foreach ($category_products as $cat)
-                $selectedIds[] = $cat->category_id;
-        }
-
-        // var_dump($selectedIds); die;
-
-        $attributes = '';
-
-        $images = ProductImage::where('product_id', $id)->orderBy('priority', 'ASC')->get();
+        
 
         $previous = session()->get('previous_url');
         // var_dump($previous); die;
 
         return view('admin.products.edit', [
             'product' => $product,
-            'images' => $images,
             'categories' => $categories,
-            'selectedIds' => $selectedIds,
             'attributes' => $attributes,
-            'productAttributes' => $product->quantity,
-            'qty' => $qty,
+            'services' => $services,
+            'res_products' => $res_products,
+            'res_assessories' => $res_assessories,
+            'related_accessories' => $related_accessories,
+            'related_products' => $related_products,
+            'related_services' => $related_services,
             'brands' => $brands,
-            'weight' => $product->weight,
-            'default_weight' => $product->mass_unit,
-            'size' => $product->size ?? '',
-            'color' => $product->color ?? '',
-            'product_type' => $product->product_type ?? '',
-            'material' => $product->material ?? '',
-            'weight_units' => Product::MASS_UNIT,
-            'product_sizes' => $product_sizes ?? '',
-            'product_weights' => $product_weights ?? '',
             'previous' => $previous,
         ]);
     }

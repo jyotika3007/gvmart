@@ -122,32 +122,85 @@ class HomeController extends Controller
 
     public function home_products()
     {
-        $sales = Product::where('is_top_rated', 1)->where('status',1)->get();
+        $sale_products = Product::where('is_top_rated', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        $new_arrival_products = Product::where('is_trending', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        $best_seller_products = Product::where('is_best_seller', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
 
+        $final_sales_products = [];
+        $final_new_arrival_products = [];
+        $final_best_seller_products = [];
 
-        // var_dump($sales); die;
-        
-        $sale_products = Product::where('is_top_rated', 1)->JOIN("attribute_value_product_attribute", "attribute_value_product_attribute.product_id", "products.id", "left")->limit(15)->get(['products.id', 'products.slug', 'products.name', 'products.cover', 'products.price', 'products.sale_price', 'products.discount', 'products.stock_quantity']);
-        
-        
-        
-        $new_arrival_products = Product::where('is_trending', 1)->limit(15)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
-        
-        
-        
-        $best_seller_products = Product::where('is_best_seller', 1)->limit(15)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        foreach($sale_products as $sp){
+            $attributes = DB::table('attribute_value_product_attribute')
+            ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
+            ->where('attribute_value_product_attribute.product_id',$sp->id)
+            ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+            if(count($attributes)>0){
+                foreach($attributes as $attr){
+                    $prods = clone $sp;
+                    $prods->storage = $attr->value;
+                    $prods->storage_id = $attr->id;
+                    $prods->price = $attr->price ?? 0;
+                    $prods->offer_price = $attr->offer_price ?? 0;
+                    $prods->stock_quantity = $attr->quantity ?? 0;
+                    array_push($final_sales_products,$prods);
+                }
+            }
+            else{
+                array_push($final_sales_products, $sp);
+            }
+        }
 
-        
-        
+        foreach($new_arrival_products as $sp){
+            $attributes = DB::table('attribute_value_product_attribute')
+            ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
+            ->where('attribute_value_product_attribute.product_id',$sp->id)
+            ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+            if(count($attributes)>0){
+                foreach($attributes as $attr){
+                    $prods = clone $sp;
+                    $prods->storage = $attr->value;
+                    $prods->storage_id = $attr->id;
+                    $prods->price = $attr->price ?? 0;
+                    $prods->offer_price = $attr->offer_price ?? 0;
+                    $prods->stock_quantity = $attr->quantity ?? 0;
+                    array_push($final_new_arrival_products,$prods);
+                }
+            }
+            else{
+                array_push($final_new_arrival_products, $sp);
+            }
+        }
+
+        foreach($best_seller_products as $sp){
+            $attributes = DB::table('attribute_value_product_attribute')
+            ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
+            ->where('attribute_value_product_attribute.product_id',$sp->id)
+            ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+            if(count($attributes)>0){
+                foreach($attributes as $attr){
+                    $prods = clone $sp;
+                    $prods->storage = $attr->value;
+                    $prods->storage_id = $attr->id;
+                    $prods->price = $attr->price ?? 0;
+                    $prods->offer_price = $attr->offer_price ?? 0;
+                    $prods->stock_quantity = $attr->quantity ?? 0;
+                    array_push($final_best_seller_products,$prods);
+                }
+            }
+            else{
+                array_push($final_best_seller_products, $sp);
+            }
+        }
+
         return response()->json([
             'status' => 1,
             'message' => 'Products fetched successfully',
             'data' => [
-                'sale_products' => $sale_products,
-                'new_arrival_products' => $new_arrival_products,
-                'best_seller_products' => $best_seller_products
+                'sale_products' => $final_sales_products,
+                'new_arrival_products' => $final_new_arrival_products,
+                'best_seller_products' => $final_best_seller_products
             ]
         ]);
-
     }
 }

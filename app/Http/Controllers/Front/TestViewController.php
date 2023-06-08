@@ -9,7 +9,7 @@ use App\Shop\ShopCategory\ShopCategory;
 use App\Shop\Booking\Booking;
 use App\Shop\Brands\Brand;
 use App\Shop\Products\Product;
-use App\Shop\Promocodes\ Promocode;
+use App\Shop\Promocodes\Promocode;
 use App\Shop\ProductReviews\ProductReview;
 use App\Shop\Categories\Category;
 use App\Shop\Wishlist\Wishlist;

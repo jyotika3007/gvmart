@@ -27,15 +27,15 @@
                     <div class="form-group">
                         <label for="name">Category <span class="text-danger">*</span></label>
                         @if(isset($categories) && count($categories)>0)
-                   
+
                         <select name="category_id" id="category_id" class="form-control select2" required>
                             <option value=""></option>
                             @foreach($categories as $cat)
                             <option value="{{$cat->id ?? ''}}">{{ $cat->name ?? '' }}</option>
                             @endforeach
                         </select>
-                    
-                    @endif
+
+                        @endif
                     </div>
 
                 </div>
@@ -88,7 +88,7 @@
                     <br />
                     <div class="form-group">
                         <label for="price">
-                            <h4>Prelaunch ? &nbsp; &nbsp;<input type="checkbox" name="is_prelaunched" id="is_prelaunched" value="1" style="width: 15px; height: 15px" >    </h4> 
+                            <h4>Prelaunch ? &nbsp; &nbsp;<input type="checkbox" name="is_prelaunched" id="is_prelaunched" value="1" style="width: 15px; height: 15px"> </h4>
                         </label>
                     </div>
 
@@ -96,10 +96,10 @@
                         <label for="prelaunch_price">Prelaunch amount <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-addon">{{ config('cart.currency') }}</span>
-                            <input type="number" name="prelaunch_price" id="prelaunch_price" placeholder="Price" class="form-control" value="{{ old('prelaunch_price') }}" >
+                            <input type="number" name="prelaunch_price" id="prelaunch_price" placeholder="Price" class="form-control" value="{{ old('prelaunch_price') }}">
                         </div>
                     </div>
-<!-- 
+                    <!-- 
                     <div class="form-group">
                         <label for="price">MRP <span class="text-danger">*</span></label>
                         <div class="input-group">
@@ -107,7 +107,7 @@
                             <input type="number" name="price" id="price" placeholder="Price" class="form-control" value="{{ old('price') }}"  onkeyup="getPrice(this)">
                         </div>
                     </div> -->
-<!-- 
+                    <!-- 
                     <div class="form-group">
                         <label for="price">Discount (in %) <span class="text-danger">*</span></label>
                         <div class="input-group">
@@ -137,7 +137,7 @@
                             Select Service
                         </label>
                         <select name="related_services[]" id="related_services" class="form-control" multiple>
-                                @foreach($services as $service)
+                            @foreach($services as $service)
                             <option value="{{ $service->id ?? ''}}">{{ $service->service_name ?? '' }}</option>
                             @endforeach
                         </select>
@@ -199,6 +199,42 @@
                     </div> -->
                 </div>
 
+
+                <div class="cardDiv">
+                    <div class="form-title">
+                        <h3>Product Specifications </h3>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="cover">Select Attribute</label>
+                        @if(isset($attributes) && count($attributes)>0)
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <select id="attribute_select" class="form-control select2" required>
+                                    <option value="">Select Attributue</option>
+                                    @foreach($attributes as $attr)
+                                    <option value="{{$attr->id ?? ''}}/{{ $attr->name ?? '' }}">{{ $attr->name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary" onclick="addNewAttribute()">Add</button>
+                            </div>
+                        </div>
+                        @endif
+
+                        <div id="productAttributes" style="margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top:15px">
+
+                        </div>
+
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label for="image">Images</label>
+                        <input type="file" name="image[]" id="image" class="form-control" multiple>
+                        <small class="text-warning">You can use ctr (cmd) to select multiple images</small>
+                    </div> -->
+                </div>
 
                 <div class="cardDiv">
                     <div class="form-title">
@@ -309,7 +345,7 @@
 
             </div>
             <div class="col-md-4">
-              
+
                 <div class="cardDiv">
                     <div class="form-title">
                         <h3>Additional Info Info </h3>
@@ -328,7 +364,7 @@
                     @endif
                 </div>
                 <!-- /.box-body -->
-                
+
     </form>
     <!-- </div> -->
     <!-- /.box -->
@@ -339,7 +375,7 @@
 
 @section('js')
 
-<script src="{{ asset('js/multiple-select.js') }}" ></script>
+<script src="{{ asset('js/multiple-select.js') }}"></script>
 
 <script>
     $('#discount').on('keyup', function() {
@@ -352,8 +388,40 @@
 
     });
 
+    var countAtt = 1;
 
-    
+    function addNewAttribute() {
+        let attrValue = $('#attribute_select').val() ?? '';
+        
+
+        if (attrValue != '') {
+            let html = `<div class="row" style="margin-bottom: 15px" id="productAtt${countAtt}">
+                                <div class="col-sm-5">
+                                    <option value="">Attributue</option>
+                                    <input type="hidden" name="attributeKey[]"  value="${attrValue.split('/')[0]}" class="form-control">
+                                    <input type="text" readonly value="${attrValue.split('/')[1]}" class="form-control">
+                                </div>
+                                <div class="col-sm-5">
+                                    <option value="">Attributue Value</option>
+                                    <input type="text" name="attributeValue[]" class="form-control">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-danger" style="margin-top: 21px" onclick="remove(${countAtt})">X</button>
+                                </div>
+                            </div>`;
+
+            countAtt++;
+            console.log(html)
+            $('#productAttributes').append(html);
+        } else {
+            alert('First select the attribute');
+        }
+    }
+
+    function remove(id) {
+        // alert(id)
+        $('#productAtt' + id).remove();
+    }
 </script>
 
 @endsection

@@ -80,6 +80,10 @@ Route::namespace('Api')->group(function () {
     Route::post('removeFromWishlist','UserDashboardController@removeFromWishlist');
     Route::post('removeFromCart','UserDashboardController@removeFromCart');
     Route::patch('updateUserProfile/{user_id}','UserDashboardController@updateUserProfile');
+    Route::get('orderDetail/{order_id}','UserDashboardController@getOrderDetail');
+    Route::get('ordersList/{user_id}','UserDashboardController@getOrdersList');
+    Route::post('checkout/{user_id}','CheckoutController@checkout');
+    Route::get('cartRelatedItems','UserDashboardController@getCartRelatedItems');
     
 
 });
