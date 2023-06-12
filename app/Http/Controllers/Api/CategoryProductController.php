@@ -66,7 +66,6 @@ class CategoryProductController extends Controller
 
                     $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
 
-
                     // dd($color_ids);
 
                     if (count($color_ids) > 0) {

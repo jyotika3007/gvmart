@@ -208,7 +208,6 @@ class ProductController extends Controller
         ]);
   }
 
-
   public function storeProductReview(Request $request){
     $data = $request->all();
 

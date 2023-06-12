@@ -84,6 +84,7 @@ Route::namespace('Api')->group(function () {
     Route::get('ordersList/{user_id}','UserDashboardController@getOrdersList');
     Route::post('checkout/{user_id}','CheckoutController@checkout');
     Route::get('cartRelatedItems','UserDashboardController@getCartRelatedItems');
+    Route::get('compareProduct/{product_id}','CompareProductsController@getcomparedProductDetail');
+    Route::get('compareProductsList','CompareProductsController@getCompareProductsList');
     
-
 });
