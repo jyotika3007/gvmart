@@ -6,7 +6,7 @@
     @include('layouts.errors-and-messages')
     <div class="box">
         <div class="form-title">
-            <h3>Customers >> Create Customer</h3>
+            <h3>Users >> Create User</h3>
         </div>
 
         <div class="row">

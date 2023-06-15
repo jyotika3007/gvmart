@@ -9,7 +9,7 @@
             <div class="box">
 
             <div class="form-title">
-            <h3>Customers >> Customers List @if(!empty($keyword)) - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif</h3>
+            <h3>Users >> Users List @if(!empty($keyword)) - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif</h3>
         </div>
 
                 <div class="box-body">
@@ -46,6 +46,7 @@
                             <tr>
                                 <td class="col-md-2">Created At</td>
                                 <td class="col-md-2">Name</td>
+                                <td class="col-md-2">Role</td>
                                 <td class="col-md-2">Email</td>
                                 <td class="col-md-2">Mobile</td>
                                 <td class="col-md-2">Status</td>
@@ -57,6 +58,7 @@
                             <tr>
                                 <td>{{ date('M d, Y',strtotime(explode(' ',$customer['created_at'])[0])) }}</td>
                                 <td>{{ $customer['name'] }}</td>
+                                <td>{{ $customer['user_role'] }}</td>
                                 <td>{{ $customer['email'] }}</td>
                                 <td>{{ $customer['mobile'] ?? ''}}</td>
                                 <td>@include('layouts.status', ['status' => $customer['status']])</td>

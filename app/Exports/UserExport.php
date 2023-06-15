@@ -16,6 +16,7 @@ class UserExport implements FromCollection, WithHeadings
         return[
             'Id',
             'Name',
+            'User Role',
             'Email',
             'Mobile',
             'Status',
@@ -25,6 +26,6 @@ class UserExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        return User::where('user_role','customer')->get(['id','name','email','mobile','status','created_at']);
+        return User::orderBy('id','ASC')->get(['id','name','user_role','email','mobile','status','created_at']);
     }
 }

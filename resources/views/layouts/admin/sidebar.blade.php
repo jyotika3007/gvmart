@@ -51,8 +51,8 @@ $company = DB::table('company_details')->first();
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ route('admin.customers.create') }}"> Add Customer</a></li>
-                    <li><a href="{{ route('admin.customers.index') }}"> Customers List</a></li>
+                    <li><a href="{{ route('admin.customers.create') }}"> Add User</a></li>
+                    <li><a href="{{ route('admin.customers.index') }}"> Users List</a></li>
                     
                     <!-- <li><a href="{{ route('admin.complaints.index') }}"> Manage Feedback</a></li> -->
                     <!-- <li><a href="{{ url('admin/wishlist/index') }}"> Customers Wishlist</a></li> -->

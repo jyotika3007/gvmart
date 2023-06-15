@@ -10,13 +10,12 @@ use App\Shop\Categories\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class CompareProductsController extends Controller
 {
 
-    public function getCompareProductsList(Request $request){
-        print_r($request->category_id);
-
+    public function getCompareProductsList(Request $request)
+    {
+      
         $categories = Category::where('parent_id', NULL)->where('id', $request->category_id)->get(['id']);
         $products = [];
 
@@ -48,10 +47,15 @@ class CompareProductsController extends Controller
             }
         }
 
+        $attributes = Attribute::get(['name']);
+
+        $data['products'] = $products;
+        $data['attributes'] = $attributes;
+
         return response()->json([
             "status" => 1,
             "message" => "Categories fetched successfully.",
-            "data" => $products
+            "data" => $data
         ]);
     }
 

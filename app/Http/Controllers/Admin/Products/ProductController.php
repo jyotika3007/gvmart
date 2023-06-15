@@ -44,8 +44,6 @@ class ProductController extends Controller
         if (!empty($all_categories)) {
 
             foreach ($all_categories as $category) {
-                // $i=0;
-
                 $item = array();
                 $cat = Category::where('parent_id', $category->id)->get();
 
@@ -71,7 +69,7 @@ class ProductController extends Controller
         }
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
-        //  echo $previous; die;
+        
         return view('admin.products.list', [
             'products' => $list
         ]);
@@ -92,7 +90,7 @@ class ProductController extends Controller
         }
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
-        //  echo $previous; die;
+       
         return view('admin.products.list', [
             'products' => $list,
             'title' => $title
@@ -114,7 +112,7 @@ class ProductController extends Controller
         }
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
-        //  echo $previous; die;
+        
         return view('admin.products.out_stock_list', [
             'products' => $list,
             'title' => $title
@@ -125,8 +123,6 @@ class ProductController extends Controller
     {
 
         $list = '';
-
-        $user = Auth::user();
 
         $title = "Vendor's New ";
 
@@ -189,12 +185,10 @@ class ProductController extends Controller
 
         $categories = Category::orderBy('id', 'DESC')->get();
         $services = AppleService::all();
-        // $categories = $this->getCategories();
+        
         $res_products = Product::where('status', 1)->get(['id', 'name']);
         $res_assessories = DB::table('products')->join('category_product', 'category_product.product_id', 'products.id')->where('category_product.category_id', 5)->where('products.status', 1)->get(['products.id', 'products.name']);
         $attributes = Attribute::whereNotIn('id',[1,3])->get();
-
-        // print_r($categories[0]->id); die;
 
         return view('admin.products.create', [
             'categories' => $categories,
@@ -220,19 +214,6 @@ class ProductController extends Controller
     {
         $data = $request->except('_token', '_method', 'units', 'related_services', 'related_products', 'related_accessories');
 
-        // print_r($data); die;
-
-        // $units = $request->units ?? '';
-        // $weights = $request->weights ?? '';
-        // $weight_prices = $request->weight_prices ?? '';
-
-        // $sizes = $data['size'] ?? 0;
-        // $prices = $data['product_prices']  ?? 0;
-
-        // if(count($data['size'])>0){
-        //     $data['size'] = implode(',',$data['size']);
-        // }
-
         $data['slug'] = str_replace(' ', '-', $request->input('name'));
 
         if ($request->hasFile('cover')) {
@@ -244,21 +225,13 @@ class ProductController extends Controller
 
         $data['user_id'] = Auth::user()->id;
 
-        // if ($data['user_id'] > 2) {
-        // }
-
         $data['status'] = 1;
-
-        // print_r($data); die;
-
-        // $data['sku'] = "SKU" . rand(10, 999999999);
 
         try {
             $lastProduct = Product::create($data);
         } catch (\Throwable $e) {
             dd($e->getMessage());
         }
-        // print_r($lastProduct->id); die;
 
         if ($request->hasFile('image')) {
             $images = $request->image ?? [];
@@ -281,7 +254,6 @@ class ProductController extends Controller
 
         if ($request->has('related_products')) {
             foreach ($request->related_products as $pro) {
-                // print_r($pro); die;
                 $proCat = DB::table('related_products')->insert([
                     'product_id' => $lastProduct->id,
                     'related_product_id' => $pro,
@@ -292,7 +264,6 @@ class ProductController extends Controller
 
         if ($request->has('related_services')) {
             foreach ($request->related_services as $pro) {
-                // print_r($pro); die;
                 $proCat = DB::table('related_products')->insert([
                     'product_id' => $lastProduct->id,
                     'related_product_id' => $pro,
@@ -311,8 +282,6 @@ class ProductController extends Controller
             }
         }
 
-
-
         if($request->has('attributeKey') && $request->has('attributeValue')){
             $attributeValues = $request->attributeValue;
               foreach($request->attributeKey as $k=>$v){
@@ -323,8 +292,6 @@ class ProductController extends Controller
                         'value'=> $attributeValues[$k]
                         ]);
 
-                        // dd($arrtId);
-        
                         DB::table('attribute_value_product_attribute')->insertGetId([
                             'product_id' => $lastProduct->id,
                             'attribute_id' => $v,
@@ -335,11 +302,8 @@ class ProductController extends Controller
                     dd($e->getMessage());
                 }
 
-                 
             }
         }
-
-        // print_r(1); die;
 
         return redirect()->route('admin.products.index')->with('message', 'Create successful');
     }
@@ -358,33 +322,56 @@ class ProductController extends Controller
         $product = Product::find($id);
         
         $categories = Category::orderBy('id', 'DESC')->get();
-        $services = AppleService::all();
+        $product_category = DB::table('category_product')->where('product_id',$id)->first(['category_id']);
+        $apple_services = AppleService::all();
         
-        $res_products = Product::where('status', 1)->whereNotIn('id',$id)->get(['id', 'name']);
+        $res_products = Product::where('status', 1)->whereNotIn('id',[$id])->get(['id', 'name']);
+
         $res_assessories = DB::table('products')->join('category_product', 'category_product.product_id', 'products.id')->where('category_product.category_id', 5)->where('products.status', 1)->get(['products.id', 'products.name']);
         
-        dd(1);
         $attributes = Attribute::whereNotIn('id',[1,3])->get();
-       
-        $related_accessories = DB::table('related_products')->where('type','accessory')->where('product_id',$id)->get(['products.id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
-        $related_products = DB::table('related_products')->where('type','product')->where('product_id',$id)->get(['products.id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
-        $related_services = DB::table('related_products')->where('type','apple_service')->where('product_id',$id)->get(['apple_services.id', 'service_name', 'service_cover', 'service_description', 'service_price']);
 
+        $product_attributes = DB::table('attribute_value_product_attribute')
+        ->join('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
+        ->join('attributes','attributes.id','attribute_values.attribute_id')
+        ->where('attribute_value_product_attribute.product_id', $id)
+        ->whereNotIn('attribute_values.attribute_id',[3])
+        ->get(['attribute_value_product_attribute.id','attributes.name','attribute_values.value']);
 
-        $brands = '';
-        $user = Auth::user();
+        $accessories = DB::table('related_products')->join('products','products.id','related_products.related_product_id')->where('related_products.type','accessory')->where('related_products.product_id',$id)->get(['products.id']);
+        $products = DB::table('related_products')->join('products','products.id','related_products.related_product_id')->where('related_products.type','product')->where('related_products.product_id',$id)->get(['products.id']);
+        $services = DB::table('related_products')->join('products','products.id','related_products.related_product_id')->where('related_products.type','apple_service')->where('related_products.product_id',$id)->get(['products.id']);
+   
+        $related_accessories = [];
+        if(count($accessories)>0){
+            foreach($accessories as $as){
+                array_push($related_accessories, $as->id);
+            }
+        }
 
-            $brands = Brand::all();
-        
+        $related_products = [];
+        if(count($products)>0){
+            foreach($products as $as){
+                array_push($related_products, $as->id);
+            }
+        }
+
+        $related_services = [];
+        if(count($services)>0){
+            foreach($services as $as){
+                array_push($related_services, $as->id);
+            }
+        }
+
+        $brands = Brand::all();
 
         $previous = session()->get('previous_url');
-        // var_dump($previous); die;
 
         return view('admin.products.edit', [
             'product' => $product,
             'categories' => $categories,
             'attributes' => $attributes,
-            'services' => $services,
+            'services' => $apple_services,
             'res_products' => $res_products,
             'res_assessories' => $res_assessories,
             'related_accessories' => $related_accessories,
@@ -392,6 +379,8 @@ class ProductController extends Controller
             'related_services' => $related_services,
             'brands' => $brands,
             'previous' => $previous,
+            'product_cat' => $product_category->category_id,
+            'product_attributes' => $product_attributes
         ]);
     }
 

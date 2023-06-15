@@ -265,6 +265,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('colors/{product_id}/store', 'ProductController@storeColorVariants');
             Route::get('getSkuCode', 'ProductController@getSkuCode');
             Route::get('productVariants', 'ProductController@getAttributes');
+            Route::get('deleteAttributes/{id}', 'ProductController@deleteAttributes');
 
             Route::get('inactive_products', 'ProductController@inactive_products');
             Route::get('out_stock_products', 'ProductController@out_stock_products');

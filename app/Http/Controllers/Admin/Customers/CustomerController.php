@@ -26,7 +26,7 @@ class CustomerController extends Controller
         if (!empty($user) && $user->user_role == 'vendor') {
             $customers = Order::JOIN('users', 'users.id', 'orders.customer_id')->where('orders.user_id', $user->id)->where('user_role', 'customer')->orderBy('id','DESC')->select('users.*')->paginate(50);
         } else {
-            $customers = User::where('user_role', 'customer')->orderBy('id','DESC')->select('users.*')->paginate(50);
+            $customers = User::orderBy('id','DESC')->select('users.*')->paginate(50);
         }
 
         $previous = $_SERVER['REQUEST_URI'];
@@ -88,7 +88,11 @@ class CustomerController extends Controller
     public function show(int $id)
     {
         $customer = User::find($id);
-        $addresses = Address::where('customer_id', $customer->id)->first();
+
+        $addresses = Address::join('states','states.id','addresses.state_code')
+                    ->join('cities','cities.id','addresses.city')
+                    ->where('customer_id', $customer->id)
+                    ->get(['addresses.*', 'states.name as state_name', 'cities.name as city_name']);
 
         return view('admin.customers.show', [
             'customer' => $customer,

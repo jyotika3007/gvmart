@@ -8,7 +8,7 @@
     @include('layouts.errors-and-messages')
     <!-- <div class="box"> -->
 
-    <form action="{{ route('admin.products.update', $product->id) }}" method="post" class="form" enctype="multipart/form-data">
+    <form action="{{ route('admin.products.update',$product->id) }}" method="post" class="form" enctype="multipart/form-data">
         <div class="box-body">
             {{ csrf_field() }}
             <div class="col-md-8">
@@ -16,12 +16,12 @@
 
                 <div class="cardDiv">
                     <div class="form-title">
-                        <h3>Products >> Edit Product Detail</h3>
+                        <h3>Products >> Edit Product </h3>
                     </div>
                     <br />
                     <div class="form-group">
                         <label for="name">Product Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}" required="required">
+                        <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ $product->name ?? '' }}" required="required">
                     </div>
 
                     <div class="form-group">
@@ -31,7 +31,7 @@
                         <select name="category_id" id="category_id" class="form-control select2" required>
                             <option value=""></option>
                             @foreach($categories as $cat)
-                            <option value="{{$cat->id ?? ''}}">{{ $cat->name ?? '' }}</option>
+                            <option value="{{$cat->id ?? ''}}" @if($product_cat == $cat->id) selected @endif>{{ $cat->name ?? '' }}</option>
                             @endforeach
                         </select>
 
@@ -48,12 +48,12 @@
                     <br />
                     <div class="form-group">
                         <label for="description">Full Description </label>
-                        <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description" required="required">{{ old('description') }}</textarea>
+                        <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description" required="required">{{ $product->description ?? '' }}</textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="key_features">Summary </label>
-                        <textarea class="form-control " name="key_features" id="key_features" rows="5" placeholder="Summary" required="required">{{ old('key_features') }}</textarea>
+                        <textarea class="form-control " name="key_features" id="key_features" rows="5" placeholder="Summary" required="required">{{ $product->key_features ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -66,7 +66,7 @@
 
                     <div class="form-group">
                         <label for="sku">SKU <span class="text-danger">*</span></label>
-                        <input type="text" name="sku" id="sku" placeholder="xxxxxxxxx" class="form-control product_slug_insert" value="" required="required">
+                        <input type="text" name="sku" id="sku" placeholder="xxxxxxxxx" class="form-control product_slug_insert" value="{{ $product->sku ?? '' }}" required="required">
                     </div>
 
                     <!-- <div class="form-group">
@@ -88,7 +88,7 @@
                     <br />
                     <div class="form-group">
                         <label for="price">
-                            <h4>Prelaunch ? &nbsp; &nbsp;<input type="checkbox" name="is_prelaunched" id="is_prelaunched" value="1" style="width: 15px; height: 15px"> </h4>
+                            <h4>Prelaunch ? &nbsp; &nbsp;<input type="checkbox" name="is_prelaunched" id="is_prelaunched" value="1" style="width: 15px; height: 15px" @if($product->is_prelaunched == 1) checked @endif> </h4>
                         </label>
                     </div>
 
@@ -96,7 +96,7 @@
                         <label for="prelaunch_price">Prelaunch amount <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-addon">{{ config('cart.currency') }}</span>
-                            <input type="number" name="prelaunch_price" id="prelaunch_price" placeholder="Price" class="form-control" value="{{ old('prelaunch_price') }}">
+                            <input type="number" name="prelaunch_price" id="prelaunch_price" placeholder="Prelaunch Price" class="form-control" value="{{ $product->prelaunch_price ?? '' }}">
                         </div>
                     </div>
                     <!-- 
@@ -138,7 +138,7 @@
                         </label>
                         <select name="related_services[]" id="related_services" class="form-control" multiple>
                             @foreach($services as $service)
-                            <option value="{{ $service->id ?? ''}}">{{ $service->service_name ?? '' }}</option>
+                            <option value="{{ $service->id ?? ''}}" @if(in_array($service->id, $related_services) )selected @endif>{{ $service->service_name ?? '' }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -155,8 +155,8 @@
                             Select Accessories
                         </label>
                         <select name="related_accessories[]" id="related_accessories" class="form-control" multiple>
-                            @foreach($related_accessories as $access)
-                            <option value="{{ $access->id ?? ''}}">{{ $access->name ?? '' }}</option>
+                            @foreach($res_assessories as $access)
+                            <option value="{{ $access->id ?? ''}}" @if(in_array($access->id, $related_accessories) )selected @endif>{{ $access->name ?? '' }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -173,8 +173,8 @@
                             Select Products
                         </label>
                         <select name="related_products[]" id="related_products" class="form-control" multiple>
-                            @foreach($related_products as $prod)
-                            <option value="{{ $prod->id ?? ''}}">{{ $prod->name ?? '' }}</option>
+                            @foreach($res_products as $prod)
+                            <option value="{{ $prod->id ?? ''}}" @if(in_array($prod->id, $related_products) )selected @endif>{{ $prod->name ?? '' }}</option>
                             @endforeach
                         </select>
 
@@ -187,6 +187,10 @@
                         <h3>Product Photos </h3>
                     </div>
                     <br />
+
+                    <div class="form-group">
+                        <img src="{{ url('storage/'.$product->cover) }}" style="height: 150px" />
+                    </div>
                     <div class="form-group">
                         <label for="cover">Cover Image</label>
                         <input type="file" name="cover" id="cover" class="form-control">
@@ -224,9 +228,24 @@
                         @endif
 
                         <div id="productAttributes" style="margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top:15px">
-
+                        @foreach($product_attributes as $attr)
+                        <div class="row" style="margin-bottom: 15px" id="productSavedAtt{{ $attr->id }}">
+                                <div class="col-sm-5">
+                                    <option value="">Attributue</option>
+                                    <input type="hidden" name="attributeKey[]"  value="{{ $attr->id ?? '' }}" class="form-control">
+                                    <input type="text" readonly value="{{ $attr->name ?? '' }}" class="form-control">
+                                </div>
+                                <div class="col-sm-5">
+                                    <option value="">Attributue Value</option>
+                                    <input type="text" name="attributeValue[]" value="{{ $attr->value ?? '' }}" class="form-control">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-danger" style="margin-top: 21px" onclick="removeMe('{{ $attr->id }}')">X</button>
+                                </div>
+                            </div>
+                       
+                        @endforeach
                         </div>
-
                     </div>
 
                     <!-- <div class="form-group">
@@ -244,19 +263,19 @@
                     <br />
                     <div class="form-group">
                         <label for="meta_title"> Meta Title</label>
-                        <textarea rows="3" name="meta_title" id="meta_title" placeholder="Meta Title" class="form-control"></textarea>
+                        <textarea rows="3" name="meta_title" id="meta_title" placeholder="Meta Title" class="form-control">{{ $product->meta_title ?? '' }}</textarea>
                     </div>
 
 
                     <div class="form-group">
                         <label for="meta_description"> Meta Description</label>
-                        <textarea rows="3" name="meta_description" id="meta_description" placeholder="Meta Description" class="form-control"></textarea>
+                        <textarea rows="3" name="meta_description" id="meta_description" placeholder="Meta Description" class="form-control">{{ $product->meta_description ?? '' }}</textarea>
                     </div>
 
 
                     <div class="form-group">
                         <label for="search_keywords">Search Keywords</label>
-                        <textarea rows="3" name="search_keywords" id="search_keywords" placeholder="Search Keywords" class="form-control"></textarea>
+                        <textarea rows="3" name="search_keywords" id="search_keywords" placeholder="Search Keywords" class="form-control">{{ $product->search_keywords ?? '' }}</textarea>
                         <p>Use comma (,) as a separator for multiple keywords.</p>
                     </div>
                 </div>
@@ -270,12 +289,12 @@
                     <div class="form-group">
                         <label for="gst"> GST Percentage</label>
                         <select name="gst" id="gst" placeholder="GST" class="form-control">
-                            <option value="0">0</option>
-                            <option value="3">3</option>
-                            <option value="5">5</option>
-                            <option value="12">12</option>
-                            <option value="18">18</option>
-                            <option value="28">28</option>
+                            <option value="0" @if($product->gst == 0) selected @endif>0</option>
+                            <option value="3" @if($product->gst == 3) selected @endif>3</option>
+                            <option value="5" @if($product->gst == 5) selected @endif>5</option>
+                            <option value="12" @if($product->gst == 12) selected @endif>12</option>
+                            <option value="18" @if($product->gst == 18) selected @endif>18</option>
+                            <option value="28" @if($product->gst == 28) selected @endif>28</option>
                         </select>
                     </div>
 
@@ -283,33 +302,33 @@
                     <div class="form-group">
                         <label for="preffered_payment_method">Preferred Payment Method</label>
                         <select name="preffered_payment_method" id="preffered_payment_method" placeholder="GST" class="form-control">
-                            <option value="both">Both</option>
-                            <option value="COD">COD</option>
-                            <option value="Prepaid">Prepaid</option>
+                            <option value="both" @if($product->preffered_payment_method == 'both') selected @endif>Both</option>
+                            <option value="COD" @if($product->preffered_payment_method == 'COD') selected @endif>COD</option>
+                            <option value="Prepaid" @if($product->preffered_payment_method == 'Prepaid') selected @endif>Prepaid</option>
                         </select>
                     </div>
 
 
                     <div class="form-group">
                         <label for="shipping_amount">Shipping Amount</label>
-                        <input type="text" name="shipping_amount" id="shipping_amount" placeholder="Shipping Amount" class="form-control"></textarea>
+                        <input type="text" name="shipping_amount" id="shipping_amount" placeholder="Shipping Amount" class="form-control">{{ $product->shipping_amount ?? '' }}</textarea>
                     </div>
 
 
                     <div class="form-group">
                         <label for="delivery_days">Expected Delivery Days</label>
-                        <input type="text" name="delivery_days" id="delivery_days" placeholder="Expected Delivery Days" class="form-control" value="{{ old('delivery_days') }}">
+                        <input type="text" name="delivery_days" id="delivery_days" placeholder="Expected Delivery Days" class="form-control" value="{{ $product->delivery_days ?? '' }}">
                     </div>
 
 
                     <div class="form-group">
                         <label for="return_period">Return Period</label>
                         <select name="return_period" id="return_period" placeholder="GST" class="form-control">
-                            <option value="At a time of delivery">At a time of delivery</option>
-                            <option value="Non Refundable">Non Refundable</option>
-                            <option value="7 Days">7 Days</option>
-                            <option value="15 Days">15 Days</option>
-                            <option value="30 Days">30 Days</option>
+                            <option value="At a time of delivery" @if($product->return_period == 'At a time of delivery') selected @endif>At a time of delivery</option>
+                            <option value="Non Refundable" @if($product->return_period == 'Non Refundable') selected @endif>Non Refundable</option>
+                            <option value="7 Days" @if($product->return_period == '7 Days') selected @endif>7 Days</option>
+                            <option value="15 Days" @if($product->return_period == '15 Days') selected @endif>15 Days</option>
+                            <option value="30 Days" @if($product->return_period == '30 Days') selected @endif>30 Days</option>
                         </select>
                     </div>
 
@@ -323,17 +342,17 @@
                     <br />
 
                     <div class="form-group">
-                        @include('admin.shared.trending', ['trending' => 0])
+                        @include('admin.shared.trending', ['trending' => $product->is_trending])
                     </div>
                     <div class="form-group">
-                        @include('admin.shared.best_seller', ['is_best_seller' => 0])
+                        @include('admin.shared.best_seller', ['is_best_seller' => $product->is_best_seller])
                     </div>
                     <div class="form-group">
-                        @include('admin.shared.top_rated', ['is_top_rated' => 0])
+                        @include('admin.shared.top_rated', ['is_top_rated' => $product->is_top_rated])
                     </div>
 
                     <div class="form-group">
-                        @include('admin.shared.status-select', ['status' => 1])
+                        @include('admin.shared.status-select', ['status' => $product->status])
                     </div>
                 </div>
                 <div class="box-footer">
@@ -418,10 +437,25 @@
         }
     }
 
+    function removeMe(id=1) {
+        $.ajax({
+            url: '/admin/deleteAttributes/'+id,
+            type: 'GET',
+            success:function(response){
+                if(response==1){
+                    $('#productSavedAtt'+id).remove();
+                }
+                else{
+                    alert('Something went wrong. Try again.')
+                }
+            }
+        })
+    }
+
     function remove(id) {
-        // alert(id)
         $('#productAtt' + id).remove();
     }
+
 </script>
 
 @endsection
