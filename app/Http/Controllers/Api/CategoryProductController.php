@@ -42,6 +42,7 @@ class CategoryProductController extends Controller
             $attributes = DB::table('attribute_value_product_attribute')
                 ->join('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
                 ->where('attribute_value_product_attribute.product_id', $sp->id)
+                ->where('attribute_values.attribute_id', 3)
                 ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
 
 

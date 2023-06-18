@@ -57,9 +57,16 @@ class CompareProductsController extends Controller
         if(count($products)>0){
             $count=0;
             foreach($products as $pro){
-                $product_detail = $this->getProductDetail($pro->id);
-                $product_detail['product_id'] = $pro->id;
-                array_push($pro_array, $product_detail);
+                if($count<3){
+
+                    $product_detail = $this->getProductDetail($pro->id);
+                    $product_detail['product_id'] = $pro->id;
+                    array_push($pro_array, $product_detail);
+                    $count++;
+                }
+                else{
+                    exit(0);
+                }
             }
         }
         $data['product_details'] = $pro_array;
