@@ -52,6 +52,18 @@ class CompareProductsController extends Controller
         $data['products'] = $products;
         $data['attributes'] = $attributes;
 
+        $pro_array = [];
+
+        if(count($products)>0){
+            $count=0;
+            foreach($products as $pro){
+                $product_detail = $this->getProductDetail($pro->id);
+                $product_detail['product_id'] = $pro->id;
+                array_push($pro_array, $product_detail);
+            }
+        }
+        $data['product_details'] = $pro_array;
+
         return response()->json([
             "status" => 1,
             "message" => "Categories fetched successfully.",
@@ -61,6 +73,16 @@ class CompareProductsController extends Controller
 
     public function getcomparedProductDetail($product_id)
     {
+        $data = $this->getProductDetail($product_id);
+
+        return response()->json([
+            "status" => 1,
+            "message" => "Product Detail fetched successfully",
+            "data" => $data
+        ]);
+    }
+
+    public function getProductDetail($product_id){
         $product = Product::find($product_id);
 
         $data['cover'] = $product->cover ?? '';
@@ -91,11 +113,7 @@ class CompareProductsController extends Controller
                 ->whereNotIn('attribute_values.attribute_id',[3])
                 ->get(['attributes.name','attribute_values.value']);
 
-        return response()->json([
-            "status" => 1,
-            "message" => "Product Detail fetched successfully",
-            "data" => $data
-        ]);
+                return $data;
     }
 
 }

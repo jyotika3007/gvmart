@@ -122,9 +122,9 @@ class HomeController extends Controller
 
     public function home_products()
     {
-        $sale_products = Product::where('is_top_rated', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
-        $new_arrival_products = Product::where('is_trending', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
-        $best_seller_products = Product::where('is_best_seller', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+        $sale_products = Product::where('is_top_rated', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
+        $new_arrival_products = Product::where('is_trending', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
+        $best_seller_products = Product::where('is_best_seller', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
 
         $final_sales_products = [];
         $final_new_arrival_products = [];
