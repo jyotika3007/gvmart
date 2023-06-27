@@ -15,242 +15,165 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
-    public function checkout(Request $request, $user_id){
+    public function checkout(Request $request, $user_id)
+    {
         $data = $request->all();
-  
-        // echo $data['payment_method']; die;
-        
-        $delivery_address = 0;
+
+        $shipping_address = 0;
         $billing_address = 0;
-        
-        $customer = $data['customer_id'];
-      
-        if (!$customer) {
 
-            $findUser = User::where('email', $data['customer_email'])->first();
-            if ($findUser) {
-                $customer = $findUser->id;
-            } else {
+        $customer = $data['user_id'];
 
-                $newUser = new User;
-
-                $newUser->name = $data['customer_name'];
-                $newUser->email = $data['customer_email'];
-                $newUser->password = Hash::make('password');
-                $newUser->status = 0;
-                $newUser->account_status = 'Active';
-                $newUser->user_role = 'guest';
-
-                $newUser->save();
-
-                if ($newUser) {
-                    $findUser = User::where('email', $data['customer_email'])->first();
-                    $customer = $findUser->id;
-                }
-            }
+        if (isset($data['new_address'])) {
+            $addr = $data['new_address'];
+            $newAddress = new Address;
+            $newAddress->customer_id = $customer;
+            $newAddress->alias = $addr['alias'] ?? 'Other';
+            $newAddress->address_1 = $addr['address_1'] ?? '';
+            $newAddress->address_2 = $addr['address_2'] ?? '';
+            $newAddress->country_id = 101;
+            $newAddress->city = $addr['city'] ?? '';
+            $newAddress->landmark = $addr['landmark'] ?? '';
+            $newAddress->state_code = $addr['state_code'] ?? '';
+            $newAddress->zip = $addr['zip'] ?? '';
+            $newAddress->phone = $addr['phone'] ?? '';
+            $newAddress->delivery_address = 0;
+            $newAddress->save();
         }
 
-          
-        
-        $newAddress = new Address;
-        $newAddress->customer_id = $customer;
-        $newAddress->alias = 'Home';
-        $newAddress->address_1 = $data['address_1'] ?? '';
-        $newAddress->address_2 = $data['address_2'] ?? '';
-        $newAddress->country_id = 99;
-        $newAddress->city = $data['city'] ?? '';
-        $newAddress->landmark = $data['landmark'] ?? '';
-        $newAddress->state_code = $data['state_code'] ?? '';
-        $newAddress->zip = $data['zip'] ?? '';
-        $newAddress->phone = $data['phone'] ?? '';
-        $newAddress->delivery_address = 0;
-        $newAddress->save();
-        
         $customerAdd = Address::where('customer_id', $customer)->get()->last();
-        
-        $billing_address = $customerAdd->id;
-        
-       
 
-        if (!empty($data['shiping_another_address']) && $data['shiping_another_address'] == 'on') {
-            $shipAddress = new Address;
-
-            $shipAddress->customer_id = $customer;
-            $shipAddress->alias = 'Home';
-            $shipAddress->address_1 = $data['address_11'] ?? '';
-            $shipAddress->address_2 = $data['address_21'] ?? '';
-            $shipAddress->country_id = 99;
-            $shipAddress->city = $data['city1'] ?? '';
-            $shipAddress->landmark = $data['landmark1'] ?? '';
-            $shipAddress->state_code = $data['state_code1'] ?? '';
-            $shipAddress->zip = $data['zip1'] ?? '';
-            $shipAddress->phone = $data['phone1'] ?? '';
-            $shipAddress->delivery_address = 0;
-            $shipAddress->save();
-
-            $customerAdd = Address::where('customer_id', $customer)->get()->last();
-            $delivery_address = $customerAdd->id;
+        if (isset($data['billing_address']) && $data['billing_address'] != '' && $data['billing_address'] != 0) {
+            $billing_address = $data['billing_address'];
         } else {
-            $delivery_address =  $billing_address;
+            $billing_address = $customerAdd->id;
         }
 
-
-        
-        
-        
-        // var_dump($shop); die;
-        
-        $user_id = 0;
-        
-        print_r($data['products']); die;
-        $products = json_decode($data['products']);
-        print_r(1);die;
-        $coupon_code = '';
-        if (session()->get('coupon_code')) {
-            $coupon_code = session()->get('coupon_code');
+        if (isset($data['shipping_address']) && $data['shipping_address'] != '' && $data['shipping_address'] != 0) {
+            $shipping_address = $data['shipping_address'];
+        } else {
+            $shipping_address = $customerAdd->id;
         }
 
-        $payment_status = 'Success';
-        if ($data['payment_method'] == 'online') {
-            $payment_status = 'Pending';
+        $payment_status = 'Pending';
+
+        $order_data = [
+            'reference' => '',
+            'courier_id' => 0,
+            'customer_id' => $customer,
+            'address_id' => $billing_address,
+            'delivery_address' => $shipping_address,
+            'order_status_id' => '1',
+            'payment' => $data['payment_method'],
+            'total_products' => $data['total_products'] ?? 0,
+            'total' => $data['total'],
+            'total_paid' => $data['total'],
+            'total_shipping' => $data['shipping_amount'],
+            'coupon_code' => $data['coupon_code'] ?? '',
+            'coupon_amount' => $data['coupon_amount'],
+            'booking_date' => date('M d, Y / h:i A'),
+            'created_at' => date('Y-m-d H:s:m'),
+            'order_from_device' => $data['order_from_device'],
+            'user_id' => 0,
+            'payment_status' => $payment_status
+        ];
+
+        try {
+            $order = DB::table('orders')->insertGetId($order_data);
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+            die;
         }
-
-        // var_dump($data['products']); die;
-
-        // echo $address; die;
-
-        $order = DB::table('orders')
-            ->insert([
-                'reference' => '',
-                'courier_id' => 0,
-                'customer_id' => $customer,
-                'address_id' => $billing_address,
-                'delivery_address' => $delivery_address,
-                'order_status_id' => '1',
-                'payment' => $data['payment_method'],
-                'total_products' => $data['total_products'] ?? 0,
-                'total' => $data['total'],
-                'total_paid' => $data['total'],
-                'total_shipping' => $data['shipping_amount'],
-                'coupon_code' => $coupon_code,
-                'coupon_amount' => $data['coupon_amount'],
-                'booking_date' => date('M d, Y / h:i A'),
-                'created_at' => date('Y-m-d H:s:m'),
-                'order_from_device' => 'website',
-                'user_id' => $user_id,
-                'delivery_date' => session()->get('delivery_date'),
-                'payment_status' => $payment_status
-            ]);
-
-
 
         $orderLast = DB::table('orders')->where('customer_id', $customer)->get()->last();
-
-       
+        $products = $data['products'];
 
 
         foreach ($products as  $product) {
-            
-            $orderProducts = DB::table('order_product')
-                ->insert([
-                    'order_id' => $orderLast->id,
-                    'product_id' => $product->id,
-                    'product_name' => $product->name ?? '',
-                    'product_sku' => $product->sku ?? '',
-                    'product_size' => $product->variants ? json_encode($product->variants): '',
-                    'product_description' => '',
-                    'quantity' => $product->quantity,
-                    'product_price' => $product->sale_price!=0 ? $product->sales_price : $product->price
-
-                ]);
+            try {
+                DB::table('order_product')
+                    ->insert([
+                        'order_id' => $orderLast->id,
+                        'product_id' => $product['product_id'],
+                        'product_name' => $product['name'] ?? '',
+                        'product_sku' => $product['sku'] ?? '',
+                        'color' => $product['color'] ?? '',
+                        'storage' => $product['storage'] ?? '',
+                        'product_size' => '',
+                        'product_description' => '',
+                        'quantity' => $product['quantity'] ?? 1,
+                        'product_price' => $product['sale_price'] != 0 ? $product['sale_price'] : $product['price']
+                    ]);
+            } catch (\Throwable $e) {
+                echo $e->getMessage();
+                die;
+            }
 
             $productUpdate = DB::table('attribute_value_product_attribute')
-            ->where('id', $product->storage_id)
-            ->where('product_id', $product->id)
-            ->first();
+                ->where('id', $product['storage_id'])
+                ->where('product_id', $product['product_id'])
+                ->first();
 
-            if($productUpdate){
+            if ($productUpdate) {
                 $productUpdate->quantity = $productUpdate->quantity - $product->cart_quantity;
                 $productUpdate->update();
             }
         }
-        // }
-
-        $items = DB::table('order_product')->where('order_id', $orderLast->id)->get();
-
-        foreach ($items as $key => $item) {
-            $pro = Product::find($item->product_id);
-            $items[$key]->cover = $pro->cover;
-            $items[$key]->description = $pro->description ?? '';
-        }
-
-
-        $order = $orderLast;
-
-        // $items
-
-        $billing_address = DB::table('addresses')->where('id', $billing_address)->first();
-        $delivery_address = DB::table('addresses')->where('id', $delivery_address)->first();
-
-        $customer = User::where('id', $customer)->first();
-
-        // var_dump($customer); die;
-
-        $currentStatus = OrderStatus::find('1');
-
-        // $shop = RegisteredShop::find($user_id);
-
-        if ($data['payment_method'] == 'cod') {
-            $cart = Cart::where('user_id', $customer->id)->delete();
 
 
 
+        // for payment link
+
+        $time  = time();
+        $addedValue = str(floor($time/1000));
+        $MID = 106598;
+        $Access_code = "4a39a6d4-46b7-474d-929d-21bf0e9ed607";
+        $Secret_code = "55E0F73224EC458A8EC0B68F7B47ACAE";
+
+        $return_url = "http://localhost:3000/ThankYou";
+
+        $url = "https://uat.pinepg.in/api/v2/accept/payment";
+
+         $json_data = [
+            "merchant_data" =>  [
+              "merchant_id"  => $MID,
+              "merchant_access_code" => $Access_code,
+              "merchant_return_url" => $return_url,
+              "unique_merchant_txn_id" => "PineLabs" . $addedValue
+            ],
+            "customer_data" => [],
+            "payment_data" => [
+              "amount_in_paisa" => 1000
+        ],
+            "txn_data" => [
+              "navigation_mode" => 2,
+              "payment_mode" => "1,3",
+              "transaction_type" => 1
+         ],
+            "udf_data" => [
+              "udf_field_1" => "Xyz",
+              "udf_field_2" => "Test txn",
+              "udf_field_3" =>  "999999999",
+              "udf_field_4" =>  "rfsgshshb"
+         ]
+        ];
 
 
-            $data['admin_email'] = 'jyotikasethi3007@gmail.com';
-            $data['admin_name'] = 'GV Mart';
 
 
-
-
-            Mail::send(
-                'mails.orderInvoice',
-                ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'shop' => $shop, 'currentStatus' => $currentStatus, 'type' => 'admin'],
-                function ($m) use ($data) {
-                    $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
-
-                    $m->to($data['admin_email'], $data['admin_name'])->subject('Order booked successfully.');
-                }
-            );
-
-
-            Mail::send(
-                'mails.orderInvoice',
-                ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'shop' => $shop, 'currentStatus' => $currentStatus, 'type' => 'user'],
-                function ($m) use ($customer) {
-                    $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
-
-                    $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
-                }
-            );
-
-            if (!empty($shop)) {
-
-
-                Mail::send(
-                    'mails.orderInvoice',
-                    ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'shop' => $shop, 'currentStatus' => $currentStatus, 'type' => 'vendor'],
-                    function ($m) use ($shop) {
-                        $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
-
-                        $m->to($shop->email, $shop->shop_name)->subject('Order booked successfully.');
-                    }
-                );
-            }
-
-            return view('front.success', compact('customer', 'items', 'order', 'billing_address', 'delivery_address', 'shop', 'currentStatus'));
-        } else {
-            return view('front.qrcode', compact('customer', 'items', 'order', 'billing_address', 'delivery_address', 'shop', 'currentStatus'));
-        }
+        return response()->json([
+            "order_id" => $order
+        ]);
+      
     }
+
+
+    // public function ValidateSecureIncomingRequest($request, $secureSeret) {
+    //     $shaGenerated = "";
+    //     $shaObj = new hash("SHA-256", "TEXT");
+    //     shaObj.setHMACKey(secureSeret, "HEX");
+    //     shaObj.update(request);
+    //     shaGenerated = shaObj.getHMAC("HEX");
+    //     return shaGenerated.toUpperCase()
+    //   };
 }
