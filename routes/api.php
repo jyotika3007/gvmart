@@ -87,4 +87,5 @@ Route::namespace('Api')->group(function () {
     Route::get('compareProduct/{product_id}','CompareProductsController@getcomparedProductDetail');
     Route::get('compareProductsList','CompareProductsController@getCompareProductsList');
     
+    Route::post('payment_link','CheckoutController@getPaymentLink');
 });
