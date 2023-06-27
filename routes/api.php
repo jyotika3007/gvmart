@@ -20,6 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::namespace('Api')->group(function () {
 
+    Route::post('ThankYou/User', 'AuthController@getPaymentResponse');
+    
     // Auth Routes
     Route::post('login','AuthController@postLogin');
     Route::post('register','AuthController@postRegister');

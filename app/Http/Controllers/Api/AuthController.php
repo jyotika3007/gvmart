@@ -228,4 +228,14 @@ class AuthController extends Controller
             ]);
         }
     }
+    
+          
+ public function getPaymentResponse(Request $request){
+     $data = $request->all();
+     
+     dd($data);
+    // 	dd($request);
+    }
+    
+    
 }
