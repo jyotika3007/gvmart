@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Shop\Addresses\Address;
+use App\Shop\Orders\Order;
 use App\Shop\Cart\Cart;
 use App\Shop\OrderStatuses\OrderStatus;
 use App\Shop\Products\Product;
@@ -12,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
+
 
 class CheckoutController extends Controller
 {
@@ -215,7 +218,6 @@ class CheckoutController extends Controller
     public function getPaymentResponse(Request $request)
     {
         $data = $request->all();
-
         // $data = [
         //     "merchant_id" => "106598",
         //     "merchant_access_code" => "4a39a6d4-46b7-474d-929d-21bf0e9ed607",
@@ -235,7 +237,7 @@ class CheckoutController extends Controller
         //     "udf_field_1" => "Xyz",
         //     "udf_field_2" => "Test txn",
         //     "udf_field_3" => "999999999",
-        //     "udf_field_4" => "orderId_43",
+        //     "udf_field_4" => "orderId_28",
         //     "card_holder_name" => "test",
         //     "salted_card_hash" => "E54AC8365C2C8C7A54B13A54B5CFAA513E3ABF6FDF8C7CBF34AFCE6B735BE32D",
         //     "rrn" => "425847096720",
@@ -246,20 +248,56 @@ class CheckoutController extends Controller
         //     "dia_secret" => "5D4DEC5E2E43251AF0271C483B0672AA54D3D6D88FD9F39DE1F66127AEAE4FDC",
         //     "dia_secret_type" => "SHA256"
         // ];
-
         $order_id = explode('_', $data['udf_field_4'])[1];
-
+        
+        
         $txn_id = $data['pine_pg_transaction_id'];
         $msg = $data['txn_response_msg'];
-
+        
         DB::table('orders')->where('id', $order_id)->update([
             'order_status_id' => 2,
             'payment_status' => $msg,
             'transaction_id' => $txn_id
         ]);
+        
+        $order=Order::find($order_id);
+        $items=DB::table('order_product')->where('order_id', $order_id)->get();
+        $customer=User::find($order->customer_id);
 
-        // dd($data);
+        // try{
+        //     $customer=User::find($order->customer_id);
+        // }catch(\Throwable $e){echo $e->getMessage();}
+
+        // print_r(env('MAIL_USERNAME'));die();
+        $billing_address=Address::find($order->address_id);
+        $delivery_address=Address::find($order->delivery_address);
+        $currentStatus = DB::table('order_statuses')->where('id', $order->order_status_id)->first();
+        
+        
+        Mail::send(
+            'mails.orderInvoice',
+            ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'admin'],
+            function ($m) use ($data) {
+                $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+
+                $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order booked successfully.');
+            }
+        );
+
+
+        Mail::send(
+            'mails.orderInvoice',
+            ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'user'],
+            function ($m) use ($customer) {
+                $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+
+                $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
+            }
+        );
+            
 
         return redirect()->away('https://www.iadvance.in/ThankYou?transaction_id=TXN' . $txn_id . '&payment_status=' . $msg);
     }
 }
+
+        

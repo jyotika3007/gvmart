@@ -273,21 +273,6 @@
                   </tbody>
                </table>
             </div>
-            <!-- end table-responsive -->
-
-            <!-- begin invoice-price -->
-           
-            
-              <!-- <table class="table table-invoice">
-                <tbody>
-                    <tr>
-                        <td><b>Shop :</b> {{ $shop->shop_name ?? '' }}</td>
-                        <td><b>Email :</b> {{ $shop->email ?? '' }}</td>
-                        <td><b>Address :</b> {{ $shop->address ?? '' }}, {{ $shop->city ?? '' }}, {{ $shop->state ?? '' }} - ({{ $shop->pincode ?? '' }}) </td>
-                        
-                    </tr>
-                </tbody>    
-            </table> -->
 <hr>
 
             
@@ -309,7 +294,7 @@
                THANK YOU FOR YOUR ORDER
             </p>
             <p class="text-center">
-               <span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i>support@gvmart.co.in</span>
+               <span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i>support@iadvance.in</span>
                <!-- <span class="m-r-10"><i class="fa fa-fw fa-lg fa-phone-volume"></i> T:016-18192302</span> -->
                <!-- <span class="m-r-10"><i class="fa fa-fw fa-lg fa-envelope"></i> rtiemps@gmail.com</span> -->
             </p>
