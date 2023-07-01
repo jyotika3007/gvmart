@@ -415,7 +415,7 @@ class CheckoutController extends Controller
 
 
             $data['admin_email'] = 'Riddhi.lic@gmail.com';
-            $data['admin_name'] = 'GV Mart';
+            $data['admin_name'] = 'IAdvance Apple Store';
 
 
 

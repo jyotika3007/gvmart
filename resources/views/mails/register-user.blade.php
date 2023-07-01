@@ -1,12 +1,7 @@
-<?php
-   $companyInfor = DB::table('company_details')->first();
-?>
-
 
 <?php
-    $name = $data['name'];
-    $email = $data['email'];
-    $password = $data['password'];
+    $name = $data['name'] ?? '';
+    $email = $data['email'] ?? '';
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -63,7 +58,7 @@
                     <tbody>
                         <tr>
                           <td colspan="3" height="70" align="center" style="background-color:#eeeeee">
-                            <a href="{{ url('/') }}"> <img src="{{ asset('storage/'.$companyInfor->company_logo ?? '') }}" width="auto" height="65"></a>
+                          <a href="{{ url('/') }}"> <img src="https://admin.iadvance.in/storage/logos/1685348917logo.png" width="auto" height="65"></a>
                           </td>
                         </tr>
                         <tr><td colspan="3" height="10"></td></tr>
@@ -78,10 +73,12 @@
                         </tr>
                         @if($type=='admin')
                         <tr>
+
                             <td width="10"></td>
+                            
                             <td>
                             
-                                <p> A new user have successfully registered at GV Mart having details  </p>
+                                <p> A new user have successfully registered at IAdvance Apple Store having details: </p>
                                 <br>
                             </td>
                             <td width="10"></td>
@@ -91,7 +88,7 @@
                             <td>
                               
                                <h3>Name : {{$name ?? ''}}</h3>
-                               <h4>Email : {{$email}} </h4>
+                               <h4>Email : {{$email ?? ''}} </h4>
                                 <br>
                             </td>
                             <td width="10"></td>
@@ -100,22 +97,12 @@
                         <tr>
                             <td width="10"></td>
                             <td>
-                            
-                                <p>Congratulations {{$name}}, You have successfully registered at GV Mart. Your Login Details are </p>
+                                <p>Congratulations {{$name}}, You have successfully registered at IAdvance Apple Store.</p>
                                 <br>
                             </td>
                             <td width="10"></td>
                         </tr>
-                        <tr>
-                            <td width="10"></td>
-                            <td>
-                              
-                               <h3>Email : {{$email}}</h3>
-                               <h4>Password : {{$password}} </h4>
-                                <br>
-                            </td>
-                            <td width="10"></td>
-                        </tr>
+                        
                         @endif
                         <tr><td colspan="3" height="10"></td></tr>
                         <tr><td colspan="3" height="30" style="background-color:#e06f47;"></td></tr>

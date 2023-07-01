@@ -222,7 +222,7 @@ class OrderController extends Controller
         $customer = User::where('id',$order->customer_id)->first();
         
         $customer->admin_email = 'Riddhi.lic@gmail.com';
-        $customer->admin_name = 'GV Mart';
+        $customer->admin_name = 'IAdvance Apple Store';
         
         $msg = '';
 
@@ -586,7 +586,7 @@ public function update_payment_status(Request $request){
      
        
             $data['admin_email'] = 'Riddhi.lic@gmail.com';
-        $data['admin_name'] = 'GV Mart';
+        $data['admin_name'] = 'IAdvance Apple Store';
         
 
     // var_dump($order); die;

@@ -13,7 +13,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GV Mart</title>
+	<title>IAdvance Apple Store</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- Favicon -->
@@ -629,7 +629,7 @@
 								<span class="separator">|</span>
 								<a href="#">Term and conditions</a>
 							</p>
-							<p class="copyright-text">&copy; 2020-21 <a href="#">GV Mart</a>. All Rights Reserved</p>
+							<p class="copyright-text">&copy; 2020-21 <a href="#">IAdvance Apple Store</a>. All Rights Reserved</p>
 						</div>
 						
 						<!--=======  End of copyright text	  =======-->

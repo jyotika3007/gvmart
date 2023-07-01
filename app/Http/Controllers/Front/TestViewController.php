@@ -678,7 +678,7 @@ $checkId = Category::where('slug',$slug)->first();
         $shop = RegisteredShop::find($data['shop_id']);
         
         $data['admin_email'] = 'Riddhi.lic@gmail.com';
-        $data['admin_name'] = 'GV Mart';
+        $data['admin_name'] = 'IAdvance Apple Store';
         $data['booking_date'] = date('Y-m-d');
          Mail::send('mails.service_booking',['data' => $data , 'type' => 'admin', 'shop' => $shop],
                  function ($m) use ($data) {
@@ -771,7 +771,7 @@ $data['category_name'] = $category->category_name ?? '';
 
 
  $data['admin_email'] = 'Riddhi.lic@gmail.com';
-        $data['admin_name'] = 'GV Mart';
+        $data['admin_name'] = 'IAdvance Apple Store';
          Mail::send('mails.registeration_shop',['data' => $data , 'type' => 'admin'],
                  function ($m) use ($data) {
                      $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
@@ -974,7 +974,7 @@ public function changeOrderStatus($status, $orderId){
                  });
                  
                  $customer->admin_email = 'Riddhi.lic@gmail.com';
-                 $customer->admin_name = 'GV Mart';
+                 $customer->admin_name = 'IAdvance Apple Store';
                  
                 //  var_dump($customer); die;
  

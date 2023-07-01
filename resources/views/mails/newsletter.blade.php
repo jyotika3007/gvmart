@@ -75,7 +75,7 @@
                             <td width="10"></td>
                             <td>
                             
-                                <p> A new user , {{ $user->email }} subscribe for newsletter  at GV Mart.   </p>
+                                <p> A new user , {{ $user->email }} subscribe for newsletter  at IAdvance Apple Store.   </p>
                                 <br>
                             </td>
                             <td width="10"></td>
@@ -86,7 +86,7 @@
                             <td width="10"></td>
                             <td>
                             
-                                <p> Hello {{ $user->email }}, your email is successfully registered for  latest updates at GV Mart. Thank you for subscribing. </p>
+                                <p> Hello {{ $user->email }}, your email is successfully registered for  latest updates at IAdvance Apple Store. Thank you for subscribing. </p>
                                 <br>
                             </td>
                             <td width="10"></td>

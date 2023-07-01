@@ -125,7 +125,7 @@
 				<div class="row"  style="margin: 0 5%; width: 90%">
 					<div class="col-lg-8">
 						<div class="default-title left-text">
-							<h2>About GV MART</h2>
+							<h2>About IAdvance Apple Store</h2>
 							<!-- <p>Customers Deserve Better</p> -->
 							<img src="{{ asset('front/images/line.svg') }}" alt="">
 						</div>

@@ -22,7 +22,7 @@
         <div class="container-fluid" style="width: 90%; margin: 0 5%">
             <div class="row">
                 <div class="col-12">
-                	<h3>GV Mart - {{ $content->title }}</h3>
+                	<h3>IAdvance Apple Store - {{ $content->title }}</h3>
                 	<br>
                 	<p>
                 		<?php

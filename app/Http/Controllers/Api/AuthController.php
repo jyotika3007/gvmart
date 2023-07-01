@@ -97,15 +97,20 @@ class AuthController extends Controller
 
                 $userId = User::insertGetId($data);
 
-                // $otp = rand(100000,999999);
-                $otp = 123456;
+                $otp = rand(100000,999999);
+                
 
                 $otpId = DB::table('email_verifications')->insertGetId([
                     'email' => $data['email'],
                     'otp' => $otp,
                     'verified' => 0
                 ]);
+                Mail::send('mails.otp',['otp'=>$otp],
+                function ($m) use ($request) {
+                    $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
+                    $m->to($request->email, "User")->subject('OTP For Email verification');
+                });
                 if ($otpId) {
                     return response()->json([
                         'status' => 1,
@@ -140,7 +145,21 @@ class AuthController extends Controller
                     DB::table('email_verifications')->where('id', $checkOtp->id)->update(['verified' => 1]);
 
                     User::where('email', $data['email'])->update(['account_status' => 'Active']);
-                    // print_r($checkOtp->id); die;
+                    $user= User::where('email', $data['email'])->first(['name']);
+                    
+                    $data['name']=$user->name;
+                    
+                    Mail::send('mails.register-user',['data' => $data, 'type' => 'admin'],
+                    function ($m) use ($data) {
+                        $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                        $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('New User Registration');
+                    });
+                                   
+                    Mail::send('mails.register-user',['data' => $data, 'type' => 'user'],
+                        function ($m) use ($data) {
+                            $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                            $m->to($data['email'], $data['name'])->subject('Registration Successful');
+                        });
                     return response()->json([
                         'status' => 1,
                         'message' => 'OTP Verified. Successfully Registered',
@@ -171,7 +190,6 @@ class AuthController extends Controller
             ]);
         } else {
             $checkUser = User::where('email', $request->email)->first();
-            // print_r($checkUser); die;
             if ($checkUser) {
 
                 if ($checkUser->status == 1) {
@@ -192,7 +210,6 @@ class AuthController extends Controller
                      $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
                      $m->to($checkUser->email, $checkUser->name ?? '')->subject('Reset Password');
-                    //  $m->to('jyotikasethi3007@gmail.com', $user->name)->subject('Order Invoice');
                  });
                     
                     return response()->json([

@@ -57,7 +57,7 @@
                     <tbody>
                         <tr>
                           <td colspan="3" height="70" align="center" style="background-color:#eeeeee">
-                             <a href="{{ url('/') }}"> <img src="{{ asset('storage/'.$companyInfor->company_logo ?? '') }}" width="auto" height="65"></a>
+                          <a href="{{ url('/') }}"> <img src="https://admin.iadvance.in/storage/logos/1685348917logo.png" width="auto" height="65"></a>
                           </td>
                         </tr>
                         <tr><td colspan="3" height="10"></td></tr>
@@ -75,7 +75,7 @@
                             <td width="10"></td>
                             <td>
                             
-                                <p>Welcome to GV Mart. Your otp for Email ID verification {{ $user->otp ?? '' }} </p>
+                                <p>Welcome to IAdvance Apple Store. Your otp for Email ID verification is {{ $otp ?? '' }} </p>
                                 <br>
                             </td>
                             <td width="10"></td>

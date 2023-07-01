@@ -71,7 +71,7 @@
                             <td width="10"></td>
                             <td>
                                 
-                                <h2>A new user registered at GV Mart </h2>
+                                <h2>A new user registered at IAdvance Apple Store </h2>
                                 <br>
                             </td>
                             <td width="10"></td>

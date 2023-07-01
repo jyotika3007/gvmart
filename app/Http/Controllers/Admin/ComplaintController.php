@@ -45,7 +45,7 @@ class ComplaintController extends Controller
     	$complaint->update();
 
         $complaint->admin_email = 'Riddhi.lic@gmail.com';
-        $complaint->admin_name = 'GV Mart';
+        $complaint->admin_name = 'IAdvance Apple Store';
 
 
             Mail::send('mails.feedbackUpdate',['complaint' => $complaint,  'type' => 'customer'],

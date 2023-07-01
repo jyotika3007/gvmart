@@ -185,7 +185,7 @@
 					<!--=======  blog slider section title  =======-->
 					
 					<div class="section-title red-title">
-						<h3>GV Mart Sale</h3>
+						<h3>IAdvance Apple Store Sale</h3>
 					</div>
 					
 					<!--=======  End of blog slider section title  =======-->

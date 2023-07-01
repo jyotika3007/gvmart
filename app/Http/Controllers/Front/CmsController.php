@@ -21,7 +21,7 @@ class CmsController extends Controller
     {
         $testimonials = Testimonial::where('status','1')->orderBy('id','DESC')->get();
 
-        $pageName = 'About GV Mart';
+        $pageName = 'About IAdvance Apple Store';
          $content = Cms::where('page','About')->first();
         return view('front.about_us',compact('content','pageName','testimonials'));
     }

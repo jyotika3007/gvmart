@@ -300,14 +300,14 @@ $user = new StdClass;
         $user->name = $request->email;
 
  $user->admin_email = 'Riddhi.lic@gmail.com';
-        $user->admin_name = 'GV Mart';
+        $user->admin_name = 'IAdvance Apple Store';
 
 
          Mail::send('mails.newsletter',['user' => $user, 'type' => 'admin' ],
                  function ($m) use ($user) {
                      $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
-                     $m->to($user->email, $user->name)->subject('GV Mart - Newsletter subscription');
+                     $m->to($user->email, $user->name)->subject('IAdvance Apple Store - Newsletter subscription');
                  });
 
 
@@ -315,7 +315,7 @@ $user = new StdClass;
                  function ($m) use ($user) {
                      $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
-                     $m->to($user->admin_email, $user->admin_name)->subject('GV Mart - Newsletter subscription');
+                     $m->to($user->admin_email, $user->admin_name)->subject('IAdvance Apple Store - Newsletter subscription');
                  });
 
 
@@ -340,7 +340,7 @@ public function submitContactForm(Request $request){
     $data = $request->all();
 
     $data['admin_email'] = 'Riddhi.lic@gmail.com';
-    $data['admin_name'] = 'GV Mart';
+    $data['admin_name'] = 'IAdvance Apple Store';
 
     Mail::send('mails.contact',['data' => $data , 'type' => 'admin' ],
        function ($m) use ($data) {
@@ -381,7 +381,7 @@ public function submitFeedbackForm(Request $request){
 // var_dump($data); die;
 
     $data['admin_email'] = 'Riddhi.lic@gmail.com';
-    $data['admin_name'] = 'GV Mart';
+    $data['admin_name'] = 'IAdvance Apple Store';
 
     Mail::send('mails.feedback',['data' => $data , 'type' => 'admin' ],
        function ($m) use ($data) {

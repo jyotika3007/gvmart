@@ -77,7 +77,7 @@ class RegisterController extends Controller
         ]);
         
         $user->admin = 'Riddhi.lic@gmail.com';
-        $user->admin_name = 'GV Mart';
+        $user->admin_name = 'IAdvance Apple Store';
         
         Mail::send('mails.register-user',['data' => $data, 'type' => 'admin'],
                  function ($m) use ($user) {

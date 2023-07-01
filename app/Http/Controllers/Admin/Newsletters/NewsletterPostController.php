@@ -85,7 +85,7 @@ class NewsletterPostController extends Controller
                 function ($m) use ($sub) {
                    $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
-                   $m->to($sub->email, $sub->email)->subject('GV Mart Updates');
+                   $m->to($sub->email, $sub->email)->subject('IAdvance Apple Store Updates');
                });
         $msg = 'Mail send successfully';
             }

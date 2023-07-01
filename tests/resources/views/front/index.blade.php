@@ -387,7 +387,7 @@
 					<!--=======  multisale  slider section title  =======-->
 					
 					<div class="section-title">
-						<h3>gv mart deal of the day</h3>
+						<h3>IAdvance Apple Store deal of the day</h3>
 					</div>
 					
 					<!--=======  End of multisale slider section title  =======-->
@@ -1083,7 +1083,7 @@
 					<!--=======  blog slider section title  =======-->
 					
 					<div class="section-title">
-						<h3>gv mart news</h3>
+						<h3>IAdvance Apple Store news</h3>
 					</div>
 					
 					<!--=======  End of blog slider section title  =======-->

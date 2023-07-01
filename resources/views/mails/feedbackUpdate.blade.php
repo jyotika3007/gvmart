@@ -85,7 +85,7 @@
                         <tr>
                             <td width="10"></td>
                             <td>
-                                <p> GV Mart has replied to your feedback . </p>
+                                <p> IAdvance Apple Store has replied to your feedback . </p>
                                 <p> Feedback : <i>{{ $complaint->complaint ?? '' }}</i> </p>
                                 <p> Reply : <i>{{ $complaint->admin_reply ?? '' }}</i> </p>
                                 <br>

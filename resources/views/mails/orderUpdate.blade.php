@@ -110,33 +110,33 @@
 
                                 @if($order_status == 2)
                                 <p>Hi {{$customer->name ?? 'User'}}, Your order has been approved successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <p>Thank you for shopping at GV Mart.</p>
+                                <p>Thank you for shopping at IAdvance Apple Store.</p>
                                 <br>
                             @endif
                                
                             @if($order_status == 3)
                                 <p>Hi {{$customer->name ?? 'User'}}, Your order is under processing having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <p>Thank you for shopping at GV Mart.</p>
+                                <p>Thank you for shopping at IAdvance Apple Store.</p>
                             @endif
                                     
                             @if($order_status == 4)
                                 <p>Hi {{$customer->name ?? 'User'}}, Your order is ready to ship having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <p>Thank you for shopping at GV Mart.</p>
+                                <p>Thank you for shopping at IAdvance Apple Store.</p>
                             @endif
                             
                             @if($order_status == 5)
                                <p>Congratulations {{$customer->name ?? 'User'}}, Your order has been delivered successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <p>Thank you for shopping at GV Mart.</p>
+                                <p>Thank you for shopping at IAdvance Apple Store.</p>
                             @endif
                             
                             @if($order_status == 6)
                                 <p>Hi {{$customer->name ?? 'User'}}, Your order has been cancelled successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <p>Thank you for shopping at GV Mart.</p>
+                                <p>Thank you for shopping at IAdvance Apple Store.</p>
                             @endif
 
                             @if($order_status == 7)
                                 <p>Hii {{$customer->name ?? 'User'}}, Your order has been returned successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <p>Thank you for shopping at GV Mart.</p>
+                                <p>Thank you for shopping at IAdvance Apple Store.</p>
                             @endif
 
                                 

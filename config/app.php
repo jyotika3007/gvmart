@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'GV Mart'),
+    'name' => env('APP_NAME', 'IAdvance Apple Store'),
 
     /*
     |--------------------------------------------------------------------------

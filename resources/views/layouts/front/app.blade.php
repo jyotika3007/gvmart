@@ -976,7 +976,7 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 								<span class="separator">|</span>
 								<a href="#">Term and conditions</a>
 							</p> -->
-							<p class="copyright-text">&copy; 2020-21 <a href="#">GV Mart</a>. All Rights Reserved</p>
+							<p class="copyright-text">&copy; 2020-21 <a href="#">IAdvance Apple Store</a>. All Rights Reserved</p>
 						</div>
 						
 						<!--=======  End of copyright text	  =======-->

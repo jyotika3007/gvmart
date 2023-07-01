@@ -9,7 +9,7 @@
   
   <meta name="image" content="{{ asset('storage/'.$product->cover ?? '') }}">
 
-<title>{{ $product->name ?? '' }} - GV Mart</title>
+<title>{{ $product->name ?? '' }} - IAdvance Apple Store</title>
 
 
 @endsection

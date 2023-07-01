@@ -98,7 +98,7 @@
                             <td>
                                 <p>{{ $msg ?? '' }}. Having Details :</b></i> </p>
                                 <p>Order No - GVM/{{date('Y')}}/000{{ $order->id }} </p>
-                                <p>Thank you for shopping at GV Mart.</p>
+                                <p>Thank you for shopping at IAdvance Apple Store.</p>
                                 <br>
                             </td>
                             <td width="10"></td>

@@ -321,7 +321,7 @@
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(40.740610, -73.935242),
                 map: map,
-                title: 'GV Mart',
+                title: 'IAdvance Apple Store',
                 icon: "/assets/images/icons/map-marker.png",
                 animation: google.maps.Animation.BOUNCE
             });
