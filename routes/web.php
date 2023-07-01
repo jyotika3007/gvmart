@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('generate-pdf', 'Front\TestViewController@generatePDF');
 
+
+
 Route::get('test', 'Front\TestViewController@getTestMail');
 
 Route::get('/', 'Auth\LoginController@getlogin')->name('login');

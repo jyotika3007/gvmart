@@ -16,9 +16,14 @@ use Illuminate\Support\Facades\Mail;
 class CheckoutController extends Controller
 {
 
-    public function getPaymentLink($x_verify, $req){
+     public function getPaymentLink(Request $request){
 
-        // print_r(1); die;
+$data = $request->all();
+$req = $data['request'] ?? '';
+$x_verify = $data['x_verify'] ?? '';
+
+if($req != '' && $x_verify != ''){
+    
 
         $vars = http_build_query(array('REQUEST' => $req));
 
@@ -43,22 +48,35 @@ class CheckoutController extends Controller
         }
 
         curl_close($ch);
-
-        return $server_output; 
-
+        
+        $resp['payment_link'] = $server_output;
+        
+        return response()->json([
+        'status' => 1,
+        'message' => 'Payemnt link generated successfully.',
+        'data' => $resp
+        ]);
+        // return $server_output; 
+}
+else{
+    return response()->json([
+        'status' => 0,
+        'message' => 'Parameters missing request & x-verify.'
+        ]);
+}
     }
 
     public function checkout(Request $request, $user_id)
     {
         $data = $request->all();
-
-        if ($data['x_verify'] != '' && $data['request'] != '') {
+        // print_r($data); die;
 
             $shipping_address = 0;
             $billing_address = 0;
 
             $customer = $data['user_id'];
 
+        // print_r(1); die;
             if (isset($data['new_address'])) {
                 $addr = $data['new_address'];
                 $newAddress = new Address;
@@ -166,28 +184,72 @@ class CheckoutController extends Controller
                     echo $e->getMessage();
                     die;
                 }
-                    
                    
                 }
-            // print_r(1); die;
+            
             }
 
-            
-              $payemnt_link = $this->getPaymentLink($data['x_verify'], $data['request']);
+        //   $payemnt_link = $this->getPaymentLink($data['x_verify'], $data['request']);
 
             $resp['order_id'] = $order;
-            $resp['payment_link'] = $payemnt_link;
+            // $resp['payment_link'] = $payemnt_link;
             
             return response()->json([
                 'status' => 1,
-                'message' => "Payment link fetched successfully",
+                'message' => "Order details saved successfully",
                 'data' => $resp
             ]);
-        } else {
-            return response()->json([
-                'status' => 0,
-                "message" => "Invalid data for payment link"
-            ]);
-        }
+        
     }
+    
+    public function getPaymentResponse(Request $request){
+         $data = $request->all();
+         
+        // $data = [
+        //     "merchant_id" => "106598",
+        //     "merchant_access_code" => "4a39a6d4-46b7-474d-929d-21bf0e9ed607",
+        //     "unique_merchant_txn_id" => "PineLabs1687929878",
+        //     "pine_pg_txn_status" => "4",
+        //     "txn_completion_date_time" => "28/06/2023 10:56:26 AM",
+        //     "amount_in_paisa" => "1000",
+        //     "txn_response_code" => "1",
+        //     "txn_response_msg" => "SUCCESS",
+        //     "acquirer_name" => "HDFC",
+        //     "pine_pg_transaction_id" => "8069656",
+        //     "captured_amount_in_paisa" => "1000",
+        //     "refund_amount_in_paisa" => "0",
+        //     "payment_mode" => "1",
+        //     "masked_card_number" => "********4242",
+        //     "mobile_no" => "9056560413",
+        //     "udf_field_1" => "Xyz",
+        //     "udf_field_2" => "Test txn",
+        //     "udf_field_3" => "999999999",
+        //     "udf_field_4" => "orderId_43",
+        //     "card_holder_name" => "test",
+        //     "salted_card_hash" => "E54AC8365C2C8C7A54B13A54B5CFAA513E3ABF6FDF8C7CBF34AFCE6B735BE32D",
+        //     "rrn" => "425847096720",
+        //     "auth_code" => "999999",
+        //     "parent_txn_status" => null,
+        //     "parent_txn_response_code" => null,
+        //     "parent_txn_response_message" => null,
+        //     "dia_secret" => "5D4DEC5E2E43251AF0271C483B0672AA54D3D6D88FD9F39DE1F66127AEAE4FDC",
+        //     "dia_secret_type" => "SHA256"
+        // ];
+         
+        $order_id = explode('_',$data['udf_field_4'])[1];
+         
+        $txn_id = $data['pine_pg_transaction_id'];
+        $msg = $data['txn_response_msg'];
+         
+        DB::table('orders')->where('id',$order_id)->update([
+            'order_status_id' => 2,
+            'payment_status' => $msg,
+            'transaction_id' => $txn_id
+        ]);
+         
+        // dd($data);
+        
+        return redirect()->away('https://www.iadvance.in/ThankYou?transaction_id=TXN'.$txn_id.'&payment_status='.$msg);
+    }
+    
 }

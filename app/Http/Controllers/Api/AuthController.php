@@ -10,6 +10,7 @@ use App\User;
 use Auth;
 use Hash;
 use Illuminate\Support\Facades\DB;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -174,6 +175,26 @@ class AuthController extends Controller
             if ($checkUser) {
 
                 if ($checkUser->status == 1) {
+                    
+                    $random_token = rand('1000000','999999999');
+
+                    $token = Hash::make($random_token);
+                    
+                     $newLink = DB::table('password_resets')->insert(array(
+                        'email' => $checkUser->email,
+                        'token' => $token
+                    ));
+                    
+                    $link = 'reset-password?email='.$checkUser->email.'&token='.$token;
+            
+                    Mail::send('mails.forgotPassword', ['user' => $checkUser, 'link' => $link],
+                        function ($m) use ($checkUser) {
+                     $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+
+                     $m->to($checkUser->email, $checkUser->name ?? '')->subject('Reset Password');
+                    //  $m->to('jyotikasethi3007@gmail.com', $user->name)->subject('Order Invoice');
+                 });
+                    
                     return response()->json([
                         'status' => 1,
                         'message' => 'Reset Password Link is send to your email id.',
@@ -228,14 +249,5 @@ class AuthController extends Controller
             ]);
         }
     }
-    
-          
- public function getPaymentResponse(Request $request){
-     $data = $request->all();
-     
-     dd($data);
-    // 	dd($request);
-    }
-    
     
 }

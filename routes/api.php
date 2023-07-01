@@ -14,13 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::namespace('Api')->group(function () {
 
-    Route::post('ThankYou/User', 'AuthController@getPaymentResponse');
+    
     
     // Auth Routes
     Route::post('login','AuthController@postLogin');
@@ -84,10 +86,16 @@ Route::namespace('Api')->group(function () {
     Route::patch('updateUserProfile/{user_id}','UserDashboardController@updateUserProfile');
     Route::get('orderDetail/{order_id}','UserDashboardController@getOrderDetail');
     Route::get('ordersList/{user_id}','UserDashboardController@getOrdersList');
+    
+    
+    // Route::post('checkout/{user_id}',function(){ echo 1; });
     Route::post('checkout/{user_id}','CheckoutController@checkout');
+    
+    
     Route::get('cartRelatedItems','UserDashboardController@getCartRelatedItems');
     Route::get('compareProduct/{product_id}','CompareProductsController@getcomparedProductDetail');
     Route::get('compareProductsList','CompareProductsController@getCompareProductsList');
     
-    Route::post('payment_link','CheckoutController@getPaymentLink');
+    Route::post('get_payment_link','CheckoutController@getPaymentLink');
+    Route::post('ThankYou/User', 'CheckoutController@getPaymentResponse');
 });
