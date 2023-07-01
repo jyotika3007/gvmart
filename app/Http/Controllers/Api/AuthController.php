@@ -82,6 +82,7 @@ class AuthController extends Controller
             ]);
         } else {
 
+           
             $checkUser = User::where('email', $request->email)->first();
 
             if ($checkUser) {
@@ -91,6 +92,13 @@ class AuthController extends Controller
                 ]);
             } else {
 
+                if(count(str_split($data['password']))<6){
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Password should not be less then 6 characters.',
+                    ]);
+                }
+
                 $data['status'] = 1;
                 $data['password'] = Hash::make($data['password']);
                 $data['user_role'] = 'customer';
@@ -99,7 +107,6 @@ class AuthController extends Controller
 
                 $otp = rand(100000,999999);
                 
-
                 $otpId = DB::table('email_verifications')->insertGetId([
                     'email' => $data['email'],
                     'otp' => $otp,

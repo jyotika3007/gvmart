@@ -272,13 +272,22 @@ class UserDashboardController extends Controller
     public function getUserOrdersList(Request $request, $userid)
     {
 
-        $orders = Order::where('customer_id', $userid)->orderBy('id', 'DESC')->get();
+        $header = $request->header('Authorization');
 
-        return response()->json([
-            "status" => 1,
-            "message" => "Orders History fetched successfully.",
-            "data" => $orders
-        ]);
+        if ($header) {
+            $orders = Order::where('customer_id', $userid)->orderBy('id', 'DESC')->get();
+
+            return response()->json([
+                "status" => 1,
+                "message" => "Orders History fetched successfully.",
+                "data" => $orders
+            ]);
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
 
         // print_r($orders);
         // die;
@@ -389,71 +398,91 @@ class UserDashboardController extends Controller
         }
     }
 
-    public function getOrderDetail($orderId)
+    public function getOrderDetail(Request $request, $orderId)
     {
+        $header = $request->header('Authorization');
 
-        $data = [];
-        $data['order'] = Order::where('id', $orderId)->first();
+        if ($header) {
 
-        $data['billing_address'] = Address::where('id', $data['order']->address_id)->first();
-        $data['delivery_address'] = Address::where('id', $data['order']->delivery_address)->first();
+            $data = [];
+            $data['order'] = Order::where('id', $orderId)->first();
 
-        $data['items'] = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $orderId)->get(['order_product.*', 'products.cover']);
+            $data['billing_address'] = Address::where('id', $data['order']->address_id)->first();
+            $data['delivery_address'] = Address::where('id', $data['order']->delivery_address)->first();
 
-        $data['order_statuses'] = DB::table('order_statuses')->get();
-        $data['currentStatus'] = DB::table('order_statuses')->where('id', $data['order']->order_status_id)->first();
-        $data['customer'] = User::where('id', $data['order']->customer_id)->first();
+            $data['items'] = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $orderId)->get(['order_product.*', 'products.cover']);
 
-        return response()->json([
-            'status' => 1,
-            'message' => 'Order detail fetched successfully',
-            'data' => $data
-        ]);
+            $data['order_statuses'] = DB::table('order_statuses')->get();
+            $data['currentStatus'] = DB::table('order_statuses')->where('id', $data['order']->order_status_id)->first();
+            $data['customer'] = User::where('id', $data['order']->customer_id)->first();
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Order detail fetched successfully',
+                'data' => $data
+            ]);
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
     }
 
 
-    public function getOrdersList($user_id)
+    public function getOrdersList(Request $request, $user_id)
     {
 
-        $orders = [];
-        $data = [];
-        $orders_list = Order::where('customer_id', $user_id)->where('order_status_id', '<=', 5)->orderBy('id', 'DESC')->get();
-        $i = 0;
+        $header = $request->header('Authorization');
 
-        $order_statuses = OrderStatus::limit(5)->get();
+        if ($header) {
 
-        if ($orders_list) {
-            foreach ($orders_list as $order) {
-                $orders[$i]['order'] = $order;
+            $orders = [];
+            $data = [];
+            $orders_list = Order::where('customer_id', $user_id)->where('order_status_id', '<=', 5)->orderBy('id', 'DESC')->get();
+            $i = 0;
 
-                $items = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $order->id)->get(['order_product.*', 'products.cover', 'products.slug']);
+            $order_statuses = OrderStatus::limit(5)->get();
 
-                $orders[$i]['items'] = $items;
+            if ($orders_list) {
+                foreach ($orders_list as $order) {
+                    $orders[$i]['order'] = $order;
 
-                $billing_address = Address::where('id', $order->address_id)->first();
-                $orders[$i]['billing_address'] = $billing_address;
+                    $items = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $order->id)->get(['order_product.*', 'products.cover', 'products.slug']);
 
-                $delivery_address = Address::where('id', $order->delivery_address)->first();
-                $orders[$i]['delivery_address'] = $delivery_address;
+                    $orders[$i]['items'] = $items;
+
+                    $billing_address = Address::where('id', $order->address_id)->first();
+                    $orders[$i]['billing_address'] = $billing_address;
+
+                    $delivery_address = Address::where('id', $order->delivery_address)->first();
+                    $orders[$i]['delivery_address'] = $delivery_address;
 
 
-                $i++;
+                    $i++;
+                }
             }
+            // dd(1);
+
+            $data['orders'] = $orders;
+            $data['order_statuses'] = $order_statuses;
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Orders List fetched successfully',
+                'data' => $data
+            ]);
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
         }
-        // dd(1);
-
-        $data['orders'] = $orders;
-        $data['order_statuses'] = $order_statuses;
-
-        return response()->json([
-            'status' => 1,
-            'message' => 'Orders List fetched successfully',
-            'data' => $data
-        ]);
     }
 
     public function getCartRelatedItems(Request $request)
     {
+
         $data = $request->all();
 
         $related_products = [];
@@ -461,33 +490,32 @@ class UserDashboardController extends Controller
 
         for ($i = 0; $i < count($data); $i++) {
 
-            $products = DB::table('related_products')->where('product_id', $data['product_ids'][$i])->where('type','product')->get(['related_products.related_product_id as id']);
-            $services = DB::table('related_products')->where('product_id', $data['product_ids'][$i])->where('type','apple_service')->get(['related_products.related_product_id as id']);
+            $products = DB::table('related_products')->where('product_id', $data['product_ids'][$i])->where('type', 'product')->get(['related_products.related_product_id as id']);
+            $services = DB::table('related_products')->where('product_id', $data['product_ids'][$i])->where('type', 'apple_service')->get(['related_products.related_product_id as id']);
 
             $ids = [];
             $service_id = [];
 
-            for($j=0 ; $j<count($products) ; $j++){
+            for ($j = 0; $j < count($products); $j++) {
                 array_push($ids, $products[$j]->id);
             }
 
-            for($j=0 ; $j<count($services) ; $j++){
+            for ($j = 0; $j < count($services); $j++) {
                 array_push($service_id, $services[$j]->id);
             }
 
-            $products_array = Product::whereIn('id', $ids)->get(['id','slug','name','cover','price','sale_price','discount','stock_quantity']);
+            $products_array = Product::whereIn('id', $ids)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
             $apple_services = AppleService::whereIn('id', $service_id)->get();
-            
-            if($products_array){
-                foreach($products_array as $pro)
-                    array_push($related_products,$pro);
+
+            if ($products_array) {
+                foreach ($products_array as $pro)
+                    array_push($related_products, $pro);
             }
 
-            if($apple_services){
-                foreach($apple_services as $app)
-                    array_push($related_services,$app);
+            if ($apple_services) {
+                foreach ($apple_services as $app)
+                    array_push($related_services, $app);
             }
-
         }
 
         $data_new['related_products'] = $related_products;
