@@ -1,6 +1,3 @@
-<?php
-   $companyInfor = DB::table('company_details')->first();
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -147,7 +144,7 @@
             <!--<a href="javascript:;" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-file t-plus-1 text-danger fa-fw fa-lg"></i> Export as PDF</a>-->
             <!--<a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-print t-plus-1 fa-fw fa-lg"></i> Print</a>-->
             </span>
-           <img src="{{ asset('storage/'.$companyInfor->company_logo ?? '') }}" width="80px">
+           <img src="https://admin.iadvance.in/storage/logos/1685348917logo.png" width="80px">
          </div>
          <!-- end invoice-company -->
          

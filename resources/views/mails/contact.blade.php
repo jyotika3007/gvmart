@@ -1,7 +1,3 @@
-<?php
-   $companyInfor = DB::table('company_details')->first();
-?>
-
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -57,7 +53,7 @@
                     <tbody>
                         <tr>
                           <td colspan="3" height="70" align="center" style="background-color:#eee">
-                            <a href="{{ url('/') }}"> <img src="{{ asset('storage/'.$companyInfor->company_logo ?? '') }}" width="auto" height="65"></a>
+                            <a href="{{ url('/') }}"> <img src="https://admin.iadvance.in/storage/logos/1685348917logo.png" width="auto" height="65"></a>
                           </td>
                         </tr>
                         <tr><td colspan="3" height="10"></td></tr>
