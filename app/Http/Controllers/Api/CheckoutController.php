@@ -21,6 +21,8 @@ class CheckoutController extends Controller
     public function generateRequestKey($json_data)
     {
 
+        // $ts = strtotime(Date('Y-m-d H:s:i'));
+        // $addedValue = floor($ts / 1000);
         // $json_data=[
         //     "merchant_data" => [
         //       "merchant_id"=> env('MID'),
@@ -53,7 +55,7 @@ class CheckoutController extends Controller
         $baseData = base64_encode(json_encode($json_data));
         $hmac_digest = hash_hmac("sha256",  $baseData, pack("H*", env('SECRET_CODE')), false);
         $resultOfKeys = ["request" => $baseData, "x_verify" => strtoupper($hmac_digest)];
-
+// print_r($resultOfKeys);
         return $resultOfKeys;
     }
 
@@ -275,7 +277,7 @@ class CheckoutController extends Controller
                 ],
                 "udf_data" => [
                     "udf_field_1" => "Xyz",
-                    "udf_field_2" => "Test txn",
+                    "udf_field_2" => $order . " Test txn " . rand('1000000', '999999999'),
                     "udf_field_3" => rand('1000000', '999999999') . $order,
                     "udf_field_4" => "orderId_" . $order
                 ]
@@ -300,6 +302,8 @@ class CheckoutController extends Controller
     public function getPaymentResponse(Request $request)
     {
         $data = $request->all();
+        
+        
         // $data = [
         //     "merchant_id" => "106598",
         //     "merchant_access_code" => "4a39a6d4-46b7-474d-929d-21bf0e9ed607",
@@ -333,8 +337,9 @@ class CheckoutController extends Controller
         $order_id = explode('_', $data['udf_field_4'])[1];
 
 
-        $txn_id = $data['pine_pg_transaction_id'];
-        $msg = $data['txn_response_msg'];
+        $txn_id = $data['pine_pg_transaction_id'] ?? '';
+        $msg = $data['txn_response_msg'] ?? '';
+        
 
         DB::table('orders')->where('id', $order_id)->update([
             'order_status_id' => 2,
@@ -354,6 +359,7 @@ class CheckoutController extends Controller
         $billing_address = Address::find($order->address_id);
         $delivery_address = Address::find($order->delivery_address);
         $currentStatus = DB::table('order_statuses')->where('id', $order->order_status_id)->first();
+        // dd($order);
 
         Mail::send(
             'mails.orderInvoice',
