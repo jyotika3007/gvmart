@@ -252,14 +252,13 @@ class CheckoutController extends Controller
             $resp['order_id'] = $order;
 
             $userData = User::find($order_data["customer_id"]);
-            $ts = strtotime(Date('Y-m-d H:s:i'));
-            $addedValue = floor($ts / 1000);
+        
             $paymentVariable = [
                 "merchant_data" => [
                     "merchant_id" => env('MID'),
                     "merchant_access_code" => env('ACCESS_CODE'),
                     "merchant_return_url" => env('RETURN_URL'),
-                    "unique_merchant_txn_id" => "PineLabs" . $addedValue
+                    "unique_merchant_txn_id" => "PineLabs". uniqid()
                 ],
                 "customer_data" => [
                     "customer_id" => $order_data["customer_id"],
