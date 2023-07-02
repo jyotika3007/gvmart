@@ -10,6 +10,7 @@ use App\Shop\Categories\Category;
 use App\Shop\Banners\Banner;
 use App\Shop\Testimonial\Testimonial;
 use Illuminate\Support\Facades\DB;
+use App\Shop\ProductImages\ProductImage;
 
 class HomeController extends Controller
 {
@@ -144,13 +145,44 @@ class HomeController extends Controller
                     $prods->price = $attr->price ?? 0;
                     $prods->offer_price = $attr->offer_price ?? 0;
                     $prods->stock_quantity = $attr->quantity ?? 0;
-                    array_push($final_sales_products,$prods);
+
+                    $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
+
+                    if (count($color_ids) > 0) {
+                        foreach ($color_ids as $col) {
+                            $color_products = clone $prods;
+                            $product_img = ProductImage::where('product_id', $prods->id)->where('color_id', $col->color_id)->first(['src']);
+                            $color_code = DB::table('attribute_values')->where('id', $col->color_id)->first(['value', 'code']);
+                            // dd($color_code);
+                            if($product_img)
+                                $color_products->cover = $product_img->src ?? '';
+                            else
+                                $color_products->cover = '';
+
+                            if($color_code){
+                                $color_products->color = $color_code->value ?? '';
+                                $color_products->color_code = $color_code->code ?? '';
+                            }
+                            else{
+                                $color_products->color = '';
+                                $color_products->color_code = '';
+                            }
+
+                            array_push($final_sales_products, $color_products);
+                        }
+                    } else {
+                        $prods->color = '';
+                        $prods->color_code = '';
+                        array_push($final_sales_products, $prods);
+                    }
+                    // array_push($final_sales_products,$prods);
                 }
             }
             else{
                 array_push($final_sales_products, $sp);
             }
         }
+
 
         foreach($new_arrival_products as $sp){
             $attributes = DB::table('attribute_value_product_attribute')
@@ -166,7 +198,38 @@ class HomeController extends Controller
                     $prods->price = $attr->price ?? 0;
                     $prods->offer_price = $attr->offer_price ?? 0;
                     $prods->stock_quantity = $attr->quantity ?? 0;
-                    array_push($final_new_arrival_products,$prods);
+
+                    $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
+
+                    if (count($color_ids) > 0) {
+                        foreach ($color_ids as $col) {
+                            $color_products = clone $prods;
+                            $product_img = ProductImage::where('product_id', $prods->id)->where('color_id', $col->color_id)->first(['src']);
+                            $color_code = DB::table('attribute_values')->where('id', $col->color_id)->first(['value', 'code']);
+                            // dd($color_code);
+                            if($product_img)
+                                $color_products->cover = $product_img->src ?? '';
+                            else
+                                $color_products->cover = '';
+
+                            if($color_code){
+                                $color_products->color = $color_code->value ?? '';
+                                $color_products->color_code = $color_code->code ?? '';
+                            }
+                            else{
+                                $color_products->color = '';
+                                $color_products->color_code = '';
+                            }
+
+                            array_push($final_new_arrival_products, $color_products);
+                        }
+                    } else {
+                        $prods->color = '';
+                        $prods->color_code = '';
+                        array_push($final_new_arrival_products, $prods);
+                    }
+
+                    // array_push($final_new_arrival_products,$prods);
                 }
             }
             else{
@@ -188,7 +251,38 @@ class HomeController extends Controller
                     $prods->price = $attr->price ?? 0;
                     $prods->offer_price = $attr->offer_price ?? 0;
                     $prods->stock_quantity = $attr->quantity ?? 0;
-                    array_push($final_best_seller_products,$prods);
+
+                    $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
+
+                    if (count($color_ids) > 0) {
+                        foreach ($color_ids as $col) {
+                            $color_products = clone $prods;
+                            $product_img = ProductImage::where('product_id', $prods->id)->where('color_id', $col->color_id)->first(['src']);
+                            $color_code = DB::table('attribute_values')->where('id', $col->color_id)->first(['value', 'code']);
+                            // dd($color_code);
+                            if($product_img)
+                                $color_products->cover = $product_img->src ?? '';
+                            else
+                                $color_products->cover = '';
+
+                            if($color_code){
+                                $color_products->color = $color_code->value ?? '';
+                                $color_products->color_code = $color_code->code ?? '';
+                            }
+                            else{
+                                $color_products->color = '';
+                                $color_products->color_code = '';
+                            }
+
+                            array_push($final_best_seller_products, $color_products);
+                        }
+                    } else {
+                        $prods->color = '';
+                        $prods->color_code = '';
+                        array_push($final_best_seller_products, $prods);
+                    }
+
+                    // array_push($final_best_seller_products,$prods);
                 }
             }
             else{

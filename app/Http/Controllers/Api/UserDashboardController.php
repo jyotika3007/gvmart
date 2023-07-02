@@ -13,10 +13,10 @@ use App\Shop\Orders\Order;
 use App\Shop\Addresses\Address;
 use App\Shop\OrderStatuses\OrderStatus;
 use App\Shop\Products\Product;
+use App\Shop\ProductImages\ProductImage;
 
 class UserDashboardController extends Controller
 {
-
 
     public function __construct(Request $request)
     {
@@ -48,7 +48,6 @@ class UserDashboardController extends Controller
             ]);
         }
     }
-
 
     public function productAddToCart(Request $request)
     {
@@ -92,7 +91,6 @@ class UserDashboardController extends Controller
         }
     }
 
-
     public function userCartProducts(Request $request, $userid)
     {
         $header = $request->header('Authorization');
@@ -122,7 +120,6 @@ class UserDashboardController extends Controller
             ]);
         }
     }
-
 
     public function productAddToWishlist(Request $request)
     {
@@ -504,12 +501,63 @@ class UserDashboardController extends Controller
                 array_push($service_id, $services[$j]->id);
             }
 
-            $products_array = Product::whereIn('id', $ids)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity']);
+            $products_array = Product::whereIn('id', $ids)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity','prelaunch_price','prelaunch_price']);
             $apple_services = AppleService::whereIn('id', $service_id)->get();
 
             if ($products_array) {
-                foreach ($products_array as $pro)
-                    array_push($related_products, $pro);
+               
+                    foreach($products_array as $sp){
+                        $attributes = DB::table('attribute_value_product_attribute')
+                        ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
+                        ->where('attribute_value_product_attribute.product_id',$sp->id)
+                        ->where('attribute_values.attribute_id', 3)
+                        ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+                        if(count($attributes)>0){
+                            foreach($attributes as $attr){
+                                $prods = clone $sp;
+                                $prods->storage = $attr->value;
+                                $prods->storage_id = $attr->id;
+                                $prods->price = $attr->price ?? 0;
+                                $prods->offer_price = $attr->offer_price ?? 0;
+                                $prods->stock_quantity = $attr->quantity ?? 0;
+            
+                                $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
+            
+                                if (count($color_ids) > 0) {
+                                    foreach ($color_ids as $col) {
+                                        $color_products = clone $prods;
+                                        $product_img = ProductImage::where('product_id', $prods->id)->where('color_id', $col->color_id)->first(['src']);
+                                        $color_code = DB::table('attribute_values')->where('id', $col->color_id)->first(['value', 'code']);
+                                        // dd($color_code);
+                                        if($product_img)
+                                            $color_products->cover = $product_img->src ?? '';
+                                        else
+                                            $color_products->cover = '';
+            
+                                        if($color_code){
+                                            $color_products->color = $color_code->value ?? '';
+                                            $color_products->color_code = $color_code->code ?? '';
+                                        }
+                                        else{
+                                            $color_products->color = '';
+                                            $color_products->color_code = '';
+                                        }
+            
+                                        array_push($related_products, $color_products);
+                                    }
+                                } else {
+                                    $prods->color = '';
+                                    $prods->color_code = '';
+                                    array_push($related_products, $prods);
+                                }
+            
+                                // array_push($related_products,$prods);
+                            }
+                        }
+                        else{
+                            array_push($related_products, $sp);
+                        }
+                    }
             }
 
             if ($apple_services) {
