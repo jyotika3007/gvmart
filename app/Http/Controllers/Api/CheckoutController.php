@@ -18,17 +18,59 @@ use Throwable;
 
 class CheckoutController extends Controller
 {
+    public function generateRequestKey()
+{
+    $ts = strtotime(Date('Y-m-d H:s:i'));
+    $addedValue = floor($ts / 1000);
+    $json_data=[
+        "merchant_data" => [
+          "merchant_id"=> env('MID'),
+          "merchant_access_code"=> env('ACCESS_CODE'),
+          "merchant_return_url"=> env('RETURN_URL'),
+          "unique_merchant_txn_id"=> "PineLabs".$addedValue
+        ],
+        "customer_data"=> [
+            "customer_id"=> 68,
+            "email_id"=> "jyotikasethi3007@gmail.com",
+            "first_name"=> "Jyotika",
+            "last_name"=> "Sethi",
+            "mobile_no"=> "9056522813"
+        ],
+        "payment_data"=> [
+            "amount_in_paisa"=> 60000        ],
+        "txn_data"=> [
+            "navigation_mode"=> 2,
+            "payment_mode"=> "1,3",
+            "transaction_type"=> 1
+        ],
+        "udf_data"=> [
+            "udf_field_1"=> "Xyz",
+            "udf_field_2"=> "Test txn",
+            "udf_field_3"=> "999999999",
+            "udf_field_4"=> "orderId_28"
+        ]
+        ];
+   
+        $baseData=base64_encode(json_encode($json_data));
+        $hmac_digest = hash_hmac("sha256",  $baseData,pack("H*",env('SECRET_CODE')), false);
+        $resultOfKeys=["request"=>$baseData,"x_verify"=>strtoupper($hmac_digest)];
+
+        return $resultOfKeys;
+    }
 
     public function getPaymentLink(Request $request)
     {
 
-        $header = $request->header('Authorization');
+        // $header = $request->header('Authorization');
 
-        if ($header) {
+        // if ($header) {
+        
+        // $req = $linkObject["request"] ?? '';
+        // $x_verify = $linkObject["x_verify"] ?? '';
         $data = $request->all();
-        $req = $data['request'] ?? '';
-        $x_verify = $data['x_verify'] ?? '';
-
+        $req = $data["request"] ?? '';
+        $x_verify = $data["x_verify"] ?? '';
+        // print_r($x_verify);die();
         if ($req != '' && $x_verify != '') {
 
 
@@ -58,10 +100,11 @@ class CheckoutController extends Controller
 
             $resp['payment_link'] = $server_output;
 
-            return response()->json([
-                'status' => 1,
-                'message' => 'Payemnt link generated successfully.',
-                'data' => $resp
+            // return $resp;
+           return  response()->json([
+                'status' => 0,
+                'message' => 'Parameters missing request & x-verify.',
+                'data'=>$resp
             ]);
             // return $server_output; 
         } else {
@@ -70,13 +113,13 @@ class CheckoutController extends Controller
                 'message' => 'Parameters missing request & x-verify.'
             ]);
         }
-    }
-    else{
-        return response()->json([
-            "status" => "400",
-            "message" => "Bad Request. Access token required",
-        ]);
-    }
+    // }
+    // else{
+    //     return response()->json([
+    //         "status" => "400",
+    //         "message" => "Bad Request. Access token required",
+    //     ]);
+    // }
     }
 
     public function checkout(Request $request, $user_id)
@@ -201,10 +244,45 @@ class CheckoutController extends Controller
 
         $resp['order_id'] = $order;
 
+        $userData=User::find($order_data["customer_id"]);
+        $ts = time();
+        $addedValue = floor($ts / 1000);
+        $paymentVariable=[
+            "merchant_data" => [
+              "merchant_id"=> env('MID'),
+              "merchant_access_code"=> env('ACCESS_CODE'),
+              "merchant_return_url"=> env('RETURN_URL'),
+              "unique_merchant_txn_id"=> "PineLabs".$addedValue
+            ],
+            "customer_data"=> [
+              "customer_id"=> $order_data["customer_id"],
+              "email_id"=> $userData->email ?? '',
+              "first_name"=>  $userData->name ?? '',
+              "mobile_no"=>  $userData->mobile ?? ''
+            ],
+            "payment_data"=> [
+              "amount_in_paisa"=> $order_data['total']*100 ?? 0
+            ],
+            "txn_data"=> [
+              "navigation_mode"=> 2,
+              "payment_mode"=> "1,3",
+              "transaction_type"=> 1
+            ],
+            "udf_data"=> [
+              "udf_field_1"=> "Xyz",
+              "udf_field_2"=> "Test txn",
+              "udf_field_3"=> "999999999",
+              "udf_field_4"=> "orderId_".$order
+            ]
+            ];
+            // print_r($paymentVariable);die();
+            $paymentRequestKeys=$this->generateRequestKey($paymentVariable);
+        $output=$this->getPaymentLink($paymentRequestKeys);
+
         return response()->json([
             'status' => 1,
             'message' => "Order details saved successfully",
-            'data' => $resp
+            'data' => $output
         ]);
     }
     else{
@@ -283,8 +361,6 @@ class CheckoutController extends Controller
                 $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order booked successfully.');
             }
         );
-
-
         Mail::send(
             'mails.orderInvoice',
             ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'user'],
@@ -294,10 +370,10 @@ class CheckoutController extends Controller
                 $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
             }
         );
-            
-
         return redirect()->away('https://www.iadvance.in/ThankYou?transaction_id=TXN' . $txn_id . '&payment_status=' . $msg);
     }
+
+    
 }
 
         
