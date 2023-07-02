@@ -129,41 +129,47 @@ class CheckoutController extends Controller
 
         if ($header) {
 
-            $shipping_address = 0;
+            // $shipping_address = 0;
             $billing_address = 0;
 
             $customer = $data['user_id'];
 
-            if (isset($data['new_address'])) {
-                $addr = $data['new_address'];
-                $newAddress = new Address;
-                $newAddress->customer_id = $customer;
-                $newAddress->alias = $addr['alias'] ?? 'Other';
-                $newAddress->address_1 = $addr['address_1'] ?? '';
-                $newAddress->address_2 = $addr['address_2'] ?? '';
-                $newAddress->country_id = 101;
-                $newAddress->city = $addr['city'] ?? '';
-                $newAddress->landmark = $addr['landmark'] ?? '';
-                $newAddress->state_code = $addr['state_code'] ?? '';
-                $newAddress->zip = $addr['zip'] ?? '';
-                $newAddress->phone = $addr['phone'] ?? '';
-                $newAddress->delivery_address = 0;
-                $newAddress->save();
-            }
+            // if (isset($data['new_address'])) {
+            //     $addr = $data['new_address'];
+            //     $newAddress = new Address;
+            //     $newAddress->customer_id = $customer;
+            //     $newAddress->alias = $addr['alias'] ?? 'Other';
+            //     $newAddress->address_1 = $addr['address_1'] ?? '';
+            //     $newAddress->address_2 = $addr['address_2'] ?? '';
+            //     $newAddress->country_id = 101;
+            //     $newAddress->city = $addr['city'] ?? '';
+            //     $newAddress->landmark = $addr['landmark'] ?? '';
+            //     $newAddress->state_code = $addr['state_code'] ?? '';
+            //     $newAddress->zip = $addr['zip'] ?? '';
+            //     $newAddress->phone = $addr['phone'] ?? '';
+            //     $newAddress->delivery_address = 0;
+            //     $newAddress->save();
+            // }
 
             $customerAdd = Address::where('customer_id', $customer)->get()->last();
 
             if (isset($data['billing_address']) && $data['billing_address'] != '' && $data['billing_address'] != 0) {
                 $billing_address = $data['billing_address'];
+                $shipping_address = $data['billing_address'];
+               
             } else {
-                $billing_address = $customerAdd->id;
+                return response()-> json([
+                    'status' => 0,
+                    'message' => 'Address should not be empty'
+                ]);
+                
             }
 
-            if (isset($data['shipping_address']) && $data['shipping_address'] != '' && $data['shipping_address'] != 0) {
-                $shipping_address = $data['shipping_address'];
-            } else {
-                $shipping_address = $customerAdd->id;
-            }
+            // if (isset($data['shipping_address']) && $data['shipping_address'] != '' && $data['shipping_address'] != 0) {
+            //     $shipping_address = $data['shipping_address'];
+            // } else {
+            //     $shipping_address = $customerAdd->id;
+            // }
 
             $payment_status = 'Pending';
 
@@ -348,7 +354,6 @@ class CheckoutController extends Controller
         $billing_address = Address::find($order->address_id);
         $delivery_address = Address::find($order->delivery_address);
         $currentStatus = DB::table('order_statuses')->where('id', $order->order_status_id)->first();
-
 
         Mail::send(
             'mails.orderInvoice',
