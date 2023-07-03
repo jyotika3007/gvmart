@@ -6,6 +6,7 @@ use App\AppleService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use Mail;
 use App\Shop\Cart\Cart;
 use App\Shop\Wishlist\Wishlist;
 use Illuminate\Support\Facades\DB;
@@ -575,4 +576,72 @@ class UserDashboardController extends Controller
             'data' => $data_new
         ]);
     }
+
+    public function updateOrderStatus(Request $request)
+    {
+    $data=$request->all();
+    if ($data['requestStatus']=="Cancel") {
+        $orderStatus=Order::where('id',$data['orderId'])->where('order_status_id',2)->first(['order_status_id']);
+        if($orderStatus){
+            $updatedOrderCancelStatus=Order::where('id',$data['orderId'])->update(['order_status_id'=>6,"request_type"=>$data['requestStatus'],"request_reason_id"=>$data["reason"]]);
+            $orderDetail=Order::find($data['orderId']);
+            $user= User::find($data["userId"]);
+            Mail::send('mails.orderUpdate',['order' => $orderDetail, 'type' => 'admin','order_status'=>$orderDetail->order_status_id],
+                    function ($m) use ($orderDetail) {
+                            $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                            $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order Cancel Request');
+                        });
+                                   
+            Mail::send('mails.orderUpdate',['order' => $orderDetail, 'type' => 'user','order_status'=>$orderDetail->order_status_id],
+                    function ($m) use ($user) {
+                        $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                        $m->to($user->email, $user->name)->subject('Order Cancel Request');
+                    });
+            return response()->json([
+                "status" => "1",
+                "message" => "cancel order request submitted successfully",
+        ]); 
+        }else{
+            return response()->json([
+                "status" => "0",
+                "message" => "You can not cancel this order",
+            ]);
+        }
+       
+    } else if ($data['requestStatus']=="Return") {
+        $orderStatus=Order::where('id',$data['orderId'])->where('order_status_id',5)->first(['order_status_id']);
+        if($orderStatus){
+            $updatedOrderCancelStatus=Order::where('id',$data['orderId'])->update(['order_status_id'=>9,"request_type"=>$data['requestStatus'],"request_reason_id"=>$data["reason"]]);
+            $orderDetail=Order::find($data['orderId']);
+            $user= User::find($data["userId"]);
+            Mail::send('mails.orderUpdate',['order' => $orderDetail, 'type' => 'admin','order_status'=>$orderDetail->order_status_id],
+                    function ($m) use ($orderDetail) {
+                            $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                            $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order Return Request');
+                        });
+                                   
+            Mail::send('mails.orderUpdate',['order' => $orderDetail, 'type' => 'user','order_status'=>$orderDetail->order_status_id],
+                    function ($m) use ($user) {
+                        $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                        $m->to($user->email, $user->name)->subject('Order Return Request');
+                    });
+            return response()->json([
+                "status" => "1",
+                "message" => "order return request submitted successfully",
+        ]); 
+        }else{
+            return response()->json([
+                "status" => "0",
+                "message" => "You can not return this order",
+            ]);
+        }
+       
+    }else{
+        return response()->json([
+            "status" => "0",
+            "message" => "Request status is not allowed",
+        ]);
+    }
+}
+
 }

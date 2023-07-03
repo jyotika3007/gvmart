@@ -57,45 +57,45 @@
                           </td>
                         </tr>
                         <tr><td colspan="3" height="10"></td></tr>
-                        <tr>
-                            <td width="10"></td>
-                            <td>
-
-                                <h2>{{ $msg ?? '' }}</h2>
-                                <br>
-                            </td>
-                            <td width="10"></td>
-                        </tr>
                         @if($type == 'admin')
                         <tr>
                             <td width="10"></td>
 
                             <td>
                             @if($order_status == 2)
-                                <p>Order has been approved successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>Order has been approved successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <br>
                             @endif
                                
                             @if($order_status == 3)
-                                <p>Order is under processing having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>Order is under processing having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                             @endif
                                     
                             @if($order_status == 4)
-                                <p>Order id ready to ship having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>Order id ready to ship having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                             @endif
                             
                             @if($order_status == 5)
-                                <p>Congratulations, an order has been delivered successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>Congratulations, an order has been delivered successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <br>
                             @endif
                             
                             @if($order_status == 6)
-                                <p>Order cancelled successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>your request for order cancellation has been sent to support team successfully order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}. your request is in under process.</b></i> </p>
                             @endif
 
                             @if($order_status == 7)
-                                <p>Order returned successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>your request has been approved successfully order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.Refund has been initiated and will reflect in your account within 7 working days. </b></i> </p>
                             @endif
+
+                            @if($order_status == 8)
+                                <p>your request has been rejected order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.For more details contact to our support team.</b></i> </p>
+                            @endif
+
+                            @if($order_status ==9 )
+                                <p>Order return request has been sent to support team order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                            @endif
+
                             </td>
                             <td width="10"></td>
                         </tr>
@@ -105,36 +105,41 @@
                             <td>
 
                                 @if($order_status == 2)
-                                <p>Hi {{$customer->name ?? 'User'}}, Your order has been approved successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>Hi {{$customer->name ?? 'User'}}, Your order has been approved successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <p>Thank you for shopping at IAdvance Apple Store.</p>
                                 <br>
                             @endif
                                
                             @if($order_status == 3)
-                                <p>Hi {{$customer->name ?? 'User'}}, Your order is under processing having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>Hi {{$customer->name ?? 'User'}}, Your order is under processing having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <p>Thank you for shopping at IAdvance Apple Store.</p>
                             @endif
                                     
                             @if($order_status == 4)
-                                <p>Hi {{$customer->name ?? 'User'}}, Your order is ready to ship having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>Hi {{$customer->name ?? 'User'}}, Your order is ready to ship having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <p>Thank you for shopping at IAdvance Apple Store.</p>
                             @endif
                             
                             @if($order_status == 5)
-                               <p>Congratulations {{$customer->name ?? 'User'}}, Your order has been delivered successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                               <p>Congratulations {{$customer->name ?? 'User'}}, Your order has been delivered successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <p>Thank you for shopping at IAdvance Apple Store.</p>
                             @endif
                             
                             @if($order_status == 6)
-                                <p>Hi {{$customer->name ?? 'User'}}, Your order has been cancelled successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <p>Thank you for shopping at IAdvance Apple Store.</p>
+                                <p>your request for order cancellation has been sent to support team successfully order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}. your request is in under process.</b></i> </p>
                             @endif
 
                             @if($order_status == 7)
-                                <p>Hii {{$customer->name ?? 'User'}}, Your order has been returned successfully having <i><b>Invoice ID - GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <p>Thank you for shopping at IAdvance Apple Store.</p>
+                                <p>your request has been approved successfully order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.Refund has been initiated and will reflect in your account within 7 working days. </b></i> </p>
                             @endif
 
+                            @if($order_status == 8)
+                                <p>your request has been rejected order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.For more details contact to our support team.</b></i> </p>
+                            @endif
+
+                            @if($order_status ==9 )
+                                <p>Order return request has been sent to support team order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                            @endif
                                 
                                 <br>
                             </td>
