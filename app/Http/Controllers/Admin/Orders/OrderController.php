@@ -207,7 +207,7 @@ class OrderController extends Controller
     public function refundPaymentRequest($order){
 
         $vars = http_build_query(array(
-            'ppc_Amount'=>$order["total"],
+            'ppc_Amount'=>$order["total"]*100,
             'ppc_CurrencyCode'=>356,
             'ppc_DIA_SECRET'=>$order['dia_sercret'],
             'ppc_DIA_SECRET_TYPE'=>$order['dia_sercret_type'],
