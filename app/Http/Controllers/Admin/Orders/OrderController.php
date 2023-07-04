@@ -204,8 +204,42 @@ class OrderController extends Controller
         ]);
     }
 
+    public function refundPaymentRequest($order){
 
+        $vars = http_build_query(array(
+            'ppc_Amount'=>$order["total"],
+            'ppc_CurrencyCode'=>356,
+            'ppc_DIA_SECRET'=>$order['dia_sercret'],
+            'ppc_DIA_SECRET_TYPE'=>$order['dia_sercret_type'],
+            'ppc_MerchantAccessCode'=>env('ACCESS_CODE'),
+            'ppc_MerchantID'=>env('MID'),
+            'ppc_PinePGTransactionID'=>$order["transaction_id"],
+            'ppc_TransactionType'=>10,
+            'ppc_UniqueMerchantTxnID'=>'ref-'.$order["unique_merchant_txn_id"]
+        ));
 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);  //Post Fields
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = [
+            'Content-Type: application/x-www-form-urlencoded'
+        ];
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $server_output = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            print "Error: " . curl_error($ch);
+            exit();
+        }
+
+        curl_close($ch);
+        return $server_output;
+    }
 
 
     public function updateOrderStatus(Request $request,$orderId){
@@ -214,16 +248,8 @@ class OrderController extends Controller
         $order = Order::find($orderId);
 
         $order->order_status_id = $data['order_status'];
-        $order->update();
-        
-        
-        
         
         $customer = User::where('id',$order->customer_id)->first();
-        
-        $customer->admin_email = 'Riddhi.lic@gmail.com';
-        $customer->admin_name = 'IAdvance Apple Store';
-        
         $msg = '';
 
         if($data['order_status'] == 2 ){
@@ -238,34 +264,39 @@ class OrderController extends Controller
 
         }
         elseif($data['order_status'] == 5 ){
-            $msg = 'Order delivered successfully';
-
-        }
-        elseif($data['order_status'] == 6 ){
-            $msg = 'Order cancelled successfully';
+            $msg = 'Order delivered';
 
         }
         elseif($data['order_status'] == 7 ){
-            $msg = 'Order returned successfully';
+           
+           $refundResponce=refundPaymentRequest($order);
+           if($refundResponce){
+            $msg = 'Refund initiated';
+           }
 
         }
+        elseif($data['order_status'] == 8 ){
+            $msg = 'Order request rejected';
+
+        }
+        $order->update();
         
-
-            Mail::send('mails.orderUpdate',['customer' => $customer, 'order' => $order, 'type' => 'customer', 'order_status' => $data['order_status'], 'msg' => $msg],
-               function ($m) use ($customer) {
-                   $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
-
-                   $m->to($customer->email, $customer->name)->subject('Order status update.');
-               });
-
+        if(!in_array($data['order_status'],[7,8])){
             Mail::send('mails.orderUpdate',['customer' => $customer, 'order' => $order, 'type' => 'admin', 'order_status' => $data['order_status'], 'msg' => $msg],
-               function ($m) use ($customer) {
-                   $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+            function ($m) use ($customer) {
+                $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
-                   $m->to($customer->admin_email, $customer->admin_name)->subject('Order status update.');
-               });
-        
+                $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order status update.');
+            });
+            
+        }
 
+        Mail::send('mails.orderUpdate',['customer' => $customer, 'order' => $order, 'type' => 'customer', 'order_status' => $data['order_status'], 'msg' => $msg],
+        function ($m) use ($customer) {
+            $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+
+            $m->to($customer->email, $customer->name)->subject($msg);
+        });
 
         return redirect()->back()->with('message','Order status updated successfully.');
     }

@@ -100,6 +100,6 @@ Route::namespace('Api')->group(function () {
     Route::post('ThankYou/User', 'CheckoutController@getPaymentResponse');
     Route::get('ThankYou/test', 'CheckoutController@generateRequestKey');
     Route::post('updateOrderStatus','UserDashboardController@updateOrderStatus');
+    Route::get('checkPaymentStatus','UserDashboardController@getPaymentStatus');
 
-    
 });

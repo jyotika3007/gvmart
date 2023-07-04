@@ -644,4 +644,42 @@ class UserDashboardController extends Controller
     }
 }
 
+
+public function getPaymentStatus(Request $request){
+    $data=$request->all();
+    $order = Order::find($data['order_id']);
+    $vars = http_build_query(array(
+        'ppc_DIA_SECRET'=>$order->dia_sercret,
+        'ppc_DIA_SECRET_TYPE'=>$order->dia_sercret_type,
+        'ppc_MerchantAccessCode'=>env('ACCESS_CODE'),
+        'ppc_MerchantID'=>env('MID'),
+        'ppc_TransactionType'=>10,
+        'ppc_UniqueMerchantTxnID'=>'ref-'.$order->unique_merchant_txn_id
+    ));
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);  //Post Fields
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $headers = [
+        'Content-Type: application/x-www-form-urlencoded'
+    ];
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+    $server_output = curl_exec($ch);
+    if (curl_errno($ch)) {
+        print "Error: " . curl_error($ch);
+        exit();
+    }
+    curl_close($ch);
+    return response()->json([
+        "status" => "1",
+        "message" => 'Refund status fetched successfully',
+        "response"=>$server_output
+    ]);
+
+}
 }

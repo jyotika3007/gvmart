@@ -470,7 +470,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('orders/status-update/{id}', 'OrderController@updateOrderStatus')->name('orders.status-update');
             Route::post('orders/update_payment_status', 'OrderController@update_payment_status');
             // Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
-
+            
 
             Route::get('order_list/{order_type}', 'OrderController@getOrders')->name('orders.order_type');
             Route::get('online_transactions', 'OrderController@onlineTransactions')->name('online_transactions');
