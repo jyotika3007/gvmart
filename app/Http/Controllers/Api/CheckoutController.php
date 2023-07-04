@@ -339,16 +339,17 @@ class CheckoutController extends Controller
         $txn_id = $data['pine_pg_transaction_id'] ?? '';
         $unique_merchant_txn_id = $data['unique_merchant_txn_id'] ?? '';
         $dia_secret_type = $data['dia_secret_type'] ?? '';
-        $dia_secret= $data['dia_secret'] ?? '';
+        // $dia_secret= $data['dia_secret'] ?? '';
 
         $msg = $data['txn_response_msg'] ?? '';
-        
+        $dia_secret = $this->generateRequestKey($data);
+
         DB::table('orders')->where('id', $order_id)->update([
             'order_status_id' => 2,
             'payment_status' => $msg,
             'transaction_id' => $txn_id,
             'unique_merchant_txn_id'=>$unique_merchant_txn_id,
-            'dia_secret'=>$dia_secret,
+            'dia_secret'=>$dia_secret["x_verify"],
             'dia_secret_type'=>$dia_secret_type
         ]);
 
