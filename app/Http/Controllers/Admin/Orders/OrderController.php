@@ -616,8 +616,8 @@ public function update_payment_status(Request $request){
      $order = Order::find($data['order_id']);
      
        
-            $data['admin_email'] = 'Riddhi.lic@gmail.com';
-        $data['admin_name'] = 'IAdvance Apple Store';
+        //     $data['admin_email'] = 'Riddhi.lic@gmail.com';
+        // $data['admin_name'] = 'IAdvance Apple Store';
         
 
     // var_dump($order); die;
@@ -672,6 +672,38 @@ $customer = User::where('id',$order->customer_id)->first();
     return redirect()->back()->with('message','Payment status updated successfully');
     
     
+}
+
+
+public function getOrdersRequest($type){
+    $from_date = '';
+    $to_date = '';
+    if($type == 'cancel'){
+        $order_type = 'Cancel Request';
+        $orders = Order::where('order_status_id',6)->paginate(30);
+    }
+    else if($type == 'return'){
+        $order_type = 'Return Request';
+        $orders = Order::where('order_status_id',9)->paginate(30);
+        
+    }
+    else if($type == 'approved'){
+        $order_type = 'Approved Request';
+        $orders = Order::where('order_status_id',7)->paginate(30);
+        
+    }
+    else if($type == 'rejected'){
+        $order_type = 'Rejected Request';
+        $orders = Order::where('order_status_id',8)->paginate(30);
+        
+    }
+    // dd($order_type);
+    return view('admin.requests.list', [
+        'orders' => $orders,
+        'order_type' => $order_type,
+        'from_date' => $from_date,
+        'to_date' => $to_date
+    ]);
 }
 
 

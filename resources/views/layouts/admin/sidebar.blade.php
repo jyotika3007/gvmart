@@ -149,6 +149,24 @@ $company = DB::table('company_details')->first();
             </li>
 
 
+             <!-- For Request -->
+
+             <li class="treeview @if(request()->segment(2) == 'orders') active @endif">
+                <a href="#" class="side-menu">
+                    <i class="  fa fa-ambulance"></i> <span>Request</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ route('admin.orders.order_request','cancel') }}"> Cancel Requests</a></li>
+                    <li><a href="{{ route('admin.orders.order_request','return') }}"> Return Requests</a></li>
+                    <li><a href="{{ route('admin.orders.order_request','approved') }}"> Approved Requests</a></li>
+                    <li><a href="{{ route('admin.orders.order_request','rejected') }}"> Rejected Requests</a></li>
+
+                </ul>
+            </li>
+
             <!-- For Sales -->
             <li class="treeview @if(request()->segment(2) == 'inventories') active @endif">
                 <a href="#" class="side-menu">

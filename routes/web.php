@@ -472,8 +472,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             // Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
             
 
+            Route::get('order_request/{type}', 'OrderController@getOrdersRequest')->name('orders.order_request');
             Route::get('order_list/{order_type}', 'OrderController@getOrders')->name('orders.order_type');
             Route::get('online_transactions', 'OrderController@onlineTransactions')->name('online_transactions');
+
+
         });
 
         Route::namespace('Bookings')->group(function () {
