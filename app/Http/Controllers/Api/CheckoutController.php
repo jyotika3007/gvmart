@@ -74,7 +74,6 @@ class CheckoutController extends Controller
         // print_r($x_verify);die();
         if ($req != '' && $x_verify != '') {
 
-
             $vars = http_build_query(array('REQUEST' => $req));
 
             $ch = curl_init();

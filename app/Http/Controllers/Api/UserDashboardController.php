@@ -502,63 +502,61 @@ class UserDashboardController extends Controller
                 array_push($service_id, $services[$j]->id);
             }
 
-            $products_array = Product::whereIn('id', $ids)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity','prelaunch_price','prelaunch_price']);
+            $products_array = Product::whereIn('id', $ids)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);
             $apple_services = AppleService::whereIn('id', $service_id)->get();
 
             if ($products_array) {
-               
-                    foreach($products_array as $sp){
-                        $attributes = DB::table('attribute_value_product_attribute')
-                        ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
-                        ->where('attribute_value_product_attribute.product_id',$sp->id)
+
+                foreach ($products_array as $sp) {
+                    $attributes = DB::table('attribute_value_product_attribute')
+                        ->join('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
+                        ->where('attribute_value_product_attribute.product_id', $sp->id)
                         ->where('attribute_values.attribute_id', 3)
                         ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
-                        if(count($attributes)>0){
-                            foreach($attributes as $attr){
-                                $prods = clone $sp;
-                                $prods->storage = $attr->value;
-                                $prods->storage_id = $attr->id;
-                                $prods->price = $attr->price ?? 0;
-                                $prods->offer_price = $attr->offer_price ?? 0;
-                                $prods->stock_quantity = $attr->quantity ?? 0;
-            
-                                $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
-            
-                                if (count($color_ids) > 0) {
-                                    foreach ($color_ids as $col) {
-                                        $color_products = clone $prods;
-                                        $product_img = ProductImage::where('product_id', $prods->id)->where('color_id', $col->color_id)->first(['src']);
-                                        $color_code = DB::table('attribute_values')->where('id', $col->color_id)->first(['value', 'code']);
-                                        // dd($color_code);
-                                        if($product_img)
-                                            $color_products->cover = $product_img->src ?? '';
-                                        else
-                                            $color_products->cover = '';
-            
-                                        if($color_code){
-                                            $color_products->color = $color_code->value ?? '';
-                                            $color_products->color_code = $color_code->code ?? '';
-                                        }
-                                        else{
-                                            $color_products->color = '';
-                                            $color_products->color_code = '';
-                                        }
-            
-                                        array_push($related_products, $color_products);
+                    if (count($attributes) > 0) {
+                        foreach ($attributes as $attr) {
+                            $prods = clone $sp;
+                            $prods->storage = $attr->value;
+                            $prods->storage_id = $attr->id;
+                            $prods->price = $attr->price ?? 0;
+                            $prods->offer_price = $attr->offer_price ?? 0;
+                            $prods->stock_quantity = $attr->quantity ?? 0;
+
+                            $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
+
+                            if (count($color_ids) > 0) {
+                                foreach ($color_ids as $col) {
+                                    $color_products = clone $prods;
+                                    $product_img = ProductImage::where('product_id', $prods->id)->where('color_id', $col->color_id)->first(['src']);
+                                    $color_code = DB::table('attribute_values')->where('id', $col->color_id)->first(['value', 'code']);
+                                    // dd($color_code);
+                                    if ($product_img)
+                                        $color_products->cover = $product_img->src ?? '';
+                                    else
+                                        $color_products->cover = '';
+
+                                    if ($color_code) {
+                                        $color_products->color = $color_code->value ?? '';
+                                        $color_products->color_code = $color_code->code ?? '';
+                                    } else {
+                                        $color_products->color = '';
+                                        $color_products->color_code = '';
                                     }
-                                } else {
-                                    $prods->color = '';
-                                    $prods->color_code = '';
-                                    array_push($related_products, $prods);
+
+                                    array_push($related_products, $color_products);
                                 }
-            
-                                // array_push($related_products,$prods);
+                            } else {
+                                $prods->color = '';
+                                $prods->color_code = '';
+                                array_push($related_products, $prods);
                             }
+
+                            // array_push($related_products,$prods);
                         }
-                        else{
-                            array_push($related_products, $sp);
-                        }
+                    } else {
+                        array_push($related_products, $sp);
                     }
+                }
             }
 
             if ($apple_services) {
@@ -579,108 +577,139 @@ class UserDashboardController extends Controller
 
     public function updateOrderStatus(Request $request)
     {
-    $data=$request->all();
-    if ($data['requestStatus']=="Cancel") {
-        $orderStatus=Order::where('id',$data['orderId'])->where('order_status_id',2)->first(['order_status_id']);
-        if($orderStatus){
-            // print_r($data);die();
-            $updatedOrderCancelStatus=Order::where('id',$data['orderId'])->update(['order_status_id'=>6,"request_type"=>$data['requestStatus'],"request_reason_id"=>$data["reason"]]);
-            $orderDetail=Order::find($data['orderId']);
-            $user= User::find($data["userId"]);
-            Mail::send('mails.orderUpdate',['order' => $orderDetail, 'type' => 'admin','order_status'=>$orderDetail->order_status_id],
-                    function ($m) use ($orderDetail) {
-                            $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+        $header = $request->header('Authorization');
+        // echo $header;
+        // die;
+        if ($header) {
+
+            $data = $request->all();
+            if ($data['requestStatus'] == "Cancel") {
+                $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 2)->first(['order_status_id']);
+                if ($orderStatus) {
+                    // print_r($data);die();
+                    $updatedOrderCancelStatus = Order::where('id', $data['orderId'])->update(['order_status_id' => 6, "request_type" => $data['requestStatus'], "request_reason_id" => $data["reason"]]);
+                    $orderDetail = Order::find($data['orderId']);
+                    $user = User::find($data["userId"]);
+                    Mail::send(
+                        'mails.orderUpdate',
+                        ['order' => $orderDetail, 'type' => 'admin', 'order_status' => $orderDetail->order_status_id],
+                        function ($m) use ($orderDetail) {
+                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
                             $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order Cancel Request');
-                        });
-                                   
-            Mail::send('mails.orderUpdate',['order' => $orderDetail, 'type' => 'user','order_status'=>$orderDetail->order_status_id],
-                    function ($m) use ($user) {
-                        $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
-                        $m->to($user->email, $user->name)->subject('Order Cancel Request');
-                    });
-            return response()->json([
-                "status" => "1",
-                "message" => "cancel order request submitted successfully",
-        ]); 
-        }else{
-            return response()->json([
-                "status" => "0",
-                "message" => "You can not cancel this order",
-            ]);
-        }
-       
-    } else if ($data['requestStatus']=="Return") {
-        $orderStatus=Order::where('id',$data['orderId'])->where('order_status_id',5)->first(['order_status_id']);
-        if($orderStatus){
-            $updatedOrderCancelStatus=Order::where('id',$data['orderId'])->update(['order_status_id'=>9,"request_type"=>$data['requestStatus'],"request_reason_id"=>$data["reason"]]);
-            $orderDetail=Order::find($data['orderId']);
-            $user= User::find($data["userId"]);
-            Mail::send('mails.orderUpdate',['order' => $orderDetail, 'type' => 'admin','order_status'=>$orderDetail->order_status_id],
-                    function ($m) use ($orderDetail) {
-                            $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                        }
+                    );
+
+                    Mail::send(
+                        'mails.orderUpdate',
+                        ['order' => $orderDetail, 'type' => 'user', 'order_status' => $orderDetail->order_status_id],
+                        function ($m) use ($user) {
+                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+                            $m->to($user->email, $user->name)->subject('Order Cancel Request');
+                        }
+                    );
+                    return response()->json([
+                        "status" => "1",
+                        "message" => "cancel order request submitted successfully",
+                    ]);
+                } else {
+                    return response()->json([
+                        "status" => "0",
+                        "message" => "You can not cancel this order",
+                    ]);
+                }
+            } else if ($data['requestStatus'] == "Return") {
+                $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 5)->first(['order_status_id']);
+                if ($orderStatus) {
+                    $updatedOrderCancelStatus = Order::where('id', $data['orderId'])->update(['order_status_id' => 9, "request_type" => $data['requestStatus'], "request_reason_id" => $data["reason"]]);
+                    $orderDetail = Order::find($data['orderId']);
+                    $user = User::find($data["userId"]);
+                    Mail::send(
+                        'mails.orderUpdate',
+                        ['order' => $orderDetail, 'type' => 'admin', 'order_status' => $orderDetail->order_status_id],
+                        function ($m) use ($orderDetail) {
+                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
                             $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order Return Request');
-                        });
-                                   
-            Mail::send('mails.orderUpdate',['order' => $orderDetail, 'type' => 'user','order_status'=>$orderDetail->order_status_id],
-                    function ($m) use ($user) {
-                        $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
-                        $m->to($user->email, $user->name)->subject('Order Return Request');
-                    });
-            return response()->json([
-                "status" => "1",
-                "message" => "order return request submitted successfully",
-        ]); 
-        }else{
+                        }
+                    );
+
+                    Mail::send(
+                        'mails.orderUpdate',
+                        ['order' => $orderDetail, 'type' => 'user', 'order_status' => $orderDetail->order_status_id],
+                        function ($m) use ($user) {
+                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+                            $m->to($user->email, $user->name)->subject('Order Return Request');
+                        }
+                    );
+                    return response()->json([
+                        "status" => "1",
+                        "message" => "order return request submitted successfully",
+                    ]);
+                } else {
+                    return response()->json([
+                        "status" => "0",
+                        "message" => "You can not return this order",
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    "status" => "0",
+                    "message" => "Request status is not allowed. Invalid request status",
+                ]);
+            }
+        } else {
             return response()->json([
                 "status" => "0",
-                "message" => "You can not return this order",
+                "message" => "Request status is not allowed. Auth Required.",
             ]);
         }
-       
-    }else{
-        return response()->json([
-            "status" => "0",
-            "message" => "Request status is not allowed",
-        ]);
     }
-}
 
 
-public function getPaymentStatus(Request $request){
-    $data=$request->all();
-    $order = Order::find($data['order_id']);
-    $vars = http_build_query(array(
-        'ppc_DIA_SECRET'=>$order->dia_sercret,
-        'ppc_DIA_SECRET_TYPE'=>$order->dia_sercret_type,
-        'ppc_MerchantAccessCode'=>env('ACCESS_CODE'),
-        'ppc_MerchantID'=>env('MID'),
-        'ppc_TransactionType'=>10,
-        'ppc_UniqueMerchantTxnID'=>'ref-'.$order->unique_merchant_txn_id
-    ));
+    public function getPaymentStatus(Request $request)
+    {
+        $header = $request->header('Authorization');
+        echo $header;
+        die;
+        if ($header) {
+            $data = $request->all();
+            $order = Order::find($data['order_id']);
+            $vars = http_build_query(array(
+                'ppc_DIA_SECRET' => $order->dia_sercret,
+                'ppc_DIA_SECRET_TYPE' => $order->dia_sercret_type,
+                'ppc_MerchantAccessCode' => env('ACCESS_CODE'),
+                'ppc_MerchantID' => env('MID'),
+                'ppc_TransactionType' => 10,
+                'ppc_UniqueMerchantTxnID' => 'ref-' . $order->unique_merchant_txn_id
+            ));
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);  //Post Fields
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);  //Post Fields
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    $headers = [
-        'Content-Type: application/x-www-form-urlencoded'
-    ];
+            $headers = [
+                'Content-Type: application/x-www-form-urlencoded'
+            ];
 
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-    $server_output = curl_exec($ch);
-    if (curl_errno($ch)) {
-        print "Error: " . curl_error($ch);
-        exit();
+            $server_output = curl_exec($ch);
+            if (curl_errno($ch)) {
+                print "Error: " . curl_error($ch);
+                exit();
+            }
+            curl_close($ch);
+            return response()->json([
+                "status" => "1",
+                "message" => 'Refund status fetched successfully',
+                "response" => $server_output
+            ]);
+        } else {
+            return response()->json([
+                "status" => "0",
+                "message" => "Request status is not allowed. Auth required",
+            ]);
+        }
     }
-    curl_close($ch);
-    return response()->json([
-        "status" => "1",
-        "message" => 'Refund status fetched successfully',
-        "response"=>$server_output
-    ]);
-
-}
 }
