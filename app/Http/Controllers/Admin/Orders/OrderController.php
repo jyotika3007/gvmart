@@ -206,22 +206,44 @@ class OrderController extends Controller
 
     public function refundPaymentRequest($order){
 
-        $vars = http_build_query(array(
+        $uniqueId = 'PineLab'.uniqid();
+        $req = array(
             'ppc_Amount'=>$order["total"]*100,
             'ppc_CurrencyCode'=>356,
-            'ppc_DIA_SECRET'=>$order['dia_sercret'],
-            'ppc_DIA_SECRET_TYPE'=>$order['dia_sercret_type'],
             'ppc_MerchantAccessCode'=>env('ACCESS_CODE'),
             'ppc_MerchantID'=>env('MID'),
             'ppc_PinePGTransactionID'=>$order["transaction_id"],
             'ppc_TransactionType'=>10,
-            'ppc_UniqueMerchantTxnID'=>'ref-'.$order["unique_merchant_txn_id"]
+            'ppc_UniqueMerchantTxnID'=> $uniqueId
+        );
+ 
+        $vars = http_build_query($req);
+
+        // $baseData = base64_encode(json_encode($vars));
+        $hmac_digest = hash_hmac("sha256",  $vars, pack("H*", env('SECRET_CODE')), false);
+        $resultOfKeys = strtoupper($hmac_digest);
+
+        // echo $resultOfKeys . ' / ' . $uniqueId; die;
+// print_r($resultOfKeys);
+        // return $resultOfKeys;
+
+        $req = http_build_query(array(
+            'ppc_Amount'=>$order["total"]*100,
+            'ppc_CurrencyCode'=>356,
+            'ppc_MerchantAccessCode'=>env('ACCESS_CODE'),
+            'ppc_MerchantID'=>env('MID'),
+            'ppc_DIA_SECRET' => $resultOfKeys,
+            'ppc_DIA_SECRET_TYPE' => 'SHA256',
+            'ppc_PinePGTransactionID'=>$order["transaction_id"],
+            'ppc_TransactionType'=>10,
+            'ppc_UniqueMerchantTxnID'=>'PineLab'.uniqid()
         ));
+
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);  //Post Fields
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $req);  //Post Fields
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $headers = [
@@ -238,6 +260,8 @@ class OrderController extends Controller
         }
 
         curl_close($ch);
+    
+
         return $server_output;
     }
 

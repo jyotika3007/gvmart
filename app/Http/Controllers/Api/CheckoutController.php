@@ -302,7 +302,7 @@ class CheckoutController extends Controller
     {
         $data = $request->all();
         
-        
+        // dd($data);
         // $data = [
         //     "merchant_id" => "106598",
         //     "merchant_access_code" => "4a39a6d4-46b7-474d-929d-21bf0e9ed607",
@@ -339,19 +339,22 @@ class CheckoutController extends Controller
         $txn_id = $data['pine_pg_transaction_id'] ?? '';
         $unique_merchant_txn_id = $data['unique_merchant_txn_id'] ?? '';
         $dia_secret_type = $data['dia_secret_type'] ?? '';
-        // $dia_secret= $data['dia_secret'] ?? '';
+        $dia_secret= $data['dia_secret'] ?? '';
 
         $msg = $data['txn_response_msg'] ?? '';
-        $dia_secret = $this->generateRequestKey($data);
+        // $dia_secret = $this->generateRequestKey($data);
 
-        DB::table('orders')->where('id', $order_id)->update([
-            'order_status_id' => 2,
-            'payment_status' => $msg,
-            'transaction_id' => $txn_id,
-            'unique_merchant_txn_id'=>$unique_merchant_txn_id,
-            'dia_secret'=>$dia_secret["x_verify"],
-            'dia_secret_type'=>$dia_secret_type
-        ]);
+        
+         try{
+            DB::table('orders')->where('id', $order_id)->update([
+                'order_status_id' => 2,
+                'payment_status' => $msg,
+                'transaction_id' => $txn_id,
+                'unique_merchant_txn_id'=>$unique_merchant_txn_id,
+                'dia_secret'=>$dia_secret["x_verify"],
+                'dia_secret_type'=>$dia_secret_type
+            ]);
+        }catch(\Throwable $e){echo $e->getMessage();}
 
         $order = Order::find($order_id);
         $items = DB::table('order_product')->where('order_id', $order_id)->get();
@@ -367,24 +370,24 @@ class CheckoutController extends Controller
         $currentStatus = DB::table('order_statuses')->where('id', $order->order_status_id)->first();
         // dd($order);
 
-        Mail::send(
-            'mails.orderInvoice',
-            ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'admin'],
-            function ($m) use ($data) {
-                $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+        // Mail::send(
+        //     'mails.orderInvoice',
+        //     ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'admin'],
+        //     function ($m) use ($data) {
+        //         $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
 
-                $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order booked successfully.');
-            }
-        );
-        Mail::send(
-            'mails.orderInvoice',
-            ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'user'],
-            function ($m) use ($customer) {
-                $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+        //         $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order booked successfully.');
+        //     }
+        // );
+        // Mail::send(
+        //     'mails.orderInvoice',
+        //     ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'user'],
+        //     function ($m) use ($customer) {
+        //         $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
 
-                $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
-            }
-        );
+        //         $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
+        //     }
+        // );
         return redirect()->away('https://www.iadvance.in/ThankYou?transaction_id=TXN' . $txn_id . '&payment_status=' . $msg);
     }
 }
