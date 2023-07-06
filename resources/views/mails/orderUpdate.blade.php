@@ -62,38 +62,18 @@
                             <td width="10"></td>
 
                             <td>
-                            @if($order_status == 2)
-                                <p>Order has been approved successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                                <br>
-                            @endif
-                               
-                            @if($order_status == 3)
-                                <p>Order is under processing having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                            @endif
-                                    
-                            @if($order_status == 4)
-                                <p>Order id ready to ship having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
-                            @endif
                             
                             @if($order_status == 5)
-                                <p>Congratulations, an order has been delivered successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                                <p>Order has been completed successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <br>
                             @endif
                             
                             @if($order_status == 6)
-                                <p>your request for order cancellation has been sent to support team successfully order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}. your request is in under process.</b></i> </p>
+                                <p>You have recieved a request for order cancellation having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                             @endif
 
-                            @if($order_status == 7)
-                                <p>your request has been approved successfully order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.Refund has been initiated and will reflect in your account within 7 working days. </b></i> </p>
-                            @endif
-
-                            @if($order_status == 8)
-                                <p>your request has been rejected order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.For more details contact to our support team.</b></i> </p>
-                            @endif
-
-                            @if($order_status ==9 )
-                                <p>Order return request has been sent to support team order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                            @if($order_status == 9 )
+                                <p>You have recieved a request for order return having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                             @endif
 
                             </td>
@@ -126,19 +106,19 @@
                             @endif
                             
                             @if($order_status == 6)
-                                <p>your request for order cancellation has been sent to support team successfully order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}. your request is in under process.</b></i> </p>
+                                <p>Your request for order cancellation has been sent to support team successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}. Your request is in under process.</b></i> </p>
                             @endif
 
                             @if($order_status == 7)
-                                <p>your request has been approved successfully order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.Refund has been initiated and will reflect in your account within 7 working days. </b></i> </p>
+                                <p>Your payment refund request has been approved successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.Refund has been initiated and will reflect in your account within 7 working days. </b></i> </p>
                             @endif
 
                             @if($order_status == 8)
-                                <p>your request has been rejected order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.For more details contact to our support team.</b></i> </p>
+                                <p>Your payment refund request has been rejected having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}.For more details contact to our support team.</b></i> </p>
                             @endif
 
-                            @if($order_status ==9 )
-                                <p>Order return request has been sent to support team order having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
+                            @if($order_status == 9 )
+                                <p>Order return request has been sent to support team having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                             @endif
                                 
                                 <br>

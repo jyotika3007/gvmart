@@ -668,24 +668,28 @@ class UserDashboardController extends Controller
     public function getPaymentStatus(Request $request)
     {
         $header = $request->header('Authorization');
-        echo $header;
-        die;
         if ($header) {
             $data = $request->all();
             $order = Order::find($data['order_id']);
-            $vars = http_build_query(array(
-                'ppc_DIA_SECRET' => $order->dia_sercret,
-                'ppc_DIA_SECRET_TYPE' => $order->dia_sercret_type,
+            if($order){
+            $req = array(
                 'ppc_MerchantAccessCode' => env('ACCESS_CODE'),
                 'ppc_MerchantID' => env('MID'),
-                'ppc_TransactionType' => 10,
-                'ppc_UniqueMerchantTxnID' => 'ref-' . $order->unique_merchant_txn_id
-            ));
+                'ppc_TransactionType' => 3,
+                'ppc_UniqueMerchantTxnID' => $order->unique_merchant_txn_id
+            );
+     
+            $vars = http_build_query($req);
+            $hmac_digest = hash_hmac("sha256",  $vars, pack("H*", env('SECRET_CODE')), false);
+            $resultOfKeys = strtoupper($hmac_digest);
+            $req['ppc_DIA_SECRET'] =$resultOfKeys;
+            $req['ppc_DIA_SECRET_TYPE']='SHA256';
+
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);  //Post Fields
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($req));  //Post Fields
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
             $headers = [
@@ -700,11 +704,30 @@ class UserDashboardController extends Controller
                 exit();
             }
             curl_close($ch);
-            return response()->json([
-                "status" => "1",
-                "message" => 'Refund status fetched successfully',
-                "response" => $server_output
-            ]);
+            $ppc_resp=json_decode($server_output);
+            if($ppc_resp->ppc_TxnResponseMessage=="SUCCESS" ){
+                return response()->json([
+                    "status" => "1",
+                    "message" => 'Payment has been credited to your account successfully.'
+                ]);
+            }elseif($ppc_resp->ppc_TxnResponseMessage=="INITIATED"){
+                return response()->json([
+                    "status" => "1",
+                    "message" => 'Refund has been initiated and will credited to your account within 7 working days.'
+                ]);
+            }else{
+                return response()->json([
+                    "status" => "0",
+                    "message" => 'Technical issue, Try again later.'
+                ]);
+            }
+            }else{
+                return response()->json([
+                    "status" => "0",
+                    "message" => "Order not found.",
+                ]);
+            }
+        
         } else {
             return response()->json([
                 "status" => "0",

@@ -219,30 +219,13 @@ class OrderController extends Controller
  
         $vars = http_build_query($req);
 
-        // $baseData = base64_encode(json_encode($vars));
         $hmac_digest = hash_hmac("sha256",  $vars, pack("H*", env('SECRET_CODE')), false);
         $resultOfKeys = strtoupper($hmac_digest);
 
-        // echo $resultOfKeys . ' / ' . $uniqueId; die;
-        // print_r($resultOfKeys);
-        // return $resultOfKeys;
-        // $options['name'] = $new_input['name'];
 
         $req['ppc_DIA_SECRET'] =$resultOfKeys;
         $req['ppc_DIA_SECRET_TYPE']='SHA256';
-        // (array(
-        //     'ppc_Amount'=>$order["total"]*100,
-        //     'ppc_CurrencyCode'=>356,
-        //     'ppc_MerchantAccessCode'=>env('ACCESS_CODE'),
-        //     'ppc_MerchantID'=>env('MID'),
-        //     'ppc_DIA_SECRET' => $resultOfKeys,
-        //     'ppc_DIA_SECRET_TYPE' => 'SHA256',
-        //     'ppc_PinePGTransactionID'=>$order["transaction_id"],
-        //     'ppc_TransactionType'=>10,
-        //     'ppc_UniqueMerchantTxnID'=>'PineLab'.uniqid()
-        // ));
-
-        // 'unique_merchant_txn_id'=>$unique_merchant_txn_id
+      
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
@@ -290,53 +273,36 @@ class OrderController extends Controller
         $order->order_status_id = $data['order_status'];
         
         $customer = User::where('id',$order->customer_id)->first();
-        $msg = '';
-
-        if($data['order_status'] == 2 ){
-            $msg = 'Order Approved';
-        }
-        elseif($data['order_status'] == 3 ){
-            $msg = 'Order is under processing';
-
-        }
-        elseif($data['order_status'] == 4 ){
-            $msg = 'Order is ready to ship';
-
-        }
-        elseif($data['order_status'] == 5 ){
-            $msg = 'Order delivered';
-
-        }
-        elseif($data['order_status'] == 7 ){           
-           $refundResponce=$this->refundPaymentRequest($order);
-           if($refundResponce){
-            $msg = 'Refund initiated';
-           }
-
-        }
-        elseif($data['order_status'] == 8 ){
-            $msg = 'Order request rejected';
-
-        }
-        $order->update();
         
-        if(!in_array($data['order_status'],[7,8])){
-            Mail::send('mails.orderUpdate',['customer' => $customer, 'order' => $order, 'type' => 'admin', 'order_status' => $data['order_status'], 'msg' => $msg],
+        if($data['order_status'] == 7 ){           
+           $refundResponce=$this->refundPaymentRequest($order);
+           if(in_array($refundResponce, ["SUCCESS","INITIATED"] )){
+            $msg = 'Refund initiated';
+           }else{
+            return redirect()->back()->with('message','Refund request rejected by pinelab.');
+           }
+    }
+   
+    $order->update();
+    
+    if(!in_array($data['order_status'],[7,8])){
+        Mail::send('mails.orderUpdate',['customer' => $customer, 'order' => $order, 'type' => 'admin', 'order_status' => $data['order_status']],
             function ($m) use ($customer) {
                 $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
-
+                
                 $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order status update.');
             });
             
         }
-
-        Mail::send('mails.orderUpdate',['customer' => $customer, 'order' => $order, 'type' => 'customer', 'order_status' => $data['order_status'], 'msg' => $msg],
+    
+        Mail::send('mails.orderUpdate',['customer' => $customer, 'order' => $order, 'type' => 'customer', 'order_status' => $data['order_status']],
         function ($m) use ($customer) {
             $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
-
-            $m->to($customer->email, $customer->name)->subject($msg);
+            
+            $m->to($customer->email, $customer->name)->subject('Order Status Update');
         });
-
+        
+    
         return redirect()->back()->with('message','Order status updated successfully.');
     }
 
@@ -351,9 +317,6 @@ class OrderController extends Controller
 
        $billing_address = Address::where('id',$order->address_id)->first();
        $delivery_address = Address::where('id',$order->delivery_address)->first();
-
-
-       
        $items = DB::table('order_product')->JOIN('products','products.id','order_product.product_id')->where('order_product.order_id',$orderId)->select('products.cover','products.description','order_product.*')->get();
         // $items = $orderRepo->listOrderedProducts();
 
