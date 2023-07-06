@@ -224,26 +224,30 @@ class OrderController extends Controller
         $resultOfKeys = strtoupper($hmac_digest);
 
         // echo $resultOfKeys . ' / ' . $uniqueId; die;
-// print_r($resultOfKeys);
+        // print_r($resultOfKeys);
         // return $resultOfKeys;
+        // $options['name'] = $new_input['name'];
 
-        $req = http_build_query(array(
-            'ppc_Amount'=>$order["total"]*100,
-            'ppc_CurrencyCode'=>356,
-            'ppc_MerchantAccessCode'=>env('ACCESS_CODE'),
-            'ppc_MerchantID'=>env('MID'),
-            'ppc_DIA_SECRET' => $resultOfKeys,
-            'ppc_DIA_SECRET_TYPE' => 'SHA256',
-            'ppc_PinePGTransactionID'=>$order["transaction_id"],
-            'ppc_TransactionType'=>10,
-            'ppc_UniqueMerchantTxnID'=>'PineLab'.uniqid()
-        ));
+        $req['ppc_DIA_SECRET'] =$resultOfKeys;
+        $req['ppc_DIA_SECRET_TYPE']='SHA256';
+        // (array(
+        //     'ppc_Amount'=>$order["total"]*100,
+        //     'ppc_CurrencyCode'=>356,
+        //     'ppc_MerchantAccessCode'=>env('ACCESS_CODE'),
+        //     'ppc_MerchantID'=>env('MID'),
+        //     'ppc_DIA_SECRET' => $resultOfKeys,
+        //     'ppc_DIA_SECRET_TYPE' => 'SHA256',
+        //     'ppc_PinePGTransactionID'=>$order["transaction_id"],
+        //     'ppc_TransactionType'=>10,
+        //     'ppc_UniqueMerchantTxnID'=>'PineLab'.uniqid()
+        // ));
 
+        // 'unique_merchant_txn_id'=>$unique_merchant_txn_id
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $req);  //Post Fields
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($req));  //Post Fields
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $headers = [
@@ -260,9 +264,21 @@ class OrderController extends Controller
         }
 
         curl_close($ch);
+        $ppc_resp=json_decode($server_output);
+        if(in_array($ppc_resp->ppc_TxnResponseMessage, ["SUCCESS","INITIATED"] )){
+            DB::table('orders')->where('id', $order['id'])->update([
+                'unique_merchant_txn_id'=>$uniqueId
+            ]);
+        }
     
-
-        return $server_output;
+        // {"ppc_MerchantID":"106598","ppc_MerchantAccessCode":"4a39a6d4-46b7-474d-929d-21bf0e9ed607",
+            // "ppc_PinePGTxnStatus":"6","ppc_TransactionCompletionDateTime":"06/07/2023 06:54:30 PM",
+            // "ppc_UniqueMerchantTxnID":"PineLab64a6c07088eae","ppc_Amount":"9499905",
+            // "ppc_TxnResponseCode":"1","ppc_TxnResponseMessage":"SUCCESS","ppc_PinePGTransactionID":"8084016",
+            // "ppc_CapturedAmount":"0","ppc_RefundedAmount":"9499905","ppc_AcquirerName":"HDFC",
+            // "ppc_DIA_SECRET":"CDEB44169A274C3730EC875DEC31E2B33BD5ED13099E5522EB5F770CFEBEBF29",
+            // "ppc_DIA_SECRET_TYPE":"SHA256","ppc_PaymentMode":"1","ppc_RRN":"428779754742"}
+        return $ppc_resp->ppc_TxnResponseMessage;
     }
 
 
@@ -291,8 +307,7 @@ class OrderController extends Controller
             $msg = 'Order delivered';
 
         }
-        elseif($data['order_status'] == 7 ){
-           
+        elseif($data['order_status'] == 7 ){           
            $refundResponce=$this->refundPaymentRequest($order);
            if($refundResponce){
             $msg = 'Refund initiated';

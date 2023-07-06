@@ -302,7 +302,6 @@ class CheckoutController extends Controller
     {
         $data = $request->all();
         
-        // dd($data);
         // $data = [
         //     "merchant_id" => "106598",
         //     "merchant_access_code" => "4a39a6d4-46b7-474d-929d-21bf0e9ed607",
@@ -338,23 +337,18 @@ class CheckoutController extends Controller
 
         $txn_id = $data['pine_pg_transaction_id'] ?? '';
         $unique_merchant_txn_id = $data['unique_merchant_txn_id'] ?? '';
-        $dia_secret_type = $data['dia_secret_type'] ?? '';
-        $dia_secret= $data['dia_secret'] ?? '';
+       
 
         $msg = $data['txn_response_msg'] ?? '';
-        // $dia_secret = $this->generateRequestKey($data);
+       
 
-        
          try{
             DB::table('orders')->where('id', $order_id)->update([
                 'order_status_id' => 2,
                 'payment_status' => $msg,
                 'transaction_id' => $txn_id,
-                'unique_merchant_txn_id'=>$unique_merchant_txn_id,
-                'dia_secret'=>$dia_secret["x_verify"],
-                'dia_secret_type'=>$dia_secret_type
             ]);
-        }catch(\Throwable $e){echo $e->getMessage();}
+        }catch(\Throwable $e){echo $e->getMessage();die();}
 
         $order = Order::find($order_id);
         $items = DB::table('order_product')->where('order_id', $order_id)->get();

@@ -583,6 +583,7 @@ class UserDashboardController extends Controller
     if ($data['requestStatus']=="Cancel") {
         $orderStatus=Order::where('id',$data['orderId'])->where('order_status_id',2)->first(['order_status_id']);
         if($orderStatus){
+            // print_r($data);die();
             $updatedOrderCancelStatus=Order::where('id',$data['orderId'])->update(['order_status_id'=>6,"request_type"=>$data['requestStatus'],"request_reason_id"=>$data["reason"]]);
             $orderDetail=Order::find($data['orderId']);
             $user= User::find($data["userId"]);
