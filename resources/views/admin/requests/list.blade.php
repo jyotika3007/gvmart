@@ -118,7 +118,7 @@
                                 @else
                                 <td>
                                     <!--<p class="text-center {{ $order->payment_status }}">{{ $order->payment_status }}</p>-->
-                                    <form action="{{ url('orders/status-update',$order->id) }}" method="post">
+                                    <form action="{{ url('admin/orders/status-update',$order->id) }}" method="post">
                                         @csrf
                                         <input type="hidden" name="order_id" id="order_id" value="{{ $order->id }}">
                                         <select name="order_status" id="order_status" style="margin-bottom: 10px">

@@ -238,6 +238,8 @@ class OrderController extends Controller
         }
 
         curl_close($ch);
+    
+
         return $server_output;
     }
 
@@ -268,8 +270,8 @@ class OrderController extends Controller
 
         }
         elseif($data['order_status'] == 7 ){
-           
-           $refundResponce=refundPaymentRequest($order);
+
+           $refundResponce=$this->refundPaymentRequest($order);
            if($refundResponce){
             $msg = 'Refund initiated';
            }
