@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// echo env('MAIL_ADMIN'); die;
+
 Route::get('generate-pdf', 'Front\TestViewController@generatePDF');
 
 

@@ -99,11 +99,7 @@ $company = DB::table('company_details')->first();
                 </ul>
             </li>
 
-
-
-
             <!-- For Sales -->
-
             <li class="treeview @if(request()->segment(2) == 'apple_services') active @endif">
                 <a href="#" class="side-menu">
                     <i class="  fa fa-ambulance"></i> <span>Apple Service</span>
@@ -117,9 +113,7 @@ $company = DB::table('company_details')->first();
                 </ul>
             </li>
 
-
             <!-- For Sales -->
-
             <li class="treeview @if(request()->segment(2) == 'our_store') active @endif">
                 <a href="#" class="side-menu">
                     <i class="  fa fa-ambulance"></i> <span>Our Store</span>
@@ -134,7 +128,6 @@ $company = DB::table('company_details')->first();
             </li>
 
             <!-- For Sales -->
-
             <li class="treeview @if(request()->segment(2) == 'orders') active @endif">
                 <a href="#" class="side-menu">
                     <i class="  fa fa-ambulance"></i> <span>Orders</span>
@@ -148,10 +141,8 @@ $company = DB::table('company_details')->first();
                 </ul>
             </li>
 
-
-             <!-- For Request -->
-
-             <li class="treeview @if(request()->segment(2) == 'orders') active @endif">
+            <!-- For Request -->
+            <li class="treeview @if(request()->segment(2) == 'orders') active @endif">
                 <a href="#" class="side-menu">
                     <i class="  fa fa-ambulance"></i> <span>Request</span>
                     <span class="pull-right-container">
@@ -163,7 +154,6 @@ $company = DB::table('company_details')->first();
                     <li><a href="{{ route('admin.orders.order_request','return') }}"> Return Requests</a></li>
                     <li><a href="{{ route('admin.orders.order_request','approved') }}"> Approved Requests</a></li>
                     <li><a href="{{ route('admin.orders.order_request','rejected') }}"> Rejected Requests</a></li>
-
                 </ul>
             </li>
 
@@ -180,9 +170,6 @@ $company = DB::table('company_details')->first();
                 </ul>
             </li>
 
-
-
-
             <!-- For Sales Report -->
             <li class="treeview @if(request()->segment(2) == 'sales_report' || request()->segment(2) == 'products_report') active @endif">
                 <a href="#" class="side-menu">
@@ -198,13 +185,6 @@ $company = DB::table('company_details')->first();
 
                 </ul>
             </li>
-
-
-
-
-
-
-
 
             @if($admin->user_role!='vendor')
             <!-- For Customers -->
@@ -223,11 +203,8 @@ $company = DB::table('company_details')->first();
             </li>
             @endif
 
-
-
             <!-- For Online Transactions -->
             <!-- <li><a href="{{ route('admin.online_transactions') }}" class="side-menu"> <i class="fa fa-money"></i> Online Transcations</a></li> -->
-
 
             <!-- For Settings -->
 
