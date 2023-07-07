@@ -685,7 +685,6 @@ class UserDashboardController extends Controller
             $req['ppc_DIA_SECRET'] =$resultOfKeys;
             $req['ppc_DIA_SECRET_TYPE']='SHA256';
 
-
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
             curl_setopt($ch, CURLOPT_POST, 1);

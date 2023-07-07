@@ -36,6 +36,7 @@ Route::namespace('Api')->group(function () {
     Route::get('home_products','HomeController@home_products');
     Route::get('home_main','HomeController@home_main');
     Route::get('categoriesList','HomeController@categories');
+    Route::get('dynamic_search','HomeController@dynamic_search');
 
 
     //Categorywise Products Api

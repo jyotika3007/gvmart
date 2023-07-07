@@ -300,4 +300,49 @@ class HomeController extends Controller
             ]
         ]);
     }
+    
+    public function dynamic_search()
+    {
+        $itemName=$_GET['search'] ?? '';
+        $result['products']=Product::where('name','LIKE','%'.$itemName.'%')
+        ->get(['id','name']);
+        $product_array=[];
+        $output=[];
+
+        foreach($result['products'] as $product){
+            $attributes=DB::table('attribute_value_product_attribute')
+            ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
+            ->join('product_images','attribute_value_product_attribute.id','product_images.storage_id')
+            ->where('attribute_value_product_attribute.product_id',$product->id)
+            ->distinct('product_images.color_id','product_images.storage_id')
+            ->get(['color_id','storage_id']);
+           
+                if(count($attributes)){
+                    foreach($attributes as $attribute){
+                        $color_value=DB::table('attribute_values')
+                        ->where('id',$attribute->color_id)
+                        ->first('value');
+                        $storage_value=DB::table('attribute_value_product_attribute')
+                        ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
+                        ->where('attribute_value_product_attribute.id',$attribute->storage_id)
+                        ->first('value');
+                        $product_array['id']=$product->id.'-'.$attribute->storage_id.'-'.$attribute->color_id;
+                        $product_array['name']=$product->name.'-'.$storage_value->value.'-'.$color_value->value;
+                        array_push($output,$product_array); 
+                    }
+                }else{
+                    $product_array['id']=$product->id;
+                    $product_array['name']=$product->name;
+                       array_push($output,$product_array); 
+                    }
+               }
+        return response()->json([
+            "status" => 1,
+            "message" => "item fetched successfully.",
+            'data'=>[
+                'products'=>$output,
+                'totalProduct'=>count($output)
+            ]
+        ]);
+    }
 }
