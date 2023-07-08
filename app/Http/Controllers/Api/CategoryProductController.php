@@ -43,7 +43,7 @@ class CategoryProductController extends Controller
                 ->join('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
                 ->where('attribute_value_product_attribute.product_id', $sp->id)
                 ->where('attribute_values.attribute_id', 3)
-                ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+                ->get(['attribute_value_product_attribute.*', 'attribute_values.value', 'attribute_values.id as value_id']);
 
 
 
@@ -53,7 +53,7 @@ class CategoryProductController extends Controller
                     $prods = clone $sp;
 
                     $prods->storage = $attr->value;
-                    $prods->storage_id = $attr->id;
+                    $prods->storage_id = $attr->value_id;
                     $prods->price = $attr->price ?? 0;
                     $prods->offer_price = $attr->offer_price ?? 0;
                     $prods->stock_quantity = $attr->quantity ?? 0;
@@ -113,9 +113,9 @@ class CategoryProductController extends Controller
 
     public function getVariants()
     {
-        $colors = Attribute::JOIN('attribute_values', 'attribute_values.attribute_id', 'attributes.id')->where('attributes.name', 'Color')->get(['attribute_values.value', 'attribute_values.code']);
+        $colors = Attribute::JOIN('attribute_values', 'attribute_values.attribute_id', 'attributes.id')->where('attributes.name', 'Color')->get(['attribute_values.id','attribute_values.value', 'attribute_values.code']);
         // $colors = Attribute::JOIN('attribute_values','attribute_values.attribute_id','attributes.id')->where('attributes.name','Color')->get();
-        $storage = Attribute::JOIN('attribute_values', 'attribute_values.attribute_id', 'attributes.id')->where('attributes.name', 'Storage')->get(['attribute_values.value', 'attribute_values.code']);
+        $storage = Attribute::JOIN('attribute_values', 'attribute_values.attribute_id', 'attributes.id')->where('attributes.name', 'Storage')->get(['attribute_values.id','attribute_values.value']);
         $min_price = Product::orderBy('price', 'ASC')->first(['price']);
         // print_r($min_price); die;
         $max_price = Product::orderBy('price', 'DESC')->first('price');

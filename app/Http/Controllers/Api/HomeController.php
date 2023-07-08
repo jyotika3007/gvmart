@@ -302,7 +302,7 @@ class HomeController extends Controller
     public function dynamic_search()
     {
         $itemName=$_GET['search'] ?? '';
-        $result['products']=Product::where('name','LIKE','%'.$itemName.'%')->get(['id','name']);
+        $result['products']=Product::where('name','LIKE','%'.$itemName.'%')->get(['id','name','slug']);
         $product_array=[];
         $output=[];
         foreach($result['products'] as $product){
@@ -322,8 +322,12 @@ class HomeController extends Controller
                         ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
                         ->where('attribute_value_product_attribute.id',$attribute->storage_id)
                         ->first('value');
-                        $product_array['id']=$product->id.'-'.$attribute->storage_id.'-'.$attribute->color_id;
+                        // $product_array['id']=$product->id.'-'.$attribute->storage_id.'-'.$attribute->color_id;
+                        $product_array['id']=$product->id;
                         $product_array['name']=$product->name.'-'.$storage_value->value.'-'.$color_value->value;
+                        $product_array['slug'] = $product->slug ?? '';
+                        $product_array['color'] = $color_value->value ?? '';
+                        $product_array['storage'] = $storage_value->value ?? '';
                         array_push($output,$product_array); 
                     }
                 }else{
