@@ -403,16 +403,17 @@ class UserDashboardController extends Controller
         if ($header) {
 
             $data = [];
-            $data['order'] = Order::where('id', $orderId)->first();
+            $order = Order::where('id', $orderId)->first();
 
+            $status = DB::table('order_statuses')->where('id', $order->order_status_id)->first(['name','color']);
+
+            $order->order_status = $status->name ?? '';
+            $order->order_status_color = $status->color ?? '';
+
+            $data['order'] = $order;
             $data['billing_address'] = Address::where('id', $data['order']->address_id)->first();
-            $data['delivery_address'] = Address::where('id', $data['order']->delivery_address)->first();
 
             $data['items'] = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $orderId)->get(['order_product.*', 'products.cover']);
-
-            $data['order_statuses'] = DB::table('order_statuses')->get();
-            $data['currentStatus'] = DB::table('order_statuses')->where('id', $data['order']->order_status_id)->first();
-            $data['customer'] = User::where('id', $data['order']->customer_id)->first();
 
             return response()->json([
                 'status' => 1,

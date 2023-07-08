@@ -183,7 +183,6 @@ class HomeController extends Controller
             }
         }
 
-
         foreach($new_arrival_products as $sp){
             $attributes = DB::table('attribute_value_product_attribute')
             ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
@@ -229,7 +228,6 @@ class HomeController extends Controller
                         array_push($final_new_arrival_products, $prods);
                     }
 
-                    // array_push($final_new_arrival_products,$prods);
                 }
             }
             else{
