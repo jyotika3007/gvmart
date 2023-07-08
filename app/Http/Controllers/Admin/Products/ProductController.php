@@ -919,4 +919,17 @@ class ProductController extends Controller
         $attributes = Attribute::get(['id', 'name']);
         return response()->json($attributes);
     }
+    
+    public function getPrelaunchProducts()
+    {
+        $preLaunchProducts = Product::where('is_prelaunched',1)->select(['id','name','cover','sku','prelaunch_price','status'])->paginate(20);
+        return view('admin.products.prelaunchlist', [
+            'preLaunchProducts' => $preLaunchProducts
+        ]);
+    }
+    public function removeFromPrelaunchProductList($product_id)
+    {   
+     Product::where('id',$product_id)->update(['is_prelaunched'=>0]);
+        return redirect('admin/prelaunchProducts')->with('message','Product launched successfully');
+    }
 }
