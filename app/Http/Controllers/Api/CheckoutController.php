@@ -68,10 +68,7 @@ class CheckoutController extends Controller
 
         $req = $linkObject["request"] ?? '';
         $x_verify = $linkObject["x_verify"] ?? '';
-        // $data = $request->all();
-        // $req = $data["request"] ?? '';
-        // $x_verify = $data["x_verify"] ?? '';
-        // print_r($x_verify);die();
+        
         if ($req != '' && $x_verify != '') {
 
             $vars = http_build_query(array('REQUEST' => $req));

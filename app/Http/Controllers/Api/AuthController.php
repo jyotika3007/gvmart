@@ -82,7 +82,7 @@ class AuthController extends Controller
             ]);
         } else {
 
-           
+
             $checkUser = User::where('email', $request->email)->first();
 
             if ($checkUser) {
@@ -92,7 +92,7 @@ class AuthController extends Controller
                 ]);
             } else {
 
-                if(count(str_split($data['password']))<6){
+                if (count(str_split($data['password'])) < 6) {
                     return response()->json([
                         'status' => 0,
                         'message' => 'Password should not be less then 6 characters.',
@@ -105,19 +105,22 @@ class AuthController extends Controller
 
                 $userId = User::insertGetId($data);
 
-                $otp = rand(100000,999999);
-                
+                $otp = rand(100000, 999999);
+
                 $otpId = DB::table('email_verifications')->insertGetId([
                     'email' => $data['email'],
                     'otp' => $otp,
                     'verified' => 0
                 ]);
-                Mail::send('mails.otp',['otp'=>$otp],
-                function ($m) use ($request) {
-                    $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                Mail::send(
+                    'mails.otp',
+                    ['otp' => $otp],
+                    function ($m) use ($request) {
+                        $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
 
-                    $m->to($request->email, "User")->subject('OTP For Email verification');
-                });
+                        $m->to($request->email, "User")->subject('OTP For Email verification');
+                    }
+                );
                 if ($otpId) {
                     return response()->json([
                         'status' => 1,
@@ -152,21 +155,27 @@ class AuthController extends Controller
                     DB::table('email_verifications')->where('id', $checkOtp->id)->update(['verified' => 1]);
 
                     User::where('email', $data['email'])->update(['account_status' => 'Active']);
-                    $user= User::where('email', $data['email'])->first(['name']);
-                    
-                    $data['name']=$user->name;
-                    
-                    Mail::send('mails.register-user',['data' => $data, 'type' => 'admin'],
-                    function ($m) use ($data) {
-                        $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
-                        $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('New User Registration');
-                    });
-                                   
-                    Mail::send('mails.register-user',['data' => $data, 'type' => 'user'],
+                    $user = User::where('email', $data['email'])->first(['name']);
+
+                    $data['name'] = $user->name;
+
+                    Mail::send(
+                        'mails.register-user',
+                        ['data' => $data, 'type' => 'admin'],
                         function ($m) use ($data) {
-                            $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+                            $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('New User Registration');
+                        }
+                    );
+
+                    Mail::send(
+                        'mails.register-user',
+                        ['data' => $data, 'type' => 'user'],
+                        function ($m) use ($data) {
+                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
                             $m->to($data['email'], $data['name'])->subject('Registration Successful');
-                        });
+                        }
+                    );
                     return response()->json([
                         'status' => 1,
                         'message' => 'OTP Verified. Successfully Registered',
@@ -200,25 +209,30 @@ class AuthController extends Controller
             if ($checkUser) {
 
                 if ($checkUser->status == 1) {
-                    
-                    $random_token = rand('1000000','999999999');
+
+                    $random_token = rand('1000000', '999999999');
 
                     $token = Hash::make($random_token);
-                    
-                     $newLink = DB::table('password_resets')->insert(array(
-                        'email' => $checkUser->email,
-                        'token' => $token
-                    ));
-                    
-                    $link = 'reset-password?email='.$checkUser->email.'&token='.$token;
-            
-                    Mail::send('mails.forgotPassword', ['user' => $checkUser, 'link' => $link],
-                        function ($m) use ($checkUser) {
-                     $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
-                     $m->to($checkUser->email, $checkUser->name ?? '')->subject('Reset Password');
-                 });
-                    
+                    $newLink = DB::table('password_resets')->insert(array(
+                        'email' => $checkUser->email,
+                        'token' => $token,
+                        'isVerified' => 0
+                    ));
+
+                    $link = env('LOCAL_RESET_PASSWORD_URL') . 'reset-password?email=' . $checkUser->email . '&token=' . $token;
+                    // echo $link; die;
+
+                    Mail::send(
+                        'mails.forgotPassword',
+                        ['user' => $checkUser, 'link' => $link],
+                        function ($m) use ($checkUser) {
+                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+
+                            $m->to($checkUser->email, $checkUser->name ?? '')->subject('Reset Password');
+                        }
+                    );
+
                     return response()->json([
                         'status' => 1,
                         'message' => 'Reset Password Link is send to your email id.',
@@ -245,33 +259,76 @@ class AuthController extends Controller
         }
     }
 
-    // Reset Password for customer
-    public function resetPassword(Request $request)
+    // Change Password for customer
+    public function changePassword(Request $request)
     {
         $header = $request->header('Authorization');
+        $data = $request->all();
 
-        if ($header) {
-            $data = $request->all();
-            
-            if ($data['user_id'] == '' && $data['password'] == '') {
+        if (isset($data['access-token']))
+
+            if ($header) {
+
+                if ($data['user_id'] == '' && $data['password'] == '') {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Email & Password both are mendatory.',
+                    ]);
+                } else {
+                    User::where('id', $data['user_id'])->update(['password' => Hash::make($data['password'])]);
+                    // print_r($data); die;
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Password updated successfully.',
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    "status" => "400",
+                    "message" => "Bad Request. Access token required",
+                ]);
+            }
+    }
+
+
+    public function resetPassword(Request $request)
+    {
+        $data = $request->all();
+
+        if ($data['accessToken'] != '' && $data['password'] != '' && $data['confirmPassword'] != '' && $data['email'] != '') {
+
+            $verify = DB::table('password_resets')->where('email', $data['email'])->where('token', $data['accessToken'])->where('isVerified', 1)->first();
+
+            if ($verify) {
+                if ($data['password'] == $data['confirmPassword']) {
+                    User::where('email', $data['email'])->update(['password' => Hash::make($data['password'])]);
+                    DB::table('password_resets')
+                        ->where('email', $data['email'])
+                        ->where('token', $data['accessToken'])
+                        ->update([
+                            'isVerified' => 1
+                        ]);
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Password reset successfully.'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Password & Confirm Password did not match.'
+                    ]);
+                }
+            } else {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'Email & Password both are mendatory.',
-                ]);
-            } else {
-                User::where('id', $data['user_id'])->update(['password'=>Hash::make($data['password'])]);
-            // print_r($data); die;
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'Password updated successfully.',
+                    'message' => 'This link has been expired.'
                 ]);
             }
         } else {
             return response()->json([
-                "status" => "400",
-                "message" => "Bad Request. Access token required",
+                'status' => 0,
+                'message' => 'Missing parameters. Email, Access Token, Password & Confirm Password all are required.'
             ]);
         }
     }
-    
 }

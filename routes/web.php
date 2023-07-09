@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// echo env('MAIL_ADMIN'); die;
+// echo env('LOCAL_RESET_PASSWORD_URL'); die;
 
 Route::get('generate-pdf', 'Front\TestViewController@generatePDF');
 

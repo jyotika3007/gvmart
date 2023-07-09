@@ -28,8 +28,9 @@ Route::namespace('Api')->group(function () {
     Route::post('login','AuthController@postLogin');
     Route::post('register','AuthController@postRegister');
     Route::post('verifyOtp','AuthController@verifyOtp');
-    Route::post('resetPassword','AuthController@resetPassword');
+    Route::post('changePassword','AuthController@changePassword');
     Route::post('forgotPassword','AuthController@forgotPassword');
+    Route::post('resetPassword','AuthController@resetPassword');
     
     
     // Honme Page routes
