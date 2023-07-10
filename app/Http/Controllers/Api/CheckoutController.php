@@ -68,7 +68,10 @@ class CheckoutController extends Controller
 
         $req = $linkObject["request"] ?? '';
         $x_verify = $linkObject["x_verify"] ?? '';
-        
+        // $data = $request->all();
+        // $req = $data["request"] ?? '';
+        // $x_verify = $data["x_verify"] ?? '';
+        // print_r($x_verify);die();
         if ($req != '' && $x_verify != '') {
 
             $vars = http_build_query(array('REQUEST' => $req));
@@ -95,7 +98,10 @@ class CheckoutController extends Controller
 
             curl_close($ch);
 
-            $resp['payment_link'] = $server_output;
+            $resp_server = json_decode($server_output);
+
+            if($resp_server->response_message == 'SUCCESS')
+                $resp['payment_link']= $resp_server->redirect_url ?? '';
 
             return $resp;
             //    return  response()->json([
@@ -122,32 +128,15 @@ class CheckoutController extends Controller
     public function checkout(Request $request, $user_id)
     {
         $data = $request->all();
+        
 
         $header = $request->header('Authorization');
 
         if ($header) {
 
-            // $shipping_address = 0;
             $billing_address = 0;
 
             $customer = $data['user_id'];
-
-            // if (isset($data['new_address'])) {
-            //     $addr = $data['new_address'];
-            //     $newAddress = new Address;
-            //     $newAddress->customer_id = $customer;
-            //     $newAddress->alias = $addr['alias'] ?? 'Other';
-            //     $newAddress->address_1 = $addr['address_1'] ?? '';
-            //     $newAddress->address_2 = $addr['address_2'] ?? '';
-            //     $newAddress->country_id = 101;
-            //     $newAddress->city = $addr['city'] ?? '';
-            //     $newAddress->landmark = $addr['landmark'] ?? '';
-            //     $newAddress->state_code = $addr['state_code'] ?? '';
-            //     $newAddress->zip = $addr['zip'] ?? '';
-            //     $newAddress->phone = $addr['phone'] ?? '';
-            //     $newAddress->delivery_address = 0;
-            //     $newAddress->save();
-            // }
 
             $customerAdd = Address::where('customer_id', $customer)->get()->last();
 
@@ -162,12 +151,6 @@ class CheckoutController extends Controller
                 ]);
                 
             }
-
-            // if (isset($data['shipping_address']) && $data['shipping_address'] != '' && $data['shipping_address'] != 0) {
-            //     $shipping_address = $data['shipping_address'];
-            // } else {
-            //     $shipping_address = $customerAdd->id;
-            // }
 
             $payment_status = 'Pending';
 
@@ -204,14 +187,27 @@ class CheckoutController extends Controller
 
             foreach ($products as  $product) {
                 try {
+                    
+                    if(isset($product['storage']) && $product['storage']!=''){
+                        $pro_storage = $product['storage'];
+                    }
+                    else{
+                        $pro_storage = '';
+                    }
+                     if(isset($product['color']) && $product['color']!=''){
+                        $pro_color = $product['color'];
+                    }
+                    else{
+                        $pro_color = '';
+                    }
                     DB::table('order_product')
                         ->insert([
                             'order_id' => $orderLast->id,
                             'product_id' => $product['product_id'],
                             'product_name' => $product['name'] ?? '',
                             'product_sku' => $product['sku'] ?? '',
-                            'color' => $product['color'] ?? '',
-                            'storage' => $product['storage'] ?? '',
+                            'color' => $pro_color ?? '',
+                            'storage' => $pro_storage ?? '',
                             'product_size' => '',
                             'product_description' => '',
                             'quantity' => $product['quantity'] ?? 1,
@@ -222,10 +218,17 @@ class CheckoutController extends Controller
                     die;
                 }
 
+
+// return $data; die;
+
+if($pro_storage != ''){
+    
                 $productUpdate = DB::table('attribute_value_product_attribute')
                     ->where('id', $product['storage_id'])
                     ->where('product_id', $product['product_id'])
                     ->first();
+
+
 
                 if ($productUpdate) {
 
@@ -241,6 +244,7 @@ class CheckoutController extends Controller
                     } catch (\Throwable $e) {
                         echo $e->getMessage();
                         die;
+}
                     }
                 }
             }

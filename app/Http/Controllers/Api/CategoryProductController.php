@@ -31,7 +31,8 @@ class CategoryProductController extends Controller
                 $child_categories = Category::where('parent_id', $sub_cat->id)->where('status', 1)->get(['id']);
 
                 foreach ($child_categories as $child_cat) {
-                    array_push($ids, $child_cat[0]->id);
+// dd(1);
+                    array_push($ids, $child_cat->id);
                 }
             }
         }
@@ -57,13 +58,6 @@ class CategoryProductController extends Controller
                     $prods->price = $attr->price ?? 0;
                     $prods->offer_price = $attr->offer_price ?? 0;
                     $prods->stock_quantity = $attr->quantity ?? 0;
-
-                    // $colors = DB::table('product_images')
-                    //     ->JOIN('attribute_values', 'attribute_values.id', 'product_images.color_id')
-                    //     ->where('product_id', $prods->id)
-                    //     ->where('storage_id', $attr->id)
-                    //     ->distinct('color_id')
-                    //     ->get(['product_images.id', 'product_images.src', 'attribute_values.value', 'attribute_values.code']);
 
                     $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
 
@@ -113,11 +107,13 @@ class CategoryProductController extends Controller
 
     public function getVariants()
     {
+        
         $colors = Attribute::JOIN('attribute_values', 'attribute_values.attribute_id', 'attributes.id')->where('attributes.name', 'Color')->get(['attribute_values.id','attribute_values.value', 'attribute_values.code']);
-        // $colors = Attribute::JOIN('attribute_values','attribute_values.attribute_id','attributes.id')->where('attributes.name','Color')->get();
+        
         $storage = Attribute::JOIN('attribute_values', 'attribute_values.attribute_id', 'attributes.id')->where('attributes.name', 'Storage')->get(['attribute_values.id','attribute_values.value']);
+        
         $min_price = Product::orderBy('price', 'ASC')->first(['price']);
-        // print_r($min_price); die;
+        
         $max_price = Product::orderBy('price', 'DESC')->first('price');
 
         $data['min_price'] = $min_price->price ?? 0;

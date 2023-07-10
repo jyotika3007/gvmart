@@ -220,7 +220,7 @@ class AuthController extends Controller
                         'isVerified' => 0
                     ));
 
-                    $link = env('LOCAL_RESET_PASSWORD_URL') . 'reset-password?email=' . $checkUser->email . '&token=' . $token;
+                    $link = env('SERVER_RESET_PASSWORD_URL') . '?email=' . $checkUser->email . '&token=' . $token;
                     // echo $link; die;
 
                     Mail::send(
@@ -297,7 +297,7 @@ class AuthController extends Controller
 
         if ($data['accessToken'] != '' && $data['password'] != '' && $data['confirmPassword'] != '' && $data['email'] != '') {
 
-            $verify = DB::table('password_resets')->where('email', $data['email'])->where('token', $data['accessToken'])->where('isVerified', 1)->first();
+            $verify = DB::table('password_resets')->where('email', $data['email'])->where('token', $data['accessToken'])->where('isVerified', 0)->first();
 
             if ($verify) {
                 if ($data['password'] == $data['confirmPassword']) {
@@ -321,7 +321,7 @@ class AuthController extends Controller
             } else {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'This link has been expired.'
+                    'message' => 'Invalid Link.'
                 ]);
             }
         } else {

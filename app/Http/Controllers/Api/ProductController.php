@@ -107,90 +107,6 @@ class ProductController extends Controller
 
         $data['product_variants'] = $storage_arr ?? [];
 
-        // $data['product_variants'] = [
-        //     [
-        //         'Storage' => "32 GB",
-        //         "price" => 78999,
-        //         "stock_quantity" => 10,
-        //         "offer_price" => 75999,
-        //         "colors" => [
-        //             [
-        //                 "color" => '#abb9c8',
-        //                 "images" => [
-        //                     "default_products/b1.jpg",
-        //                     "default_products/b2.jpg",
-        //                 ]
-
-        //             ],
-        //             [
-
-        //                 "color" => '#33383f',
-        //                 "images" => [
-        //                     "default_products/black1.jpg",
-        //                     "default_products/black2.jpg",
-        //                 ]
-        //             ],
-        //             [
-
-        //                 "color" => '#e9373c',
-        //                 "images" => [
-        //                     "default_products/red1.jpg",
-        //                     "default_products/red2.jpg",
-        //                 ]
-        //             ],
-        //             [
-
-        //                 "color" => 'fdf49f',
-        //                 "images" => [
-        //                     "default_products/yellow1.jpg",
-        //                     "default_products/yellow2.jpg",
-        //                 ]
-        //             ]
-        //         ],
-        //     ],
-        //     [
-        //         'Storage' => "64 GB",
-        //         "price" => 84999,
-        //         "stock_quantity" => 10,
-        //         "offer_price" => 75999,
-        //         "colors" => [
-        //             [
-        //                 "color" => '#abb9c8',
-        //                 "images" => [
-        //                     "default_products/b1.jpg",
-        //                     "default_products/b2.jpg",
-        //                 ]
-
-        //             ],
-        //             [
-
-        //                 "color" => '#33383f',
-        //                 "images" => [
-        //                     "default_products/black1.jpg",
-        //                     "default_products/black2.jpg",
-        //                 ]
-        //             ],
-        //             [
-
-        //                 "color" => '#e9373c',
-        //                 "images" => [
-        //                     "default_products/red1.jpg",
-        //                     "default_products/red2.jpg",
-        //                 ]
-        //             ],
-        //             [
-
-        //                 "color" => 'fdf49f',
-        //                 "images" => [
-        //                     "default_products/yellow1.jpg",
-        //                     "default_products/yellow2.jpg",
-        //                 ]
-        //             ]
-        //         ],
-
-        //     ]
-        // ];
-
         if ($related_products) {
                
             foreach($related_products as $sp){
@@ -306,7 +222,15 @@ class ProductController extends Controller
 
     $data['related_products'] = $final_related_products ?? [];
     $data['related_accessories'] = $final_related_accessories ?? [];
-        return response()->json([
+    
+    
+    $data['other_variants'] = DB::table('attributes')
+                                ->JOIN('attribute_values','attribute_values.attribute_id','attributes.id')
+                                ->JOIN('attribute_value_product_attribute','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
+                                ->where('attribute_value_product_attribute.product_id',$product_id)
+                                ->whereNotIn('attributes.name',['Storage','Color'])
+                                ->get(['attributes.name','attribute_values.value']);
+                                    return response()->json([
             'status' => 1,
             'message' => 'Product detail fetched successfully.',
             'data' => $data
