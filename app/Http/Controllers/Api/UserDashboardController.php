@@ -405,7 +405,7 @@ class UserDashboardController extends Controller
             $data = [];
             $order = Order::where('id', $orderId)->first();
 
-            $status = DB::table('order_statuses')->where('id', $order->order_status_id)->first(['name','color']);
+            $status = DB::table('order_statuses')->where('id', $order->order_status_id)->first(['name', 'color']);
 
             $order->order_status = $status->name ?? '';
             $order->order_status_color = $status->color ?? '';
@@ -503,7 +503,7 @@ class UserDashboardController extends Controller
                 array_push($service_id, $services[$j]->id);
             }
 
-            $products_array = Product::whereIn('id', $ids)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);
+            $products_array = Product::whereIn('id', $ids)->where('status', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);
             $apple_services = AppleService::whereIn('id', $service_id)->get();
 
             if ($products_array) {
@@ -513,12 +513,13 @@ class UserDashboardController extends Controller
                         ->join('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
                         ->where('attribute_value_product_attribute.product_id', $sp->id)
                         ->where('attribute_values.attribute_id', 3)
-                        ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+                        ->where('attribute_value_product_attribute.status', 1)
+                        ->get(['attribute_value_product_attribute.*', 'attribute_values.value', 'attribute_values.id as value_id']);
                     if (count($attributes) > 0) {
                         foreach ($attributes as $attr) {
                             $prods = clone $sp;
                             $prods->storage = $attr->value;
-                            $prods->storage_id = $attr->id;
+                            $prods->storage_id = $attr->value_id;
                             $prods->price = $attr->price ?? 0;
                             $prods->offer_price = $attr->offer_price ?? 0;
                             $prods->stock_quantity = $attr->quantity ?? 0;
@@ -561,8 +562,10 @@ class UserDashboardController extends Controller
             }
 
             if ($apple_services) {
-                foreach ($apple_services as $app)
+                foreach ($apple_services as $app){
+                    $app->stock_quantity = 1;
                     array_push($related_services, $app);
+                }
             }
         }
 
@@ -672,62 +675,61 @@ class UserDashboardController extends Controller
         if ($header) {
             $data = $request->all();
             $order = Order::find($data['order_id']);
-            if($order){
-            $req = array(
-                'ppc_MerchantAccessCode' => env('ACCESS_CODE'),
-                'ppc_MerchantID' => env('MID'),
-                'ppc_TransactionType' => 3,
-                'ppc_UniqueMerchantTxnID' => $order->unique_merchant_txn_id
-            );
-     
-            $vars = http_build_query($req);
-            $hmac_digest = hash_hmac("sha256",  $vars, pack("H*", env('SECRET_CODE')), false);
-            $resultOfKeys = strtoupper($hmac_digest);
-            $req['ppc_DIA_SECRET'] =$resultOfKeys;
-            $req['ppc_DIA_SECRET_TYPE']='SHA256';
+            if ($order) {
+                $req = array(
+                    'ppc_MerchantAccessCode' => env('ACCESS_CODE'),
+                    'ppc_MerchantID' => env('MID'),
+                    'ppc_TransactionType' => 3,
+                    'ppc_UniqueMerchantTxnID' => $order->unique_merchant_txn_id
+                );
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($req));  //Post Fields
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $vars = http_build_query($req);
+                $hmac_digest = hash_hmac("sha256",  $vars, pack("H*", env('SECRET_CODE')), false);
+                $resultOfKeys = strtoupper($hmac_digest);
+                $req['ppc_DIA_SECRET'] = $resultOfKeys;
+                $req['ppc_DIA_SECRET_TYPE'] = 'SHA256';
 
-            $headers = [
-                'Content-Type: application/x-www-form-urlencoded'
-            ];
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/PG/V2");
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($req));  //Post Fields
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                $headers = [
+                    'Content-Type: application/x-www-form-urlencoded'
+                ];
 
-            $server_output = curl_exec($ch);
-            if (curl_errno($ch)) {
-                print "Error: " . curl_error($ch);
-                exit();
-            }
-            curl_close($ch);
-            $ppc_resp=json_decode($server_output);
-            if($ppc_resp->ppc_TxnResponseMessage=="SUCCESS" ){
-                return response()->json([
-                    "status" => "1",
-                    "message" => 'Payment has been credited to your account successfully.'
-                ]);
-            }elseif($ppc_resp->ppc_TxnResponseMessage=="INITIATED"){
-                return response()->json([
-                    "status" => "1",
-                    "message" => 'Refund has been initiated and will credited to your account within 7 working days.'
-                ]);
-            }else{
-                return response()->json([
-                    "status" => "0",
-                    "message" => 'Technical issue, Try again later.'
-                ]);
-            }
-            }else{
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+                $server_output = curl_exec($ch);
+                if (curl_errno($ch)) {
+                    print "Error: " . curl_error($ch);
+                    exit();
+                }
+                curl_close($ch);
+                $ppc_resp = json_decode($server_output);
+                if ($ppc_resp->ppc_TxnResponseMessage == "SUCCESS") {
+                    return response()->json([
+                        "status" => "1",
+                        "message" => 'Payment has been credited to your account successfully.'
+                    ]);
+                } elseif ($ppc_resp->ppc_TxnResponseMessage == "INITIATED") {
+                    return response()->json([
+                        "status" => "1",
+                        "message" => 'Refund has been initiated and will credited to your account within 7 working days.'
+                    ]);
+                } else {
+                    return response()->json([
+                        "status" => "0",
+                        "message" => 'Technical issue, Try again later.'
+                    ]);
+                }
+            } else {
                 return response()->json([
                     "status" => "0",
                     "message" => "Order not found.",
                 ]);
             }
-        
         } else {
             return response()->json([
                 "status" => "0",

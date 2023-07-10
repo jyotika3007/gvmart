@@ -37,22 +37,20 @@ class CategoryProductController extends Controller
             }
         }
 
-        $products = Product::JOIN('category_product', 'category_product.product_id', 'products.id')->whereIn('category_product.category_id', $ids)->get(['products.id', 'products.slug', 'products.name', 'products.cover', 'products.price', 'products.sale_price', 'products.discount', 'products.stock_quantity', 'products.is_prelaunched', 'products.prelaunch_price']);
+        $products = Product::JOIN('category_product', 'category_product.product_id', 'products.id')->whereIn('category_product.category_id', $ids)->where('products.status',1)->get(['products.id', 'products.slug', 'products.name', 'products.cover', 'products.price', 'products.sale_price', 'products.discount', 'products.stock_quantity', 'products.is_prelaunched', 'products.prelaunch_price']);
 
         foreach ($products as $sp) {
             $attributes = DB::table('attribute_value_product_attribute')
                 ->join('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
                 ->where('attribute_value_product_attribute.product_id', $sp->id)
                 ->where('attribute_values.attribute_id', 3)
+                ->where('attribute_value_product_attribute.status', 1)
                 ->get(['attribute_value_product_attribute.*', 'attribute_values.value', 'attribute_values.id as value_id']);
-
-
 
             if (count($attributes) > 0) {
                 foreach ($attributes as $attr) {
 
                     $prods = clone $sp;
-
                     $prods->storage = $attr->value;
                     $prods->storage_id = $attr->value_id;
                     $prods->price = $attr->price ?? 0;
@@ -60,8 +58,6 @@ class CategoryProductController extends Controller
                     $prods->stock_quantity = $attr->quantity ?? 0;
 
                     $color_ids = DB::table('product_images')->where('product_id', $prods->id)->where('storage_id', $attr->id)->distinct('color_id')->get(['color_id']);
-
-                    // dd($color_ids);
 
                     if (count($color_ids) > 0) {
                         foreach ($color_ids as $col) {
@@ -90,8 +86,6 @@ class CategoryProductController extends Controller
                         $prods->color_code = '';
                         array_push($final_sales_products, $prods);
                     }
-
-                    // dd($final_sales_products);
                 }
             } else {
                 array_push($final_sales_products, $sp);

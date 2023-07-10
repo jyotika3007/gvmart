@@ -123,9 +123,9 @@ class HomeController extends Controller
 
     public function home_products()
     {
-        $sale_products = Product::where('is_top_rated', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
-        $new_arrival_products = Product::where('is_trending', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
-        $best_seller_products = Product::where('is_best_seller', 1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
+        $sale_products = Product::where('is_top_rated', 1)->where('status',1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
+        $new_arrival_products = Product::where('is_trending', 1)->where('status',1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
+        $best_seller_products = Product::where('is_best_seller', 1)->where('status',1)->get(['id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'is_prelaunched', 'prelaunch_price']);
 
         $final_sales_products = [];
         $final_new_arrival_products = [];
@@ -136,12 +136,13 @@ class HomeController extends Controller
             ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
             ->where('attribute_value_product_attribute.product_id',$sp->id)
             ->where('attribute_values.attribute_id', 3)
-            ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+            ->where('attribute_value_product_attribute.status', 1)
+            ->get(['attribute_value_product_attribute.*', 'attribute_values.value', "attribute_values.id as value_id"]);
             if(count($attributes)>0){
                 foreach($attributes as $attr){
                     $prods = clone $sp;
                     $prods->storage = $attr->value;
-                    $prods->storage_id = $attr->id;
+                    $prods->storage_id = $attr->value_id ?? '';
                     $prods->price = $attr->price ?? 0;
                     $prods->offer_price = $attr->offer_price ?? 0;
                     $prods->stock_quantity = $attr->quantity ?? 0;
@@ -188,12 +189,13 @@ class HomeController extends Controller
             ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
             ->where('attribute_value_product_attribute.product_id',$sp->id)
             ->where('attribute_values.attribute_id', 3)
-            ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+            ->where('attribute_value_product_attribute.status', 1)
+            ->get(['attribute_value_product_attribute.*', 'attribute_values.value', "attribute_values.id as value_id"]);
             if(count($attributes)>0){
                 foreach($attributes as $attr){
                     $prods = clone $sp;
                     $prods->storage = $attr->value;
-                    $prods->storage_id = $attr->id;
+                    $prods->storage_id = $attr->value_id ?? '';
                     $prods->price = $attr->price ?? 0;
                     $prods->offer_price = $attr->offer_price ?? 0;
                     $prods->stock_quantity = $attr->quantity ?? 0;
@@ -240,12 +242,13 @@ class HomeController extends Controller
             ->join('attribute_values','attribute_values.id','attribute_value_product_attribute.attribute_value_id')
             ->where('attribute_value_product_attribute.product_id',$sp->id)
             ->where('attribute_values.attribute_id', 3)
-            ->get(['attribute_value_product_attribute.*', 'attribute_values.value']);
+            ->where('attribute_value_product_attribute.status', 1)
+            ->get(['attribute_value_product_attribute.*', 'attribute_values.value', "attribute_values.id as value_id"]);
             if(count($attributes)>0){
                 foreach($attributes as $attr){
                     $prods = clone $sp;
                     $prods->storage = $attr->value;
-                    $prods->storage_id = $attr->id;
+                    $prods->storage_id = $attr->value_id ?? '';
                     $prods->price = $attr->price ?? 0;
                     $prods->offer_price = $attr->offer_price ?? 0;
                     $prods->stock_quantity = $attr->quantity ?? 0;

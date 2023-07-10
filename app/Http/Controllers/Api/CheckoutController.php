@@ -364,24 +364,27 @@ if($pro_storage != ''){
         $currentStatus = DB::table('order_statuses')->where('id', $order->order_status_id)->first();
         // dd($order);
 
-        // Mail::send(
-        //     'mails.orderInvoice',
-        //     ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'admin'],
-        //     function ($m) use ($data) {
-        //         $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+        Mail::send(
+            'mails.orderInvoice',
+            ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'admin'],
+            function ($m) use ($data) {
+                $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
 
-        //         $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order booked successfully.');
-        //     }
-        // );
-        // Mail::send(
-        //     'mails.orderInvoice',
-        //     ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'user'],
-        //     function ($m) use ($customer) {
-        //         $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+                $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order booked successfully.');
+            }
+        );
+        Mail::send(
+            'mails.orderInvoice',
+            ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'user'],
+            function ($m) use ($customer) {
+                $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
 
-        //         $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
-        //     }
-        // );
-        return redirect()->away('https://www.iadvance.in/ThankYou?transaction_id=TXN' . $txn_id . '&payment_status=' . $msg);
+                $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
+            }
+        );
+        
+         $invoice = "iAD/".date('Y',strtotime($order->created_at))."/#".str_pad($order->id, 4, '0', STR_PAD_LEFT);
+         
+        return redirect()->away('https://www.iadvance.in/ThankYou?transaction_id=TXN' . $txn_id . '&payment_status=' . $msg . '&invoiceId=' . $invoice);
     }
 }
