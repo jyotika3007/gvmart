@@ -273,7 +273,7 @@ class UserDashboardController extends Controller
         $header = $request->header('Authorization');
 
         if ($header) {
-            $orders = Order::where('customer_id', $userid)->orderBy('id', 'DESC')->get();
+            $orders = Order::where('customer_id', $userid)->whereNotIn('order_status_id',[1])->orderBy('id', 'DESC')->get();
 
             return response()->json([
                 "status" => 1,
@@ -568,6 +568,7 @@ class UserDashboardController extends Controller
                 }
             }
         }
+
 
         $data_new['related_products'] = $related_products;
         $data_new['related_services'] = $related_services;
