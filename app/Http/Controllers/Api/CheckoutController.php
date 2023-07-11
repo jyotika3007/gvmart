@@ -200,6 +200,15 @@ class CheckoutController extends Controller
                     else{
                         $pro_color = '';
                     }
+                    if(isset($product['is_prelaunch']) && $product['is_prelaunch'] == 1 ){
+                        $pro_prelaunch=1;
+                        $prebooking_amount=$product['price'];
+                        $pro_price=0;
+                    }else{
+                        $pro_prelaunch=0;
+                        $prebooking_amount=0;
+                        $pro_price= $product['sale_price'] != 0 ? $product['sale_price'] : $product['price'];
+                    }
                     DB::table('order_product')
                         ->insert([
                             'order_id' => $orderLast->id,
@@ -211,7 +220,9 @@ class CheckoutController extends Controller
                             'product_size' => '',
                             'product_description' => '',
                             'quantity' => $product['quantity'] ?? 1,
-                            'product_price' => $product['sale_price'] != 0 ? $product['sale_price'] : $product['price']
+                            'product_price' =>$pro_price,
+                            'is_prelaunch'=>$pro_prelaunch,
+                            'prebooking_amount'=>$prebooking_amount,
                         ]);
                 } catch (\Throwable $e) {
                     echo $e->getMessage();

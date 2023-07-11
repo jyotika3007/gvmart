@@ -14,8 +14,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Shop\ProductSize;
 use App\Shop\ProductWeight;
+
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Mail;
+
 
 class ProductController extends Controller
 {
@@ -928,7 +931,106 @@ class ProductController extends Controller
     }
     public function removeFromPrelaunchProductList($product_id)
     {   
-     Product::where('id',$product_id)->update(['is_prelaunched'=>0]);
-        return redirect('admin/prelaunchProducts')->with('message','Product launched successfully');
+    Product::where('id',$product_id)->update(['is_prelaunched'=>0]);
+    $preBookedOrders=DB::table("order_product")->where('product_id',$product_id)->get();
+    foreach( $preBookedOrders as $bookedOrder){
+        $customerDetail = DB::table('orders')
+                ->JOIN('users', 'users.id', 'orders.customer_id')
+                ->where('orders.id',$bookedOrder->order_id)
+                ->first(['users.email','users.name','users.id']);
+                try {
+                    $productDetail= Product::join('attribute_value_product_attribute', 'product_id', 'products.id')
+                    ->join('attribute_values', 'attribute_value_product_attribute.attribute_value_id', 'attribute_values.id')
+                    ->where('attribute_values.value',$bookedOrder->storage)
+                    ->where('products.id',$bookedOrder->product_id)
+                    ->first(['products.id','products.name as product_name','attribute_value_product_attribute.price']);
+                       } catch (\Throwable $e) {
+                    dd($e->getMessage());
+                }
+      
+        $data=[
+                'name' =>  $customerDetail->name,
+                'payment1'=>$bookedOrder->prebooking_amount,
+                'payment2' => $productDetail->price - $bookedOrder->prebooking_amount,
+                'product_name'=> $productDetail->product_name
+        ];
+
+            $order = DB::table('orders')->where('id',$bookedOrder->order_id)->first();
+            $order= json_encode($order);
+
+            $paymentVariable = [
+                "merchant_data" => [
+                    "merchant_id" => env('MID'),
+                    "merchant_access_code" => env('ACCESS_CODE'),
+                    "merchant_return_url" => env('RETURN_URL'),
+                    "unique_merchant_txn_id" => "PineLabs". uniqid()
+                ],
+                "customer_data" => [
+                    "customer_id" => $customerDetail->id,
+                    "email_id" => $customerDetail->email ?? '',
+                    "first_name" =>  $customerDetail->name ?? '',
+                ],
+                "payment_data" => [
+                    "amount_in_paisa" => $data['payment2'] * 100 ?? 0
+                ],
+                "txn_data" => [
+                    "navigation_mode" => 2,
+                    "payment_mode" => "1,3",
+                    "transaction_type" => 1
+                ],
+                "udf_data" => [
+                    "udf_field_1" => "Xyz",
+                    "udf_field_2" => $order . " Test txn " . rand('1000000', '999999999'),
+                    "udf_field_3" => rand('1000000', '999999999') . $order,
+                    "udf_field_4" => "orderId_" . $order
+                ]
+            ];
+        $baseData = base64_encode(json_encode($paymentVariable));
+        $hmac_digest = hash_hmac("sha256",  $baseData, pack("H*", env('SECRET_CODE')), false);
+
+        $vars = http_build_query(array('REQUEST' => $baseData));
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://uat.pinepg.in/api/v2/accept/payment");
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);  //Post Fields
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $headers = [
+                'X-VERIFY: ' .  strtoupper($hmac_digest),
+                'Content-Type: application/x-www-form-urlencoded'
+            ];
+
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            $server_output = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                print "Error: " . curl_error($ch);
+                exit();
+            }
+
+            curl_close($ch);
+
+            $resp_server = json_decode($server_output);
+
+            $resp_server = json_decode($server_output);
+
+            if($resp_server->response_message == 'SUCCESS')
+                $data['payment_link']=$resp_server->redirect_url;
+                
+            Mail::send(
+                'mails.prelaunch_paymentlink',
+                ['data'=>$data],
+                function ($m) use ($data) {
+                    $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+    
+                    $m->to('test1234@yopmail.com','test1234')->subject('Order Payment link');
+                }
+            );               
+        
+    
+    };
+   // return redirect('admin/prelaunchProducts')->with('message','Product launched successfully');
     }
 }

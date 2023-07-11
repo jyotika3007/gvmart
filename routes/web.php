@@ -283,6 +283,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('getMoreWeightFields', 'ProductController@getMoreWeightFields');
             Route::get('delete_weight/{id}', 'ProductController@deleteWeight');
             Route::get('prelaunchProducts', 'ProductController@getPrelaunchProducts');
+            
             Route::get('launchProduct/{product_id}', 'ProductController@removeFromPrelaunchProductList');
 
 
