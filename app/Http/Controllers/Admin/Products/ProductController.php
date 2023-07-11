@@ -956,7 +956,7 @@ class ProductController extends Controller
         ];
 
             $order = DB::table('orders')->where('id',$bookedOrder->order_id)->first();
-            $order= json_encode($order);
+            // $order= json_encode($order);
 
             $paymentVariable = [
                 "merchant_data" => [
@@ -979,10 +979,10 @@ class ProductController extends Controller
                     "transaction_type" => 1
                 ],
                 "udf_data" => [
-                    "udf_field_1" => "Xyz",
-                    "udf_field_2" => $order . " Test txn " . rand('1000000', '999999999'),
-                    "udf_field_3" => rand('1000000', '999999999') . $order,
-                    "udf_field_4" => "orderId_" . $order
+                    "udf_field_1" => "prebooked_".$bookedOrder->id,
+                    "udf_field_2" => $order->id . " Test txn " . rand('1000000', '999999999'),
+                    "udf_field_3" => rand('1000000', '999999999') . $order->id,
+                    "udf_field_4" => "orderId_" . $order->id
                 ]
             ];
         $baseData = base64_encode(json_encode($paymentVariable));
@@ -1018,19 +1018,20 @@ class ProductController extends Controller
 
             if($resp_server->response_message == 'SUCCESS')
                 $data['payment_link']=$resp_server->redirect_url;
-                
+            
+
             Mail::send(
                 'mails.prelaunch_paymentlink',
                 ['data'=>$data],
-                function ($m) use ($data) {
+                function ($m) use ($customerDetail) {
                     $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
     
-                    $m->to('test1234@yopmail.com','test1234')->subject('Order Payment link');
+                    $m->to($customerDetail->email,$customerDetail->name)->subject('Order Payment link');
                 }
             );               
         
     
     };
-   // return redirect('admin/prelaunchProducts')->with('message','Product launched successfully');
+   return redirect('admin/prelaunchProducts')->with('message','Product launched successfully');
     }
 }

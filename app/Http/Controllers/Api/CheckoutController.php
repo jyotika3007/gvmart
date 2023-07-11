@@ -286,7 +286,7 @@ if($pro_storage != ''){
                     "transaction_type" => 1
                 ],
                 "udf_data" => [
-                    "udf_field_1" => "Xyz",
+                    "udf_field_1" => "normal_0",
                     "udf_field_2" => $order . " Test txn " . rand('1000000', '999999999'),
                     "udf_field_3" => rand('1000000', '999999999') . $order,
                     "udf_field_4" => "orderId_" . $order
@@ -344,22 +344,37 @@ if($pro_storage != ''){
         //     "dia_secret_type" => "SHA256"
         // ];
         $order_id = explode('_', $data['udf_field_4'])[1];
-
-
+        $order_product_id = explode('_', $data['udf_field_1'])[1];
+        $isprebooked= explode('_', $data['udf_field_1'])[0];
+        
+        
         $txn_id = $data['pine_pg_transaction_id'] ?? '';
         $unique_merchant_txn_id = $data['unique_merchant_txn_id'] ?? '';
-       
-
+        
+        
         $msg = $data['txn_response_msg'] ?? '';
-       
+        
+        try{
+            if($isprebooked == 'prebooked'){
+                $order= DB::table('orders')->where('id', $order_id)->first();
+                DB::table('orders')->where('id', $order_id)->update([
+                    'order_status_id' => 2,
+                    'payment_status' => $msg,
+                    'transaction_id' => $txn_id,
+                    'total'=>$order->total + ($data['amount_in_paisa']/100),
+                    'total_paid'=>$order->total + ($data['amount_in_paisa']/100)
+                ]);
+                DB::table('order_product')->where('id', $order_product_id)->update([
+                    'product_price'=>$data['amount_in_paisa']/100
+                ]);
+            }else{
 
-         try{
-            DB::table('orders')->where('id', $order_id)->update([
-                'order_status_id' => 2,
-                'payment_status' => $msg,
-                'transaction_id' => $txn_id,
-            ]);
-        }catch(\Throwable $e){echo $e->getMessage();die();}
+                DB::table('orders')->where('id', $order_id)->update([
+                    'order_status_id' => 2,
+                    'payment_status' => $msg,
+                    'transaction_id' => $txn_id,
+                ]);
+            }
 
         $order = Order::find($order_id);
         $items = DB::table('order_product')->where('order_id', $order_id)->get();
@@ -373,7 +388,6 @@ if($pro_storage != ''){
         $billing_address = Address::find($order->address_id);
         $delivery_address = Address::find($order->delivery_address);
         $currentStatus = DB::table('order_statuses')->where('id', $order->order_status_id)->first();
-        // dd($order);
 
         Mail::send(
             'mails.orderInvoice',
@@ -395,7 +409,8 @@ if($pro_storage != ''){
         );
         
          $invoice = "iAD/".date('Y',strtotime($order->created_at))."/#".str_pad($order->id, 4, '0', STR_PAD_LEFT);
-         
+        }catch(\Throwable $e){echo $e->getMessage();die();}
+
         return redirect()->away('https://www.iadvance.in/ThankYou?transaction_id=TXN' . $txn_id . '&payment_status=' . $msg . '&invoiceId=' . $invoice);
     }
 }

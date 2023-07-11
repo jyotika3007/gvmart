@@ -69,7 +69,13 @@
                         <tr>
                             <td width="10"></td>
                             <td>
-                                <p>Congratulations {{$name}},Our product {{$product_name}} with price {{$payment2}} has been launched.As we can see you have paid {{$payment1}} as a prebooking amount,To complete your remaining payment click the below link </br> {{$payment_link }}.</br>Thank You</p>
+                                <p>Congratulations {{$name}}</p>
+                                <p>Our product {{$product_name}} with price {{$payment2}} has been launched.</p>
+                                <p>As we can see you have paid {{$payment1}} as a prebooking amount,To complete your remaining payment click the below link</p> 
+                                
+                                <p><a href="{{$payment_link}}">{{$payment_link }}</a></p>
+                                
+                                <p>Thank You</p>
                                 <br>
                             </td>
                             <td width="10"></td>
