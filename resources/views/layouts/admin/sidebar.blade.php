@@ -75,6 +75,7 @@ $company = DB::table('company_details')->first();
 
                     <li><a href="{{ route('admin.products.create') }}"> Add Product</a></li>
                     <li><a href="{{ route('admin.products.index') }}"> Products List</a></li>
+                    <li><a href="{{ url('admin/prelaunchProducts') }}"> Prelaunch Products List</a></li>
                     <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
                     <li><a href="{{ route('admin.brands.index') }}"> Brands</a></li>
                     <li><a href="{{ route('admin.attributes.index') }}"> Attributes</a></li>
