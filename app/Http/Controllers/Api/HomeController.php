@@ -305,7 +305,8 @@ class HomeController extends Controller
     public function dynamic_search()
     {
         $itemName=$_GET['search'] ?? '';
-        $result['products']=Product::where('name','LIKE','%'.$itemName.'%')->get(['id','name','slug']);
+        $result['products']=Product::where('name','LIKE','%'.$itemName.'%')->get(['id','name']);
+
         $product_array=[];
         $output=[];
         foreach($result['products'] as $product){
