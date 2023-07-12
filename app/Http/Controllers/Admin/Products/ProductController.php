@@ -1029,8 +1029,6 @@ class ProductController extends Controller
                     $m->to($customerDetail->email,$customerDetail->name)->subject('Order Payment link');
                 }
             );               
-        
-    
     };
    return redirect('admin/prelaunchProducts')->with('message','Product launched successfully');
     }

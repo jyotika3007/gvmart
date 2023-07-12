@@ -445,9 +445,6 @@ public function getOrders(Request $request, $orderType){
     }
 
 
-
-
-
     if($orderType == 'shipped_orders'){
         $order_type = 'Shipped Orders';
 
@@ -610,20 +607,12 @@ if($orderType == 'returned_orders'){
 public function update_payment_status(Request $request){
     $data = $request->all();
     
-    // var_dump($data);
-    // die;
     
-    $order_update = Order::where('id',$data['order_id'])->update(array('payment_status'=>$data['payment_status']));
+    $order_update = Order::where('id',$data['order_id'])->update(array('payment_status'=>strtoupper($data['payment_status']),'order_status_id'=>5));
     
      $order = Order::find($data['order_id']);
      
        
-        //     $data['admin_email'] = 'Riddhi.lic@gmail.com';
-        // $data['admin_name'] = 'IAdvance Apple Store';
-        
-
-    // var_dump($order); die;
-
         $shop = RegisteredShop::where('id',$order->user_id)->first();
         
         $billing_address = Address::where('id',$order->address_id)->first();
@@ -632,41 +621,29 @@ public function update_payment_status(Request $request){
 
        
         $items = DB::table('order_product')->JOIN('products','products.id','order_product.product_id')->where('order_product.order_id',$order->id)->select('products.cover','products.description','order_product.*')->get();
-        // $items = $orderRepo->listOrderedProducts();
 
-        // var_dump($items); die;
 
 $order_statuses = DB::table('order_statuses')->get();
 $currentStatus = DB::table('order_statuses')->where('id',$order->order_status_id)->first();
 $customer = User::where('id',$order->customer_id)->first();
 
-    
-    if($order_update && $data['payment_status'] == 'Success'){
-         Mail::send('mails.orderInvoice',['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'shop' => $shop, 'currentStatus' => $currentStatus , 'type' => 'admin' ],
-                 function ($m) use ($data) {
-                     $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
-                     $m->to($data['admin_email'], $data['admin_name'])->subject('Order booked successfully.');
-                 });
-                 
-                 
+if($order_update && $data['payment_status'] == 'Success'){
+    //  Mail::send('mails.orderInvoice',['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'shop' => $shop, 'currentStatus' => $currentStatus , 'type' => 'admin' ],
+    //          function ($m) use ($data) {
+        //              $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
+        
+        //              $m->to($data['admin_email'], $data['admin_name'])->subject('Order booked successfully.');
+        //          });
+        
+        
         Mail::send('mails.orderInvoice',['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'shop' => $shop, 'currentStatus' => $currentStatus , 'type' => 'user'],
                  function ($m) use ($customer) {
                      $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
 
-                     $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
-                 }); 
-                 
-                 if(!empty($shop)){
-
-                 
-        Mail::send('mails.orderInvoice',['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'shop' => $shop, 'currentStatus' => $currentStatus , 'type' => 'vendor'],
-                 function ($m) use ($shop) {
-                     $m->from( env('MAIL_USERNAME'), env('APP_NAME') );
-
-                     $m->to($shop->email, $shop->shop_name)->subject('Order booked successfully.');
-                 });
-                 }
+                     $m->to($customer->email, $customer->name)->subject('Order pickedup successfully.');
+                    }); 
+                    
     
     
     }

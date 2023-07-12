@@ -263,7 +263,7 @@ if($pro_storage != ''){
             $resp['order_id'] = $order;
 
             $userData = User::find($order_data["customer_id"]);
-        
+        if($data['payment_method'] == 'online'){
             $paymentVariable = [
                 "merchant_data" => [
                     "merchant_id" => env('MID'),
@@ -299,8 +299,18 @@ if($pro_storage != ''){
             return response()->json([
                 'status' => 1,
                 'message' => "Order details saved successfully",
-                'data' => $output
+                'data' => $output,
+                'order_mode'=>$data['payment_method']
             ]);
+        }else{
+            return response()->json([
+                'status' => 1,
+                'message' => "Order details saved successfully",
+                'order_mode'=>$data['payment_method']
+
+            ]);
+        }
+           
         } else {
             return response()->json([
                 "status" => "400",
