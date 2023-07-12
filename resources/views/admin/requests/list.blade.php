@@ -98,6 +98,12 @@
                             <?php
                             $customer = DB::table('users')->where('id',$order->customer_id)->first();
                             $status = DB::table('order_statuses')->where('id',$order->order_status_id)->first();
+                            $partial_product_price=DB::table('order_product')->where('order_id',$order->id)->where('is_partial_cancel',1)->get(['product_price']);
+                            $total_price=0;
+
+                            foreach($partial_product_price as $partial_product){
+                                $total_price+=$partial_product->product_price;
+                            };
                             ?>
                             <tr>
                                 <td><a title="Show order" href="{{ route('admin.orders.show', $order->id) }}">GVM/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</a></td>
@@ -105,10 +111,10 @@
                                 <td>{{$customer->name ?? ''}}</td>
                                 <!-- <td>{{ $order->courier->name ?? '' }}</td> -->
                                 <td>
-                                    <span class="label @if($order->total != $order->total_paid) label-danger @else label-success @endif">{{ config('cart.currency') }} {{ $order->total }}</span>
+                                    <span class="label @if($order->total != $order->total_paid) label-danger @else label-success @endif">{{ config('cart.currency') }} {{ $total_price ? $total_price:$order->total}}</span>
                                 </td>
                                 <td>{{ $order->delivery_date ?? '' }}</td>
-                                <td><p class="text-center" style="color: #ffffff; background-color: {{ $status->color }}">{{ $status->name }}</p></td>
+                                <td><p class="text-center" style="color: #ffffff; background-color: {{ $status->color }}">{{ $order->request_type }}</p></td>
                                 <td><p class="text-center" >{{ strtoupper($order->payment) }}</p></td>
                                 @if($order->order_status_id == 7)
                                 <td><p class="text-center Success">Approved (Refunded)</p></td>

@@ -583,16 +583,27 @@ class UserDashboardController extends Controller
     public function updateOrderStatus(Request $request)
     {
         $header = $request->header('Authorization');
-        // echo $header;
-        // die;
         if ($header) {
 
             $data = $request->all();
-            if ($data['requestStatus'] == "Cancel") {
-                $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 2)->first(['order_status_id']);
+            if ($data['requestStatus'] == "Cancel"  ) {
+
+                $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 1)->first(['order_status_id']);
+                dd($orderStatus);die();
+
                 if ($orderStatus) {
-                    // print_r($data);die();
-                    $updatedOrderCancelStatus = Order::where('id', $data['orderId'])->update(['order_status_id' => 6, "request_type" => $data['requestStatus'], "request_reason_id" => $data["reason"]]);
+                    if(isset($data['order_product_id']) &&  $data['order_product_id'] !== ''){
+                        try{
+                            DB::table("order_product")->where('id',$data['order_product_id'])->update(['is_partial_cancel' => 1]);
+                            Order::where('id', $data['orderId'])->update(['order_status_id' => 6, "request_type" => "partial_cancel", "request_reason_id" => $data["reason"]]);
+                            // print_r($data);die();
+                        } catch (\Throwable $e) {
+                            echo($e->getMessage());
+                        }
+                        
+                    }else{
+                        Order::where('id', $data['orderId'])->update(['order_status_id' => 6, "request_type" => $data['requestStatus'], "request_reason_id" => $data["reason"]]);
+                    }
                     $orderDetail = Order::find($data['orderId']);
                     $user = User::find($data["userId"]);
                     Mail::send(
@@ -622,39 +633,39 @@ class UserDashboardController extends Controller
                         "message" => "You can not cancel this order",
                     ]);
                 }
-            } else if ($data['requestStatus'] == "Return") {
-                $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 5)->first(['order_status_id']);
-                if ($orderStatus) {
-                    $updatedOrderCancelStatus = Order::where('id', $data['orderId'])->update(['order_status_id' => 9, "request_type" => $data['requestStatus'], "request_reason_id" => $data["reason"]]);
-                    $orderDetail = Order::find($data['orderId']);
-                    $user = User::find($data["userId"]);
-                    Mail::send(
-                        'mails.orderUpdate',
-                        ['order' => $orderDetail, 'type' => 'admin', 'order_status' => $orderDetail->order_status_id],
-                        function ($m) use ($orderDetail) {
-                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
-                            $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order Return Request');
-                        }
-                    );
+            // } else if ($data['requestStatus'] == "Return") {
+            //     $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 5)->first(['order_status_id']);
+            //     if ($orderStatus) {
+            //         $updatedOrderCancelStatus = Order::where('id', $data['orderId'])->update(['order_status_id' => 9, "request_type" => $data['requestStatus'], "request_reason_id" => $data["reason"]]);
+            //         $orderDetail = Order::find($data['orderId']);
+            //         $user = User::find($data["userId"]);
+            //         Mail::send(
+            //             'mails.orderUpdate',
+            //             ['order' => $orderDetail, 'type' => 'admin', 'order_status' => $orderDetail->order_status_id],
+            //             function ($m) use ($orderDetail) {
+            //                 $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+            //                 $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order Return Request');
+            //             }
+            //         );
 
-                    Mail::send(
-                        'mails.orderUpdate',
-                        ['order' => $orderDetail, 'type' => 'user', 'order_status' => $orderDetail->order_status_id],
-                        function ($m) use ($user) {
-                            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
-                            $m->to($user->email, $user->name)->subject('Order Return Request');
-                        }
-                    );
-                    return response()->json([
-                        "status" => "1",
-                        "message" => "order return request submitted successfully",
-                    ]);
-                } else {
-                    return response()->json([
-                        "status" => "0",
-                        "message" => "You can not return this order",
-                    ]);
-                }
+            //         Mail::send(
+            //             'mails.orderUpdate',
+            //             ['order' => $orderDetail, 'type' => 'user', 'order_status' => $orderDetail->order_status_id],
+            //             function ($m) use ($user) {
+            //                 $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+            //                 $m->to($user->email, $user->name)->subject('Order Return Request');
+            //             }
+            //         );
+            //         return response()->json([
+            //             "status" => "1",
+            //             "message" => "order return request submitted successfully",
+            //         ]);
+            //     } else {
+            //         return response()->json([
+            //             "status" => "0",
+            //             "message" => "You can not return this order",
+            //         ]);
+            //     }
             } else {
                 return response()->json([
                     "status" => "0",
