@@ -587,9 +587,13 @@ class UserDashboardController extends Controller
 
             $data = $request->all();
             if ($data['requestStatus'] == "Cancel"  ) {
+                if(isset($data['order_product_id']) &&  $data['order_product_id'] !== ''){
+                    $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 1)->first(['order_status_id']);
 
-                $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 1)->first(['order_status_id']);
-                dd($orderStatus);die();
+                }else{
+                    $orderStatus = Order::where('id', $data['orderId'])->where('order_status_id', 2)->first(['order_status_id']);
+                }
+                // dd($orderStatus);die();
 
                 if ($orderStatus) {
                     if(isset($data['order_product_id']) &&  $data['order_product_id'] !== ''){

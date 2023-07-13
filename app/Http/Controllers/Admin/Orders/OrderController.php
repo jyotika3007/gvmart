@@ -267,23 +267,24 @@ class OrderController extends Controller
 
     public function updateOrderStatus(Request $request,$orderId){
         $data = $request->all();
-
+        
         $order = Order::find($orderId);
-
+        
         $order->order_status_id = $data['order_status'];
         
+
         $customer = User::where('id',$order->customer_id)->first();
         
-        if($data['order_status'] == 7 ){           
+        if($data['order_status'] == 7){           
            $refundResponce=$this->refundPaymentRequest($order);
            if(in_array($refundResponce, ["SUCCESS","INITIATED"] )){
             $msg = 'Refund initiated';
            }else{
             return redirect()->back()->with('message','Refund request rejected by pinelab.');
            }
-    }
+        }
    
-    $order->update();
+        $order->update();
     
     if(!in_array($data['order_status'],[7,8])){
         Mail::send('mails.orderUpdate',['customer' => $customer, 'order' => $order, 'type' => 'admin', 'order_status' => $data['order_status']],

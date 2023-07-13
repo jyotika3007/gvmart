@@ -23,10 +23,6 @@
         </div>
         
         <div class="box-body">
-            
-            
-            
-            
             <br>
             
             <form action="" method="get">
@@ -128,12 +124,19 @@
                                         @csrf
                                         <input type="hidden" name="order_id" id="order_id" value="{{ $order->id }}">
                                         <select name="order_status" id="order_status" style="margin-bottom: 10px">
+                                        @if($order->payment=='online')
                                             <option value="7">Approve</option>
                                             <option value="8">Reject</option>
+                                        @else
+                                        @if($order->payment=='store')
+                                            <option value="10">Approve</option>
+                                            <option value="11">Reject</option>
+                                        @endif
+                                        @endif
                                             <!--<option value="Cancel">Cancel</option>-->
                                         </select>
                                         
-                                        <button type="submit" name="submit" class="btn btn-danger">Change</button>
+                                        <button type="submit" name="submit" class="btn btn-danger">Submit</button>
                                     </form>
                                 </td>
                                 @endif

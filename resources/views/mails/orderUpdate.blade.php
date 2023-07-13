@@ -120,6 +120,14 @@
                             @if($order_status == 9 )
                                 <p>Order return request has been sent to support team having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                             @endif
+
+                            @if($order_status == 10)
+                                <p>Your order cancellation request has been approved successfully. </p>
+                            @endif
+
+                            @if($order_status == 11)
+                                <p>Your order cancellation request request has been rejected. For more details contact to our support team.</p>
+                            @endif
                                 
                                 <br>
                             </td>
