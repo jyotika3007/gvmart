@@ -575,7 +575,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
         Route::get('inventories', 'Inventories\InventoryController@searchList')->name('inventories.search_inventory');
         Route::resource('permissions', 'Permissions\PermissionController');
+        
+        Route::resource('policies', 'Policy\PolicyController');
     });
+
 });
 
 

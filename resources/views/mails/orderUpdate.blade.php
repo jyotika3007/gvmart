@@ -60,14 +60,11 @@
                         @if($type == 'admin')
                         <tr>
                             <td width="10"></td>
-
                             <td>
-                            
                             @if($order_status == 5)
                                 <p>Order has been completed successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <br>
                             @endif
-                            
                             @if($order_status == 6)
                                 <p>You have recieved a request for order cancellation having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                             @endif
@@ -83,7 +80,6 @@
                         <tr>
                             <td width="10"></td>
                             <td>
-
                                 @if($order_status == 2)
                                 <p>Hi {{$customer->name ?? 'User'}}, Your order has been approved successfully having <i><b>Invoice ID - iADV/{{ date('Y',strtotime($order->created_at)) }}/#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT)}}</b></i> </p>
                                 <p>Thank you for shopping at IAdvance Apple Store.</p>

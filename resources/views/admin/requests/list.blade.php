@@ -66,12 +66,6 @@
                 </div>
             </form>
             <br>
-            
-            
-            
-            
-            
-            
             @if($orders)
             <table class="table table-bordered table-responsive">
                         <thead>
