@@ -20,7 +20,7 @@
                         <select name="request_type" id="request_type" class="form-control select2" required>
                             <option value="">- Selct Request Type -</option>
                             <option value="cancel">Cancel</option>
-                            <option value="return">Reason</option>
+                            <option value="return">Return</option>
                         </select>
                     </div>
 

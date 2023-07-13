@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Shop\CompanyDetail\CompanyDetail;
 use App\Shop\Cms\Cms;
+use DB;
+
 
 class CmsController extends Controller
 {
@@ -25,33 +27,43 @@ class CmsController extends Controller
         ]);
     }
 
-public function getCmsDetail(){
-    if(isset($_GET['page']) && $_GET['page']!=''){
-        $cms = CMS::where('page',$_GET['page'])->first();
+        public function getCmsDetail(){
+            if(isset($_GET['page']) && $_GET['page']!=''){
+                $cms = CMS::where('page',$_GET['page'])->first();
 
-        if($cms){
+                if($cms){
+
+                    return response()->json([
+                        "status" => 1,
+                        "message" => $cms->title ?? '' +" Detail fetched successfully",
+                        "data" => $cms
+                    ]);
+                }
+                else{
+                    return response()->json([
+                        "status" => 0,
+                        "message" => "No record found for this page"
+                    ]);
+                }
+            }
+            else{
+                return response()->json([
+                    "status" => 0,
+                    "message" => "Page name is required"
+                ]);
+            }
+            
+        }
+        
+        public function getPoliciesList()
+        {
+            $policies = DB::table('policies')->where('status',1)->get(['id','reason','request_type']);
 
             return response()->json([
                 "status" => 1,
-                "message" => $cms->title ?? '' +" Detail fetched successfully",
-                "data" => $cms
+                "message" => "Policy List fetched successfully",
+                "data" => $policies
             ]);
         }
-        else{
-            return response()->json([
-                "status" => 0,
-                "message" => "No record found for this page"
-            ]);
-        }
-    }
-    else{
-        return response()->json([
-            "status" => 0,
-            "message" => "Page name is required"
-        ]);
-    }
-    
-}
-
 
    }

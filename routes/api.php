@@ -54,6 +54,8 @@ Route::namespace('Api')->group(function () {
     // Company Detail
     Route::get('companyDetail','CmsController@companyDetail');
     Route::get('pageDetail','CmsController@getCmsDetail');
+    Route::get('policyList','CmsController@getPoliciesList');
+
 
     
     // Offers Api
