@@ -6,6 +6,7 @@
             <td>Name</td>
             <td>Prelaunch Price</td>
             <td>Cover</td>
+            <td>Storage</td>
             <td>Status</td>
             <td>Actions</td>
         </tr>
@@ -26,6 +27,9 @@
                 @if(!empty($product->cover) && $product->cover!='')
                 <img src="{{ asset('storage/'.$product->cover ?? '') }}" style="height: 50px; width: auto">
                 @endif
+            </td>
+            <td>
+                <a href="{{ url('admin/variants/'.$product->id.'?type=Storage' ) }}" class="btn btn-success btn">Add</a>
             </td>
             <td>@include('layouts.status', ['status' => $product->status])</td>
             <td>

@@ -473,6 +473,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::resource('order-statuses', 'OrderStatusController');
             Route::get('orders/{id}/invoice', 'OrderController@downloadInvoice')->name('orders.invoice.download');
             Route::get('pending_payments', 'OrderController@pendingPaymentOrders');
+            Route::get('completed_payments', 'OrderController@completedPaymentOrders');
             Route::post('orders/status-update/{id}', 'OrderController@updateOrderStatus')->name('orders.status-update');
             Route::post('orders/update_payment_status', 'OrderController@update_payment_status');
             // Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');

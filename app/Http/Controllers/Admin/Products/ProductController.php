@@ -922,9 +922,31 @@ class ProductController extends Controller
         $attributes = Attribute::get(['id', 'name']);
         return response()->json($attributes);
     }
+
+    // public function getPrelaunchProducts()
+    // {
+    //     $preLaunchProducts = Product::where('is_prelaunched',1)->select(['id','name','cover','sku','prelaunch_price','status'])->paginate(20);
+    //     return view('admin.products.prelaunchlist', [
+    //         'preLaunchProducts' => $preLaunchProducts
+    //     ]);
+    // }
+
     public function getPrelaunchProducts()
     {
+
+        $list = '';
+
+        $title = 'Inactive';
+        
         $preLaunchProducts = Product::where('is_prelaunched',1)->select(['id','name','cover','sku','prelaunch_price','status'])->paginate(20);
+        $previous = $_SERVER['REQUEST_URI'];
+        session()->put('previous_url', $previous);
+       
+        // return view('admin.products.list', [
+        //     'products' => $list,
+        //     'title' => $title
+        // ]);
+
         return view('admin.products.prelaunchlist', [
             'preLaunchProducts' => $preLaunchProducts
         ]);

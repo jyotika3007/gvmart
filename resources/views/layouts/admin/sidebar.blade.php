@@ -88,11 +88,11 @@ $company = DB::table('company_details')->first();
                     <li><a href="{{ route('admin.pincodes.index' )}}"> Manage Pincode</a></li>
                     <li><a href="{{ route('admin.locations.index') }}"> Manage Location</a></li>
 
-                    <li><a href="{{ url('admin/inactive_products') }}"> Inactive Products</a></li>
+                    <li><a href="{{ url('admin/inactive_products') }}"> Inactive Products</a></li> -->
 
                     <li><a href="{{ url('admin/out_stock_products') }}"> Out Stock Products</a></li>
 
-                    <li><a href="{{ url('admin/dump_data') }}"> Products Excel</a></li>
+                    <!-- <li><a href="{{ url('admin/dump_data') }}"> Products Excel</a></li>
 
                     <li><a href="{{ url('admin/product_reviews') }}"> Manage Products Reviews</a></li>
                     <li><a href="{{ url('admin/vendor_products') }}"> New Vendors Products </a></li> -->
@@ -137,8 +137,10 @@ $company = DB::table('company_details')->first();
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ route('admin.orders.index') }}"> Orders</a></li>
-                    <li><a href="{{ url('admin/pending_payments') }}"> Pending Online Payments</a></li>
+                    <li><a href="{{ route('admin.orders.index') }}"> All Orders</a></li>
+                    <li><a href="{{ url('admin/pending_payments?type=store') }}"> Pending Store Orders</a></li>
+                    <li><a href="{{ url('admin/pending_payments?type=online') }}"> Pending Online Orders</a></li>
+                    <li><a href="{{ url('admin/completed_payments') }}"> Completed Orders</a></li>
                 </ul>
             </li>
 
@@ -206,6 +208,21 @@ $company = DB::table('company_details')->first();
 
             <!-- For Online Transactions -->
             <!-- <li><a href="{{ route('admin.online_transactions') }}" class="side-menu"> <i class="fa fa-money"></i> Online Transcations</a></li> -->
+
+
+ <!-- For Request -->
+ <li class="treeview @if(request()->segment(2) == 'orders') active @endif">
+                <a href="#" class="side-menu">
+                    <i class="  fa fa-ambulance"></i> <span>Policies</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ route('admin.policies') }}"> Policies List</a></li>
+                    <li><a href="{{ route('admin.policies.create') }}"> Add Policy</a></li>
+                </ul>
+            </li>
 
             <!-- For Settings -->
 
