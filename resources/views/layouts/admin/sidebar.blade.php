@@ -211,7 +211,7 @@ $company = DB::table('company_details')->first();
 
 
  <!-- For Request -->
- <li class="treeview @if(request()->segment(2) == 'orders') active @endif">
+ <li class="treeview @if(request()->segment(2) == 'policies') active @endif">
                 <a href="#" class="side-menu">
                     <i class="  fa fa-ambulance"></i> <span>Policies</span>
                     <span class="pull-right-container">
@@ -219,8 +219,8 @@ $company = DB::table('company_details')->first();
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ route('admin.policies') }}"> Policies List</a></li>
-                    <li><a href="{{ route('admin.policies.create') }}"> Add Policy</a></li>
+                    <li><a href="{{ route('admin.policies.index') }}"> Policies List</a></li>
+                    <li><a href="#"> Add Policy</a></li>
                 </ul>
             </li>
 
