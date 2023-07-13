@@ -472,8 +472,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::resource('orders', 'OrderController');
             Route::resource('order-statuses', 'OrderStatusController');
             Route::get('orders/{id}/invoice', 'OrderController@downloadInvoice')->name('orders.invoice.download');
-            Route::get('pending_payments', 'OrderController@pendingPaymentOrders');
-            Route::get('completed_payments', 'OrderController@completedPaymentOrders');
+            Route::get('payments', 'OrderController@pendingPaymentOrders');
+            // Route::get('completed_payments', 'OrderController@pendingPaymentOrders');
             Route::post('orders/status-update/{id}', 'OrderController@updateOrderStatus')->name('orders.status-update');
             Route::post('orders/update_payment_status', 'OrderController@update_payment_status');
             // Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
@@ -576,7 +576,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
         Route::get('inventories', 'Inventories\InventoryController@searchList')->name('inventories.search_inventory');
         Route::resource('permissions', 'Permissions\PermissionController');
-        
+
         Route::resource('policies', 'Policy\PolicyController');
     });
 

@@ -137,10 +137,10 @@ $company = DB::table('company_details')->first();
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ route('admin.orders.index') }}"> All Orders</a></li>
-                    <li><a href="{{ url('admin/pending_payments?type=store') }}"> Pending Store Orders</a></li>
-                    <li><a href="{{ url('admin/pending_payments?type=online') }}"> Pending Online Orders</a></li>
-                    <li><a href="{{ url('admin/completed_payments') }}"> Completed Orders</a></li>
+                    <!-- <li><a href="{{ route('admin.orders.index') }}"> All Orders</a></li> -->
+                    <li><a href="{{ url('admin/payments?type=store') }}"> Pending Store Orders</a></li>
+                    <li><a href="{{ url('admin/payments?type=online') }}"> Pending Online Orders</a></li>
+                    <li><a href="{{ url('admin/payments?type=completed') }}"> Completed Orders</a></li>
                 </ul>
             </li>
 

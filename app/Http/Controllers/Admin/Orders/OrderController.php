@@ -71,48 +71,20 @@ class OrderController extends Controller
 
     public function pendingPaymentOrders(Request $request)
     {
-        $data = $request->all();
+        if($_GET['type'] == 'completed'){
 
-        $order_type = 'Pending Payment Orders';
-        $user = Auth::user();
-
-        $from_date = '';
-        $to_date = '';
-
-        if (!empty($data['from_date']) && !empty($data['to_date'])) {
-            $from_date = date('Y-m-d H:s:m', strtotime($data['from_date']));
-            $to_date = date('Y-m-d', strtotime($data['to_date']));
-            $to_date = $to_date . ' 23:59:59';
-
-            if (!empty($user) && $user->user_role == 'vendor') {
-
-                $orders = Order::JOIN('registered_shops', 'registered_shops.id', 'orders.user_id')->where('registered_shops.user_id', $user->id)->where('orders.created_at', '>=', $from_date)->where('orders.created_at', '<=', $to_date)->where('orders.payment_status', 'Pending')->orderBy('orders.id', 'DESC')->select('orders.*')->paginate(30);
-            } else {
-                $orders = Order::where('created_at', '>=', $from_date)->where('created_at', '<=', $to_date)->where('payment_status', 'Pending')->orderBy('id', 'DESC')->paginate(30);
-            }
-
-            $from_date = explode(' ', $from_date)[0];
-            $to_date = explode(' ', $to_date)[0];
-        } else {
-
-
-            if (!empty($user) && $user->user_role == 'vendor') {
-                // echo 'Yes'; die;
-                $orders = Order::JOIN('registered_shops', 'registered_shops.id', 'orders.user_id')->where('registered_shops.user_id', $user->id)->where('orders.payment_status', 'Pending')->orderBy('orders.id', 'DESC')->select('orders.*')->paginate(30);
-            } else {
-                // echo 'No'; die;
-                $orders = Order::where('payment_status', 'Pending')->orderBy('id', 'DESC')->paginate(30);
-            }
+            $orders = Order::where('order_status_id', 5)->paginate(30);
+        }else{
+            $orders = Order::where('payment', $_GET['type'])->paginate(30);
         }
-
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
 
         return view('admin.orders.list', [
             'orders' => $orders,
-            'order_type' => $order_type,
-            'from_date' => $from_date,
-            'to_date' => $to_date
+            'order_type' => $_GET['type'],
+            'from_date' => '',
+            'to_date' => ''
         ]);
     }
 
