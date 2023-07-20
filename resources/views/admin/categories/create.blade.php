@@ -38,14 +38,14 @@
                     <input type="file" name="cover" id="cover" class="form-control">
                 </div>
                 
-                <div class="form-group ">
-                    @include('admin.shared.prelaunched', ['is_prelaunched' => 0])
-                </div>
+                <!--<div class="form-group ">-->
+                <!--    @include('admin.shared.prelaunched', ['is_prelaunched' => 0])-->
+                <!--</div>-->
                 
-                <div class="form-group ">
-                    @include('admin.shared.featured', ['featured' => 0])
-                    <p>If yes, then will show in menu</p>
-                </div>
+                <!--<div class="form-group ">-->
+                <!--    @include('admin.shared.featured', ['featured' => 0])-->
+                <!--    <p>If yes, then will show in menu</p>-->
+                <!--</div>-->
                 
                 <div class="form-group ">
                     @include('admin.shared.top', ['top' => 0])

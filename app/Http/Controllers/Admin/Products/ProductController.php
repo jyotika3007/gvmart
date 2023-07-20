@@ -15,9 +15,10 @@ use Illuminate\Http\Request;
 use App\Shop\ProductSize;
 use App\Shop\ProductWeight;
 
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
+use Mail;
+
 
 class ProductController extends Controller
 {
@@ -78,6 +79,7 @@ class ProductController extends Controller
 
     public function inactive_products()
     {
+
         $list = '';
 
         $title = 'Inactive';
@@ -91,7 +93,7 @@ class ProductController extends Controller
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
        
-        return view('admin.products.list', [ 
+        return view('admin.products.list', [
             'products' => $list,
             'title' => $title
         ]);
@@ -99,6 +101,7 @@ class ProductController extends Controller
 
     public function out_stock_products()
     {
+
         $list = '';
 
         $title = 'Out Of  Stock';
@@ -120,6 +123,7 @@ class ProductController extends Controller
 
     public function vendor_products()
     {
+
         $list = '';
 
         $title = "Vendor's New ";
@@ -138,6 +142,7 @@ class ProductController extends Controller
 
     public function searchList(Request $request)
     {
+
         $list = '';
 
         $user = Auth::user();

@@ -73,13 +73,13 @@ $company = DB::table('company_details')->first();
                 </a>
                 <ul class="treeview-menu">
 
+                    <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
                     <li><a href="{{ route('admin.products.create') }}"> Add Product</a></li>
                     <li><a href="{{ route('admin.products.index') }}"> Products List</a></li>
-                    <li><a href="{{ url('admin/prelaunchProducts') }}"> Prelaunch Products List</a></li>
-                    <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
                     <li><a href="{{ route('admin.brands.index') }}"> Brands</a></li>
                     <li><a href="{{ route('admin.attributes.index') }}"> Attributes</a></li>
                     <li><a href="{{ url('admin/product_reviews') }}"> Reviews</a></li>
+                    <li><a href="{{ url('admin/prelaunchProducts') }}"> Prelaunch List</a></li>
                   
 <!-- 
                     <li><a href="{{ route('admin.shop_categories.index') }}"> Manage Vendor Categories</a></li>
@@ -90,7 +90,7 @@ $company = DB::table('company_details')->first();
 
                     <li><a href="{{ url('admin/inactive_products') }}"> Inactive Products</a></li> -->
 
-                    <li><a href="{{ url('admin/out_stock_products') }}"> Out Stock Products</a></li>
+                    <!--<li><a href="{{ url('admin/out_stock_products') }}"> Out Stock Products</a></li>-->
 
                     <!-- <li><a href="{{ url('admin/dump_data') }}"> Products Excel</a></li>
 

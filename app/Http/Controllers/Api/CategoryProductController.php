@@ -31,7 +31,6 @@ class CategoryProductController extends Controller
                 $child_categories = Category::where('parent_id', $sub_cat->id)->where('status', 1)->get(['id']);
 
                 foreach ($child_categories as $child_cat) {
-// dd(1);
                     array_push($ids, $child_cat->id);
                 }
             }

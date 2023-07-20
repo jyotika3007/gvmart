@@ -16,8 +16,13 @@ class AppleServiceController extends Controller
     {
         $data = '';
 
-        $data = AppleService::join('categories','categories.id','apple_Services.category_id','left outer')->paginate(50);
-
+try{
+        $data = AppleService::join('categories','categories.id','apple_services.category_id')->paginate(50);
+}
+catch(\Throwable $e){
+    echo $e->getMessage();
+}
+dd($data);
 
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
