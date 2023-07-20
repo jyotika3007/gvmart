@@ -58,8 +58,9 @@ class BannerController extends Controller
 
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/banners/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'banners/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/banners/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'banners/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         // var_dump($data); die;
@@ -110,8 +111,9 @@ class BannerController extends Controller
 
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/banners/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'banners/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/banners/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'banners/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $banner = Banner::where('id',$id)->update($data);

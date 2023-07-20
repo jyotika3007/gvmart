@@ -53,8 +53,10 @@ class SliderController extends Controller
 
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/sliders/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'sliders/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/sliders/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'sliders/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         // var_dump($data); die;
@@ -95,8 +97,10 @@ class SliderController extends Controller
 
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/sliders/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'sliders/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/sliders/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'sliders/'.time().'.'.$file_ext[count($file_ext)-1];
         }
         $slider = Slider::where('id',$id)->update($data);
 

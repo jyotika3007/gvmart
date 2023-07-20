@@ -50,18 +50,20 @@ class ShopCategoryController extends Controller
         if ($request->hasFile('cover')) {
 
             $file=$request->cover;
-            $file->move(public_path(). '/storage/shop_categories/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'shop_categories/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/shop_categories/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'shop_categories/'.time().'.'.$file_ext[count($file_ext)-1];
 
-            $this->resizeCoverImage(time().$file->getClientOriginalName());
+            $this->resizeCoverImage(time().'.'.$file_ext[count($file_ext)-1]);
         }
 
         if ($request->hasFile('icons')) {
             $file=$request->icons;
-            $file->move(public_path(). '/storage/shop_categories/', time().$file->getClientOriginalName());   
-            $data['icons'] = 'shop_categories/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/shop_categories/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['icons'] = 'shop_categories/'.time().'.'.$file_ext[count($file_ext)-1];
 
-            $this->resizeIconImage(time().$file->getClientOriginalName());
+            $this->resizeIconImage(time().'.'.$file_ext[count($file_ext)-1]);
 
         }
 
@@ -92,13 +94,15 @@ class ShopCategoryController extends Controller
 
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/shop_categories/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'shop_categories/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/shop_categories/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'shop_categories/'.time().'.'.$file_ext[count($file_ext)-1];
         }
         if ($request->hasFile('icons')) {
             $file=$request->icons;
-            $file->move(public_path(). '/storage/shop_categories/', time().$file->getClientOriginalName());   
-            $data['icons'] = 'shop_categories/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/shop_categories/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['icons'] = 'shop_categories/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $shop_category = ShopCategory::where('id',$id)->update($data);

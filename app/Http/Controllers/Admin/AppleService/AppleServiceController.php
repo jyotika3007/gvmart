@@ -63,8 +63,9 @@ class AppleServiceController extends Controller
 
         if ($request->hasFile('service_cover')) {
             $file = $request->service_cover;
-            $file->move(public_path() . '/storage/apple_services/', time() . $file->getClientOriginalName());
-            $data['service_cover'] = 'apple_services/' . time() . $file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path() . '/storage/apple_services/', time().'.'.$file_ext[count($file_ext)-1]);
+            $data['service_cover'] = 'apple_services/' . time().'.'.$file_ext[count($file_ext)-1];
         }
         // print_r($data); die;
         $brand = AppleService::create($data);
@@ -91,8 +92,9 @@ class AppleServiceController extends Controller
         $data = $request->except('_token', '_method');
         if ($request->hasFile('service_cover')) {
             $file = $request->service_cover;
-            $file->move(public_path() . '/storage/apple_services/', time() . $file->getClientOriginalName());
-            $data['service_cover'] = 'apple_services/' . time() . $file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path() . '/storage/apple_services/', time().'.'.$file_ext[count($file_ext)-1]);
+            $data['service_cover'] = 'apple_services/' . time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $brand = AppleService::where('id', $id)->update($data);

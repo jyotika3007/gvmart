@@ -72,8 +72,9 @@ class RegisteredShopController extends Controller
 
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/registered_shops/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'registered_shops/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/registered_shops/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'registered_shops/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $employee = new User;
@@ -161,8 +162,9 @@ class RegisteredShopController extends Controller
 
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/registered_shops/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'registered_shops/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/registered_shops/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'registered_shops/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         // var_dump($data['category_ids']); die;

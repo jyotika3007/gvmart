@@ -70,8 +70,9 @@ public function searchList(Request $request)
 
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/blogs/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'blogs/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/blogs/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'blogs/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $blog =Blog::create($data);
@@ -112,8 +113,9 @@ public function searchList(Request $request)
 
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/blogs/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'blogs/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/blogs/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'blogs/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $blog = Blog::where('id',$id)->update($data);

@@ -7,15 +7,14 @@
     @include('layouts.errors-and-messages')
     <div class="box">
 
-
         <div class="form-title">
             <h3>Categories >> Add Category @if(!empty($parent_category)) {{ ' Under' }} <i><b>'{{ $parent_category->name ?? '' }}' @endif</b></i></h3>
         </div>
-
+        
         <form action="{{ route('admin.categories.store') }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
                 {{ csrf_field() }}
-
+                
                 <br>
                 <div class="form-group" @if($parent_id>0){{ 'style=display:none;' }}@endif>
                     <label for="parent">Parent Category</label>
@@ -38,34 +37,22 @@
                     <label for="cover">Cover </label>
                     <input type="file" name="cover" id="cover" class="form-control">
                 </div>
-
-
-
+                
                 <div class="form-group ">
                     @include('admin.shared.prelaunched', ['is_prelaunched' => 0])
                 </div>
-
-
+                
                 <div class="form-group ">
                     @include('admin.shared.featured', ['featured' => 0])
                     <p>If yes, then will show in menu</p>
                 </div>
-
+                
                 <div class="form-group ">
                     @include('admin.shared.top', ['top' => 0])
                 </div>
-
-                @include('admin.shared.select-status', ['status' => 0])
-
-                <!-- <div class="form-group">
-                    <label for="status">Status </label>
-                    <input type="radio" name="status" id="status" value="1" checked /> Enable
-                    <input type="radio" name="status" id="status" value="0" /> Disable
-                </div> -->
-
-
-
-
+                
+                @include('admin.shared.status-select', ['status' => 0])
+                
             </div>
             <!-- /.box-body -->
             <div class="box-footer">

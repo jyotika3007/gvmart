@@ -57,45 +57,58 @@ public function searchList()
         $data = $request->except('_token','_method');
 
         if ($request->hasFile('driving_licence') ) {
-            $file=$request->driving_licence;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['driving_licence'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            $file=$request->driving_licence;            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['driving_licence'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('adhaar_front') ) {
             $file=$request->adhaar_front;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['adhaar_front'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['adhaar_front'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('adhaar_back') ) {
             $file=$request->adhaar_back;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['adhaar_back'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['adhaar_back'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('pan_card') ) {
             $file=$request->pan_card;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['pan_card'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['pan_card'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('voter_id') ) {
             $file=$request->voter_id;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['voter_id'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['voter_id'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('passport_size_photo') ) {
             $file=$request->passport_size_photo;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['passport_size_photo'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['passport_size_photo'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('others') ) {
             $file=$request->others;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['others'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['others'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
         
 
@@ -138,44 +151,58 @@ public function searchList()
 
           if ($request->hasFile('driving_licence') ) {
             $file=$request->driving_licence;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['driving_licence'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['driving_licence'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('adhaar_front') ) {
             $file=$request->adhaar_front;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['adhaar_front'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['adhaar_front'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('adhaar_back') ) {
             $file=$request->adhaar_back;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['adhaar_back'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['adhaar_back'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('pan_card') ) {
             $file=$request->pan_card;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['pan_card'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['pan_card'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('voter_id') ) {
             $file=$request->voter_id;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['voter_id'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['voter_id'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('passport_size_photo') ) {
             $file=$request->passport_size_photo;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['passport_size_photo'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['passport_size_photo'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
         
         if ($request->hasFile('others') ) {
             $file=$request->others;
-            $file->move(public_path(). '/storage/employees_doc/', time().$file->getClientOriginalName());   
-            $data['others'] = 'employees_doc/'.time().$file->getClientOriginalName();
+            
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['others'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
         }
         
 

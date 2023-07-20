@@ -68,7 +68,7 @@
                         </td>
                         <td>
 
-                            <a href="" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{{ url('admin/variants/edit/'.$attr->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
 
                         </td>
 

@@ -266,6 +266,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('colors/{product_id}/store-image/{color_id}', 'ProductController@storeColorImages');
             Route::get('variants/{product_id}/add', 'ProductController@addVariants');
             Route::post('variants/{product_id}/store', 'ProductController@storeVariants');
+            Route::get('variants/edit/{id}', 'ProductController@editVariant');
+            Route::post('variants/update/{id}', 'ProductController@updateVariant');
             Route::post('colors/{product_id}/store', 'ProductController@storeColorVariants');
             Route::get('getSkuCode', 'ProductController@getSkuCode');
             Route::get('productVariants', 'ProductController@getAttributes');
@@ -586,4 +588,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
 Auth::routes();
 
-Route::get('/home', 'Front\HomeController@old')->name('home');
+Route::get('home', 'Admin\HomeController@index')->name('home');
+
+// Route::get('/home', 'Front\HomeController@old')->name('home');

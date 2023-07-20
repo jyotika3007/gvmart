@@ -15,10 +15,9 @@ use Illuminate\Http\Request;
 use App\Shop\ProductSize;
 use App\Shop\ProductWeight;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Mail;
-
+use Illuminate\Support\Facades\Mail;
 
 class ProductController extends Controller
 {
@@ -49,7 +48,6 @@ class ProductController extends Controller
             foreach ($all_categories as $category) {
                 $item = array();
                 $cat = Category::where('parent_id', $category->id)->get();
-
                 $categories[$i]['main'] = $category;
                 $categories[$i]['main']['main'] = $cat;
                 $i++;
@@ -80,7 +78,6 @@ class ProductController extends Controller
 
     public function inactive_products()
     {
-
         $list = '';
 
         $title = 'Inactive';
@@ -94,7 +91,7 @@ class ProductController extends Controller
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
        
-        return view('admin.products.list', [
+        return view('admin.products.list', [ 
             'products' => $list,
             'title' => $title
         ]);
@@ -102,7 +99,6 @@ class ProductController extends Controller
 
     public function out_stock_products()
     {
-
         $list = '';
 
         $title = 'Out Of  Stock';
@@ -124,7 +120,6 @@ class ProductController extends Controller
 
     public function vendor_products()
     {
-
         $list = '';
 
         $title = "Vendor's New ";
@@ -143,7 +138,6 @@ class ProductController extends Controller
 
     public function searchList(Request $request)
     {
-
         $list = '';
 
         $user = Auth::user();
@@ -221,7 +215,8 @@ class ProductController extends Controller
 
         if ($request->hasFile('cover')) {
             $file = $request->cover;
-            $file_name = time() . $file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file_name = time().'.'.$file_ext[count($file_ext)-1];
             $file->move(public_path() . '/storage/products/', $file_name);
             $data['cover'] = 'products/' . $file_name;
         }
@@ -242,8 +237,8 @@ class ProductController extends Controller
                 $newImage = new ProductImage;
 
                 $file = $img;
-
-                $file_name = time() . $file->getClientOriginalName();
+                $file_ext = explode('.',$file->getClientOriginalName());
+                $file_name = time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 
                 $newImage->src = 'products/' . $file_name;
@@ -432,11 +427,11 @@ class ProductController extends Controller
 
         if ($request->hasFile('cover')) {
             $file = $request->cover;
-
-            $file_name = time() . $file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file_name = time().'.'.$file_ext[count($file_ext)-1];
             $file->move(public_path() . '/storage/products/', $file_name);
 
-            // $file->move(public_path(). '/storage/products/', time().$file->getClientOriginalName());   
+            // $file->move(public_path(). '/storage/products/', time().'.'.$file_ext[count($file_ext)-1]);   
             $data['cover'] = 'products/' . $file_name;
         }
 
@@ -451,10 +446,10 @@ class ProductController extends Controller
 
                 $file = $img;
 
-                $file_name = time() . $file->getClientOriginalName();
+                $file_name = time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 
-                // $file->move(public_path(). '/storage/products/', time().$file->getClientOriginalName());   
+                // $file->move(public_path(). '/storage/products/', time().'.'.$file_ext[count($file_ext)-1]);   
                 $newImage->src = 'products/' . $file_name;
 
                 $newImage->product_id = $product->id;
@@ -793,6 +788,30 @@ class ProductController extends Controller
             'product' => $product
         ]);
     }
+    public function editVariant($id)
+    {
+        
+        try {
+            
+            $list = DB::table('attribute_value_product_attribute')
+            ->JOIN('attribute_values', 'attribute_values.id', 'attribute_value_product_attribute.attribute_value_id')
+            ->where('attribute_value_product_attribute.attribute_id', 3)
+            ->where('attribute_value_product_attribute.id', $id)
+            ->first(['attribute_value_product_attribute.*', 'attribute_values.value']);
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
+        
+        // dd($list->product_id);
+        $product = Product::find($list->product_id);
+        
+        // dd($product);
+
+        return view('admin.products.edit-attributes', [
+            'storage' => $list,
+            'product' => $product
+        ]);
+    }
 
     public function addColorVariants(Request $request, $product_id)
     {
@@ -816,6 +835,8 @@ class ProductController extends Controller
             'type_id' => $_GET['type_id']
         ]);
     }
+
+
 
     public function storeVariants(Request $request, $product_id)
     {
@@ -854,11 +875,11 @@ class ProductController extends Controller
                 $newImage = new ProductImage;
                 
                 $file = $img;
-
-                $file_name = time() . $file->getClientOriginalName();
+                $file_ext = explode('.',$file->getClientOriginalName());
+                $file_name = time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 
-                // $file->move(public_path(). '/storage/products/', time().$file->getClientOriginalName());   
+                // $file->move(public_path(). '/storage/products/', time().'.'.$file_ext[count($file_ext)-1]);   
                 $newImage->src = 'products/' . $file_name;
 
                 $newImage->product_id = $product_id;
@@ -891,11 +912,11 @@ class ProductController extends Controller
                 $newImage = new ProductImage;
                 
                 $file = $img;
-
-                $file_name = time() . $file->getClientOriginalName();
+                $file_ext = explode('.',$file->getClientOriginalName());
+                $file_name = time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 
-                // $file->move(public_path(). '/storage/products/', time().$file->getClientOriginalName());   
+                // $file->move(public_path(). '/storage/products/', time().'.'.$file_ext[count($file_ext)-1]);   
                 $newImage->src = 'products/' . $file_name;
 
                 $newImage->product_id = $product_id;

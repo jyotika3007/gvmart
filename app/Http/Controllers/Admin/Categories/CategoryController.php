@@ -89,20 +89,22 @@ class CategoryController extends Controller
         $parent_id = 0;
         $parent_category = '';
 
+        
         if(!empty($_GET['parent_id'])){
             $parent_id = $_GET['parent_id'];
             $parent_category = Category::find($parent_id);
         }
         $categories = '';
-
+        
         $user = Auth::user();
-
+        
         if(!empty($user) && $user->user_role == 'vendor'){
             $categories = Category::where('user_id',$user->id)->orderBy('parent_id','ASC')->get();
         }
         else{
             $categories = Category::orderBy('parent_id','ASC')->get();
         }
+        // dd($user);
         return view('admin.categories.create' , [
             'categories' => $categories,
             'parent_id' => $parent_id,
@@ -121,8 +123,9 @@ class CategoryController extends Controller
 
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/categories/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'categories/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/categories/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'categories/'.time().'.'.$file_ext[count($file_ext)-1];
         }
         
         $category = Category::create($data);
@@ -170,8 +173,9 @@ class CategoryController extends Controller
 
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/categories/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'categories/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/categories/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'categories/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $category = Category::where('id',$id)->update($data);

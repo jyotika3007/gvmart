@@ -50,8 +50,9 @@ class NewsletterPostController extends Controller
 
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/newsletters/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'newsletters/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/newsletters/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'newsletters/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $newPost->post_title = $data['post_title'];
@@ -145,8 +146,9 @@ class NewsletterPostController extends Controller
 
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/newsletters/', time().$file->getClientOriginalName());   
-            $cover = 'newsletters/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/newsletters/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $cover = 'newsletters/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $news->post_title = $request->post_title;

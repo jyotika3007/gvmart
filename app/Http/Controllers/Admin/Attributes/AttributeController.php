@@ -29,6 +29,12 @@ class AttributeController extends Controller
 
     public function store(Request $request)
     {
+
+        $data = $request->except('_method','_token');
+
+        // dd($data);
+
+        Attribute::create($data);
         return redirect()->route('admin.attributes.index');
     }
 

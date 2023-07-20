@@ -51,8 +51,9 @@ class TestimonialController extends Controller
 
         if ($request->hasFile('cover')) {
             $file = $request->cover;
-            $file->move(public_path() . '/storage/testimonials/', time() . $file->getClientOriginalName());
-            $data['cover'] = 'testimonials/' . time() . $file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path() . '/storage/testimonials/', time().'.'.$file_ext[count($file_ext)-1]);
+            $data['cover'] = 'testimonials/' . time().'.'.$file_ext[count($file_ext)-1];
         }
         $data['user_id'] = Auth::user()->id;
         // print_r($data); die;
@@ -95,8 +96,9 @@ class TestimonialController extends Controller
 
         if ($request->hasFile('cover')) {
             $file = $request->cover;
-            $file->move(public_path() . '/storage/testimonials/', time() . $file->getClientOriginalName());
-            $data['cover'] = 'testimonials/' . time() . $file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path() . '/storage/testimonials/', time().'.'.$file_ext[count($file_ext)-1]);
+            $data['cover'] = 'testimonials/' . time().'.'.$file_ext[count($file_ext)-1];
         }
 
         Testimonial::where('id', $id)->update($data);

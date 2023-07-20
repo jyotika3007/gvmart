@@ -38,7 +38,8 @@
                     <input type="hidden" name="_method" value="delete">
                     <div class="btn-group">
                         <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                        <a href="{{ url('admin/launchProduct/'.$product->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trace"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm" onclick="launchProduct({{ $product->id }})"><i class="fa fa-trash"></i></a>
+                        <!-- <a href="{{ url('admin/launchProduct/'.$product->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a> -->
                     </div>
                 </form>
             </td>
@@ -47,3 +48,12 @@
     </tbody>
 </table>
 @endif
+
+
+@section('js')
+<script>
+    function launchProduct(id){
+        let conf = confirm('Once you launch the product, email will send to users for payment. So before launching the product, update all the details like product price. Do you want to launch this product ?')
+    }
+</script>
+@endsection

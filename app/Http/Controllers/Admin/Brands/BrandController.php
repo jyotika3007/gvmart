@@ -64,8 +64,9 @@ class BrandController extends Controller
 
        if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/brands/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'brands/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/brands/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'brands/'.time().'.'.$file_ext[count($file_ext)-1];
         }
         $brand = Brand::create($data);
         return redirect()->route('admin.brands.index')->with('message', 'Create brand successful!');
@@ -89,8 +90,9 @@ class BrandController extends Controller
         $data = $request->except('_token','_method');
         if ($request->hasFile('cover')) {
             $file=$request->cover;
-            $file->move(public_path(). '/storage/brands/', time().$file->getClientOriginalName());   
-            $data['cover'] = 'brands/'.time().$file->getClientOriginalName();
+            $file_ext = explode('.',$file->getClientOriginalName());
+            $file->move(public_path(). '/storage/brands/', time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'brands/'.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $brand = Brand::where('id',$id)->update($data);
