@@ -103,93 +103,93 @@ Route::namespace('Front')->group(function () {
 });
 
 
-Route::namespace('Front')->group(function () {
+// Route::namespace('Front')->group(function () {
 
-    // Route::get('/', 'HomeController@old')->name('home');
+//     // Route::get('/', 'HomeController@old')->name('home');
 
-    Route::group(['middleware' => ['auth', 'web']], function () {
+//     Route::group(['middleware' => ['auth', 'web']], function () {
 
-        Route::namespace('Payments')->group(function () {
-            Route::get('bank-transfer', 'BankTransferController@index')->name('bank-transfer.index');
-            Route::post('bank-transfer', 'BankTransferController@store')->name('bank-transfer.store');
-        });
+//         Route::namespace('Payments')->group(function () {
+//             Route::get('bank-transfer', 'BankTransferController@index')->name('bank-transfer.index');
+//             Route::post('bank-transfer', 'BankTransferController@store')->name('bank-transfer.store');
+//         });
 
-        Route::namespace('Addresses')->group(function () {
-            Route::resource('country.state', 'CountryStateController');
-            Route::resource('state.city', 'StateCityController');
-        });
-
-
-        Route::get('accounts', 'AccountsController@index')->name('accounts');
-        // Route::get('checkout', 'CheckoutController@index')->name('checkout.index');
-        Route::post('checkout', 'CheckoutController@store')->name('checkout.store');
-        Route::get('checkout/execute', 'CheckoutController@executePayPalPayment')->name('checkout.execute');
-        Route::post('checkout/execute', 'CheckoutController@charge')->name('checkout.execute');
-        Route::get('checkout/cancel', 'CheckoutController@cancel')->name('checkout.cancel');
-        Route::get('checkout/success', 'CheckoutController@success')->name('checkout.success');
-        Route::resource('customer.address', 'CustomerAddressController');
-    });
-    // Route::resource('cart', 'CartController');
-    Route::get('wishlist', 'HomeController@getWishlist');
-    Route::get('blog/{slug}', 'HomeController@getBlogDetail');
-    Route::get('blogs', 'HomeController@getBlogs');
-    Route::get('blogs/{tag}', 'HomeController@getTaggedBlogs');
-    Route::post('blog-review/submitreview', 'HomeController@submitReview');
-    Route::get('minicart', 'AjaxController@getMinicart');
-    Route::post('add-to-wishlist', 'AjaxController@addToWishlist');
-    Route::post('delete-wishlist-item', 'AjaxController@deleteWishlistItem');
-    Route::post('remove-product', 'AjaxController@deleteSessionData');
-    Route::post('update-cart', 'AjaxController@updateCart');
-    Route::post('cart/delete-product/{id}', 'AjaxController@deleteSessionData');
-    Route::post('postCheckout', 'CheckoutController@postCheckout');
-    Route::post('delete-address', 'AjaxController@deleteAddress');
-
-    Route::post('submit-product-review', 'ProductController@submitReview');
-    Route::post('submit-newsletter', 'AjaxController@submitNewsletter');
-    Route::post('contact-form-submit', 'AjaxController@submitContactForm');
-    Route::post('getProductPrice', 'AjaxController@getProductPrice');
-
-    Route::get('destroy-session', 'AjaxController@destroyCartSession');
-
-    Route::get('user/invoice/{id}', 'AjaxController@getUserInvoice');
+//         Route::namespace('Addresses')->group(function () {
+//             Route::resource('country.state', 'CountryStateController');
+//             Route::resource('state.city', 'StateCityController');
+//         });
 
 
-    Route::post('pay', 'PayController@pay');
+//         Route::get('accounts', 'AccountsController@index')->name('accounts');
+//         // Route::get('checkout', 'CheckoutController@index')->name('checkout.index');
+//         Route::post('checkout', 'CheckoutController@store')->name('checkout.store');
+//         Route::get('checkout/execute', 'CheckoutController@executePayPalPayment')->name('checkout.execute');
+//         Route::post('checkout/execute', 'CheckoutController@charge')->name('checkout.execute');
+//         Route::get('checkout/cancel', 'CheckoutController@cancel')->name('checkout.cancel');
+//         Route::get('checkout/success', 'CheckoutController@success')->name('checkout.success');
+//         Route::resource('customer.address', 'CustomerAddressController');
+//     });
+//     // Route::resource('cart', 'CartController');
+//     Route::get('wishlist', 'HomeController@getWishlist');
+//     Route::get('blog/{slug}', 'HomeController@getBlogDetail');
+//     Route::get('blogs', 'HomeController@getBlogs');
+//     Route::get('blogs/{tag}', 'HomeController@getTaggedBlogs');
+//     Route::post('blog-review/submitreview', 'HomeController@submitReview');
+//     Route::get('minicart', 'AjaxController@getMinicart');
+//     Route::post('add-to-wishlist', 'AjaxController@addToWishlist');
+//     Route::post('delete-wishlist-item', 'AjaxController@deleteWishlistItem');
+//     Route::post('remove-product', 'AjaxController@deleteSessionData');
+//     Route::post('update-cart', 'AjaxController@updateCart');
+//     Route::post('cart/delete-product/{id}', 'AjaxController@deleteSessionData');
+//     Route::post('postCheckout', 'CheckoutController@postCheckout');
+//     Route::post('delete-address', 'AjaxController@deleteAddress');
+
+//     Route::post('submit-product-review', 'ProductController@submitReview');
+//     Route::post('submit-newsletter', 'AjaxController@submitNewsletter');
+//     Route::post('contact-form-submit', 'AjaxController@submitContactForm');
+//     Route::post('getProductPrice', 'AjaxController@getProductPrice');
+
+//     Route::get('destroy-session', 'AjaxController@destroyCartSession');
+
+//     Route::get('user/invoice/{id}', 'AjaxController@getUserInvoice');
 
 
-    Route::get('payment-success', 'PayController@success');
-
-    Route::get('contact_us', 'CmsController@getContact');
-
-    Route::get('feedback', 'TestViewController@getFeedback');
-    Route::post('feedback', 'AjaxController@submitFeedbackForm');
-
-    Route::get('complaint', 'TestViewController@getComplaint');
-
-    Route::get('about_us', 'CmsController@getAbout');
-    Route::get('term_and_conditions', 'CmsController@getTNC');
-    Route::get('privacy_policy', 'CmsController@getPrivacyPolicy');
-    Route::get('return_policy', 'CmsController@getReturnPolicy');
+//     Route::post('pay', 'PayController@pay');
 
 
-    Route::get('cart', 'CartController@getCart');
-    Route::post('add-to-cart', 'AjaxController@addTocart');
-    Route::get("category/{slug}", 'CategoryController@getCategory')->name('front.category.slug');
-    Route::get("searchedProducts", 'ProductController@search')->name('search.product');
-    Route::get("product-detail/{product}", 'ProductController@show')->name('front.get.product');
+//     Route::get('payment-success', 'PayController@success');
+
+//     Route::get('contact_us', 'CmsController@getContact');
+
+//     Route::get('feedback', 'TestViewController@getFeedback');
+//     Route::post('feedback', 'AjaxController@submitFeedbackForm');
+
+//     Route::get('complaint', 'TestViewController@getComplaint');
+
+//     Route::get('about_us', 'CmsController@getAbout');
+//     Route::get('term_and_conditions', 'CmsController@getTNC');
+//     Route::get('privacy_policy', 'CmsController@getPrivacyPolicy');
+//     Route::get('return_policy', 'CmsController@getReturnPolicy');
 
 
-    Route::get('search', 'AjaxController@getSearchResult');
-    Route::post('sortBy', 'AjaxController@sortBy');
+//     Route::get('cart', 'CartController@getCart');
+//     Route::post('add-to-cart', 'AjaxController@addTocart');
+//     Route::get("category/{slug}", 'CategoryController@getCategory')->name('front.category.slug');
+//     Route::get("searchedProducts", 'ProductController@search')->name('search.product');
+//     Route::get("product-detail/{product}", 'ProductController@show')->name('front.get.product');
 
 
-    Route::get('/redirect/{facebook}', 'SocialController@redirect');
-    Route::get('/callback/{facebook}', 'SocialController@callback');
+//     Route::get('search', 'AjaxController@getSearchResult');
+//     Route::post('sortBy', 'AjaxController@sortBy');
 
 
-    Route::get('/redirect/{google}', 'SocialController@redirect');
-    Route::get('/callback/{google}', 'SocialController@callback');
-});
+//     Route::get('/redirect/{facebook}', 'SocialController@redirect');
+//     Route::get('/callback/{facebook}', 'SocialController@callback');
+
+
+//     Route::get('/redirect/{google}', 'SocialController@redirect');
+//     Route::get('/callback/{google}', 'SocialController@callback');
+// });
 
 
 Route::namespace('Admin')->group(function () {
@@ -422,6 +422,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::namespace('Cms')->group(function () {
             Route::resource('cms', 'CmsController');
         });
+
+
         //Company Detail;
         Route::namespace('CompanyDetail')->group(function () {
             // Route::resource('company_detail', 'CompanyDetailController');
@@ -429,12 +431,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('company_detail/{id}/edit', 'CompanyDetailController@edit')->name('company_detail.edit');
             Route::post('company_detail/{id}/edit', 'CompanyDetailController@update')->name('company_detail.update');
         });
+
+
         //Testimonials
         Route::namespace('Testimonial')->group(function () {
             Route::resource('testimonials', 'TestimonialController');
             Route::get('remove-image-product', 'TestimonialController@removeImage')->name('testimonial.remove.image');
             Route::get('remove-image-thumb', 'TestimonialController@removeThumbnail')->name('testimonial.remove.thumb');
         });
+
+
         //RegisteredShop
         Route::namespace('RegisteredShops')->group(function () {
             Route::resource('registered_shops', 'RegisteredShopController');
@@ -449,10 +455,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('search_shops', 'RegisteredShopController@searchList')->name('shops.search_shops');
         });
 
+
         Route::namespace('Customers')->group(function () {
             Route::resource('customers', 'CustomerController');
             Route::resource('customers.addresses', 'CustomerAddressController');
             Route::get('customers_export', 'CustomerController@getCustomersData')->name('customers.export');
+            Route::get('customer/updateStatus/{status}/{id}', 'CustomerController@updateCutomerStatus');
         });
 
         Route::namespace('Subadmin')->group(function () {

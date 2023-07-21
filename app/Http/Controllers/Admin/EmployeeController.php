@@ -59,56 +59,63 @@ public function searchList()
         if ($request->hasFile('driving_licence') ) {
             $file=$request->driving_licence;            
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['driving_licence'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['driving_licence'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('adhaar_front') ) {
             $file=$request->adhaar_front;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['adhaar_front'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['adhaar_front'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('adhaar_back') ) {
             $file=$request->adhaar_back;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['adhaar_back'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['adhaar_back'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('pan_card') ) {
             $file=$request->pan_card;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['pan_card'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['pan_card'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('voter_id') ) {
             $file=$request->voter_id;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['voter_id'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['voter_id'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('passport_size_photo') ) {
             $file=$request->passport_size_photo;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['passport_size_photo'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['passport_size_photo'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('others') ) {
             $file=$request->others;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['others'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['others'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
         
 
@@ -153,56 +160,63 @@ public function searchList()
             $file=$request->driving_licence;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['driving_licence'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['driving_licence'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('adhaar_front') ) {
             $file=$request->adhaar_front;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['adhaar_front'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['adhaar_front'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('adhaar_back') ) {
             $file=$request->adhaar_back;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['adhaar_back'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['adhaar_back'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('pan_card') ) {
             $file=$request->pan_card;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['pan_card'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['pan_card'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('voter_id') ) {
             $file=$request->voter_id;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['voter_id'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['voter_id'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         if ($request->hasFile('passport_size_photo') ) {
             $file=$request->passport_size_photo;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['passport_size_photo'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['passport_size_photo'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
         
         if ($request->hasFile('others') ) {
             $file=$request->others;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/employees_doc/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['others'] = 'employees_doc/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/employees_doc/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['others'] = 'employees_doc/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
         
 

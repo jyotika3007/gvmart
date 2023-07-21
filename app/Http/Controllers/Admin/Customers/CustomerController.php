@@ -8,7 +8,7 @@ use App\Shop\Customers\Customer;
 use App\Shop\Addresses\Address;
 use App\Shop\Orders\Order;
 use App\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Exports\UserExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -136,6 +136,17 @@ class CustomerController extends Controller
         $customer->delete();
 
         return redirect()->route('admin.customers.index')->with('message', 'Delete successful');
+    }
+
+    public function updateCutomerStatus($status, $id)
+    {
+        $customer = User::find($id);
+
+        $customer->status = $status;
+        
+        $customer->update();
+
+        return redirect()->route('admin.customers.index')->with('message', 'Customer status updated successfully.');
     }
 
     public function getCustomersData(){

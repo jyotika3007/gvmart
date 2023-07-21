@@ -36,7 +36,7 @@ class CategoryProductController extends Controller
             }
         }
 
-        $products = Product::JOIN('category_product', 'category_product.product_id', 'products.id')->whereIn('category_product.category_id', $ids)->where('products.status',1)->get(['products.id', 'products.slug', 'products.name', 'products.cover', 'products.price', 'products.sale_price', 'products.discount', 'products.stock_quantity', 'products.is_prelaunched', 'products.prelaunch_price']);
+        $products = Product::JOIN('category_product', 'category_product.product_id', 'products.id')->whereIn('category_product.category_id', $ids)->where('products.status',1)->get(['products.id', 'products.slug', 'products.name', 'products.cover',  'products.is_prelaunched', 'products.prelaunch_price']);
 
         foreach ($products as $sp) {
             $attributes = DB::table('attribute_value_product_attribute')

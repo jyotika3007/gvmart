@@ -105,5 +105,6 @@ Route::namespace('Api')->group(function () {
     Route::get('ThankYou/test', 'CheckoutController@generateRequestKey');
     Route::post('updateOrderStatus','UserDashboardController@updateOrderStatus');
     Route::get('checkPaymentStatus','UserDashboardController@getPaymentStatus');
+    Route::get('validateCouponCode','CheckoutController@checkValidCouponcode');
 
 });

@@ -51,19 +51,21 @@ class ShopCategoryController extends Controller
 
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/shop_categories/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'shop_categories/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/shop_categories/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'shop_categories/'.$random.time().'.'.$file_ext[count($file_ext)-1];
 
-            $this->resizeCoverImage(time().'.'.$file_ext[count($file_ext)-1]);
+            $this->resizeCoverImage($random.time().'.'.$file_ext[count($file_ext)-1]);
         }
 
         if ($request->hasFile('icons')) {
             $file=$request->icons;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/shop_categories/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['icons'] = 'shop_categories/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/shop_categories/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['icons'] = 'shop_categories/'.$random.time().'.'.$file_ext[count($file_ext)-1];
 
-            $this->resizeIconImage(time().'.'.$file_ext[count($file_ext)-1]);
+            $this->resizeIconImage($random.time().'.'.$file_ext[count($file_ext)-1]);
 
         }
 
@@ -95,14 +97,16 @@ class ShopCategoryController extends Controller
         if ($request->hasFile('cover')) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/shop_categories/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'shop_categories/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/shop_categories/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'shop_categories/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
         if ($request->hasFile('icons')) {
             $file=$request->icons;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/shop_categories/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['icons'] = 'shop_categories/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/shop_categories/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['icons'] = 'shop_categories/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $shop_category = ShopCategory::where('id',$id)->update($data);

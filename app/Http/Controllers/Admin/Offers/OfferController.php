@@ -47,8 +47,9 @@ class OfferController extends Controller
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/offers/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'offers/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/offers/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'offers/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $blog =Offer::create($data);
@@ -87,8 +88,9 @@ class OfferController extends Controller
         if ($request->hasFile('cover')) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/offers/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'offers/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/offers/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'offers/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $blog = Offer::where('id',$id)->update($data);

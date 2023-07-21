@@ -221,7 +221,8 @@ class ProductController extends Controller
         if ($request->hasFile('cover')) {
             $file = $request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file_name = time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file_name = $random.time().'.'.$file_ext[count($file_ext)-1];
             $file->move(public_path() . '/storage/products/', $file_name);
             $data['cover'] = 'products/' . $file_name;
         }
@@ -243,7 +244,8 @@ class ProductController extends Controller
 
                 $file = $img;
                 $file_ext = explode('.',$file->getClientOriginalName());
-                $file_name = time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+                $file_name = $random.time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 
                 $newImage->src = 'products/' . $file_name;
@@ -433,10 +435,11 @@ class ProductController extends Controller
         if ($request->hasFile('cover')) {
             $file = $request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file_name = time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file_name = $random.time().'.'.$file_ext[count($file_ext)-1];
             $file->move(public_path() . '/storage/products/', $file_name);
 
-            // $file->move(public_path(). '/storage/products/', time().'.'.$file_ext[count($file_ext)-1]);   
+            // $file->move(public_path(). '/storage/products/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
             $data['cover'] = 'products/' . $file_name;
         }
 
@@ -451,10 +454,10 @@ class ProductController extends Controller
 
                 $file = $img;
 
-                $file_name = time().'.'.$file_ext[count($file_ext)-1];
+                $file_name = $random.time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 
-                // $file->move(public_path(). '/storage/products/', time().'.'.$file_ext[count($file_ext)-1]);   
+                // $file->move(public_path(). '/storage/products/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
                 $newImage->src = 'products/' . $file_name;
 
                 $newImage->product_id = $product->id;
@@ -881,10 +884,11 @@ class ProductController extends Controller
                 
                 $file = $img;
                 $file_ext = explode('.',$file->getClientOriginalName());
-                $file_name = time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+                $file_name = $random.time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 
-                // $file->move(public_path(). '/storage/products/', time().'.'.$file_ext[count($file_ext)-1]);   
+                // $file->move(public_path(). '/storage/products/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
                 $newImage->src = 'products/' . $file_name;
 
                 $newImage->product_id = $product_id;
@@ -918,10 +922,11 @@ class ProductController extends Controller
                 
                 $file = $img;
                 $file_ext = explode('.',$file->getClientOriginalName());
-                $file_name = time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+                $file_name = $random.time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 
-                // $file->move(public_path(). '/storage/products/', time().'.'.$file_ext[count($file_ext)-1]);   
+                // $file->move(public_path(). '/storage/products/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
                 $newImage->src = 'products/' . $file_name;
 
                 $newImage->product_id = $product_id;

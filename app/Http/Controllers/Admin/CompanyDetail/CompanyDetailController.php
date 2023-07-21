@@ -60,8 +60,9 @@ class CompanyDetailController extends Controller
          if ($request->hasFile('company_logo')) {
             $file=$request->company_logo;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/logos/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['company_logo'] = 'logos/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/logos/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['company_logo'] = 'logos/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $company = CompanyDetail::where('id',$id)->update($data);       

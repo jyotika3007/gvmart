@@ -44,13 +44,13 @@
                     <table class="table table-bordered table-responsive">
                         <thead>
                             <tr>
-                                <td class="col-md-2">Created At</td>
-                                <td class="col-md-2">Name</td>
-                                <td class="col-md-2">Role</td>
-                                <td class="col-md-2">Email</td>
-                                <td class="col-md-2">Mobile</td>
-                                <td class="col-md-2">Status</td>
-                                <td class="col-md-4">Actions</td>
+                                <td>Created At</td>
+                                <td>Name</td>
+                                <td>Role</td>
+                                <td>Email</td>
+                                <td>Mobile</td>
+                                <td>Status</td>
+                                <td>Actions</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,11 +67,11 @@
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
-                                            <!-- @if($customer['status']==1)
-                                            <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-danger btn-sm"><i class="fa fa-close"></i></a>
+                                            @if($customer['status']==1)
+                                            <a href="#" onclick="updateStatus('disable',0,{{$customer['id']}})" class="btn btn-danger btn-sm">Disable</a>
                                             @else
-                                            <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-                                            @endif -->
+                                            <a href="#" onclick="updateStatus('enable',1,{{$customer['id']}})" class="btn btn-success btn-sm">Enable</a>
+                                            @endif
                                              <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
                                             <a href="{{ route('admin.customers.edit', $customer['id']) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                             <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
@@ -91,5 +91,20 @@
 
     </section>
     <!-- /.content -->
+@endsection
+
+@section('js')
+<script>
+
+    function updateStatus(status,sts, uid){
+        let res = confirm(`Do you want to ${status} this user ?`);
+
+        if(res){
+            window.location.href = `/admin/customer/updateStatus/${sts}/${uid}`;
+        }
+    }
+
+    </script>
+
 @endsection
 

@@ -7,7 +7,7 @@
     <!-- Default box -->
             <div class="box">
             <div class="form-title">
-            <h3>Promocodes @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
+            <h3>Coupons @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
         </div>
                 <div class="box-body">
             
@@ -43,7 +43,7 @@
                             <a href="{{ route('admin.promocodes.index') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
                         </div>
                         <div class="col-sm-2">
-                            <a href="{{ route('admin.promocodes.create') }}" class="btn btn-success">Add New Promocode</a>
+                            <a href="{{ route('admin.promocodes.create') }}" class="btn btn-success">Add New Coupon</a>
                         </div>
                     </div>
                 </form>

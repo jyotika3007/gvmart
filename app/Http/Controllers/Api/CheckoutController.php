@@ -8,6 +8,7 @@ use App\Shop\Orders\Order;
 use App\Shop\Cart\Cart;
 use App\Shop\OrderStatuses\OrderStatus;
 use App\Shop\Products\Product;
+use App\Shop\Promocodes\Promocode;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -55,7 +56,7 @@ class CheckoutController extends Controller
         $baseData = base64_encode(json_encode($json_data));
         $hmac_digest = hash_hmac("sha256",  $baseData, pack("H*", env('SECRET_CODE')), false);
         $resultOfKeys = ["request" => $baseData, "x_verify" => strtoupper($hmac_digest)];
-// print_r($resultOfKeys);
+        // print_r($resultOfKeys);
         return $resultOfKeys;
     }
 
@@ -100,8 +101,8 @@ class CheckoutController extends Controller
 
             $resp_server = json_decode($server_output);
 
-            if($resp_server->response_message == 'SUCCESS')
-                $resp['payment_link']= $resp_server->redirect_url ?? '';
+            if ($resp_server->response_message == 'SUCCESS')
+                $resp['payment_link'] = $resp_server->redirect_url ?? '';
 
             return $resp;
             //    return  response()->json([
@@ -128,7 +129,7 @@ class CheckoutController extends Controller
     public function checkout(Request $request, $user_id)
     {
         $data = $request->all();
-        
+
 
         $header = $request->header('Authorization');
 
@@ -143,13 +144,11 @@ class CheckoutController extends Controller
             if (isset($data['billing_address']) && $data['billing_address'] != '' && $data['billing_address'] != 0) {
                 $billing_address = $data['billing_address'];
                 $shipping_address = $data['billing_address'];
-               
             } else {
-                return response()-> json([
+                return response()->json([
                     'status' => 0,
                     'message' => 'Address should not be empty'
                 ]);
-                
             }
 
             $payment_status = 'Pending';
@@ -187,27 +186,25 @@ class CheckoutController extends Controller
 
             foreach ($products as  $product) {
                 try {
-                    
-                    if(isset($product['storage']) && $product['storage']!=''){
+
+                    if (isset($product['storage']) && $product['storage'] != '') {
                         $pro_storage = $product['storage'];
-                    }
-                    else{
+                    } else {
                         $pro_storage = '';
                     }
-                     if(isset($product['color']) && $product['color']!=''){
+                    if (isset($product['color']) && $product['color'] != '') {
                         $pro_color = $product['color'];
-                    }
-                    else{
+                    } else {
                         $pro_color = '';
                     }
-                    if(isset($product['is_prelaunch']) && $product['is_prelaunch'] == 1 ){
-                        $pro_prelaunch=1;
-                        $prebooking_amount=$product['price'];
-                        $pro_price=0;
-                    }else{
-                        $pro_prelaunch=0;
-                        $prebooking_amount=0;
-                        $pro_price= $product['sale_price'] != 0 ? $product['sale_price'] : $product['price'];
+                    if (isset($product['is_prelaunch']) && $product['is_prelaunch'] == 1) {
+                        $pro_prelaunch = 1;
+                        $prebooking_amount = $product['price'];
+                        $pro_price = 0;
+                    } else {
+                        $pro_prelaunch = 0;
+                        $prebooking_amount = 0;
+                        $pro_price = $product['sale_price'] != 0 ? $product['sale_price'] : $product['price'];
                     }
                     DB::table('order_product')
                         ->insert([
@@ -220,9 +217,9 @@ class CheckoutController extends Controller
                             'product_size' => '',
                             'product_description' => '',
                             'quantity' => $product['quantity'] ?? 1,
-                            'product_price' =>$pro_price,
-                            'is_prelaunch'=>$pro_prelaunch,
-                            'prebooking_amount'=>$prebooking_amount,
+                            'product_price' => $pro_price,
+                            'is_prelaunch' => $pro_prelaunch,
+                            'prebooking_amount' => $prebooking_amount,
                         ]);
                 } catch (\Throwable $e) {
                     echo $e->getMessage();
@@ -230,32 +227,32 @@ class CheckoutController extends Controller
                 }
 
 
-// return $data; die;
+                // return $data; die;
 
-if($pro_storage != ''){
-    
-                $productUpdate = DB::table('attribute_value_product_attribute')
-                    ->where('id', $product['storage_id'])
-                    ->where('product_id', $product['product_id'])
-                    ->first();
+                if ($pro_storage != '') {
+
+                    $productUpdate = DB::table('attribute_value_product_attribute')
+                        ->where('id', $product['storage_id'])
+                        ->where('product_id', $product['product_id'])
+                        ->first();
 
 
 
-                if ($productUpdate) {
+                    if ($productUpdate) {
 
-                    try {
-                        $product_quantity = $productUpdate->quantity - $product['quantity'];
+                        try {
+                            $product_quantity = $productUpdate->quantity - $product['quantity'];
 
-                        DB::table('attribute_value_product_attribute')
-                            ->where('id', $product['storage_id'])
-                            ->where('product_id', $product['product_id'])
-                            ->update([
-                                "quantity" => $product_quantity
-                            ]);
-                    } catch (\Throwable $e) {
-                        echo $e->getMessage();
-                        die;
-}
+                            DB::table('attribute_value_product_attribute')
+                                ->where('id', $product['storage_id'])
+                                ->where('product_id', $product['product_id'])
+                                ->update([
+                                    "quantity" => $product_quantity
+                                ]);
+                        } catch (\Throwable $e) {
+                            echo $e->getMessage();
+                            die;
+                        }
                     }
                 }
             }
@@ -263,54 +260,53 @@ if($pro_storage != ''){
             $resp['order_id'] = $order;
 
             $userData = User::find($order_data["customer_id"]);
-        if($data['payment_method'] == 'online'){
-            $paymentVariable = [
-                "merchant_data" => [
-                    "merchant_id" => env('MID'),
-                    "merchant_access_code" => env('ACCESS_CODE'),
-                    "merchant_return_url" => env('RETURN_URL'),
-                    "unique_merchant_txn_id" => "PineLabs". uniqid()
-                ],
-                "customer_data" => [
-                    "customer_id" => $order_data["customer_id"],
-                    "email_id" => $userData->email ?? '',
-                    "first_name" =>  $userData->name ?? '',
-                    "mobile_no" =>  $userData->mobile ?? ''
-                ],
-                "payment_data" => [
-                    "amount_in_paisa" => $order_data['total'] * 100 ?? 0
-                ],
-                "txn_data" => [
-                    "navigation_mode" => 2,
-                    "payment_mode" => "1,3",
-                    "transaction_type" => 1
-                ],
-                "udf_data" => [
-                    "udf_field_1" => "normal_0",
-                    "udf_field_2" => $order . " Test txn " . rand('1000000', '999999999'),
-                    "udf_field_3" => rand('1000000', '999999999') . $order,
-                    "udf_field_4" => "orderId_" . $order
-                ]
-            ];
-            // print_r($paymentVariable);die();
-            $paymentRequestKeys = $this->generateRequestKey($paymentVariable);
-            $output = $this->getPaymentLink($paymentRequestKeys);
+            if ($data['payment_method'] == 'online') {
+                $paymentVariable = [
+                    "merchant_data" => [
+                        "merchant_id" => env('MID'),
+                        "merchant_access_code" => env('ACCESS_CODE'),
+                        "merchant_return_url" => env('RETURN_URL'),
+                        "unique_merchant_txn_id" => "PineLabs" . uniqid()
+                    ],
+                    "customer_data" => [
+                        "customer_id" => $order_data["customer_id"],
+                        "email_id" => $userData->email ?? '',
+                        "first_name" =>  $userData->name ?? '',
+                        "mobile_no" =>  $userData->mobile ?? ''
+                    ],
+                    "payment_data" => [
+                        "amount_in_paisa" => $order_data['total'] * 100 ?? 0
+                    ],
+                    "txn_data" => [
+                        "navigation_mode" => 2,
+                        "payment_mode" => "1,3",
+                        "transaction_type" => 1
+                    ],
+                    "udf_data" => [
+                        "udf_field_1" => "normal_0",
+                        "udf_field_2" => $order . " Test txn " . rand('1000000', '999999999'),
+                        "udf_field_3" => rand('1000000', '999999999') . $order,
+                        "udf_field_4" => "orderId_" . $order
+                    ]
+                ];
+                // print_r($paymentVariable);die();
+                $paymentRequestKeys = $this->generateRequestKey($paymentVariable);
+                $output = $this->getPaymentLink($paymentRequestKeys);
 
-            return response()->json([
-                'status' => 1,
-                'message' => "Order details saved successfully",
-                'data' => $output,
-                'order_mode'=>$data['payment_method']
-            ]);
-        }else{
-            return response()->json([
-                'status' => 1,
-                'message' => "Order details saved successfully",
-                'order_mode'=>$data['payment_method']
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Order details saved successfully",
+                    'data' => $output,
+                    'order_mode' => $data['payment_method']
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Order details saved successfully",
+                    'order_mode' => $data['payment_method']
 
-            ]);
-        }
-           
+                ]);
+            }
         } else {
             return response()->json([
                 "status" => "400",
@@ -322,7 +318,7 @@ if($pro_storage != ''){
     public function getPaymentResponse(Request $request)
     {
         $data = $request->all();
-        
+
         // $data = [
         //     "merchant_id" => "106598",
         //     "merchant_access_code" => "4a39a6d4-46b7-474d-929d-21bf0e9ed607",
@@ -355,29 +351,29 @@ if($pro_storage != ''){
         // ];
         $order_id = explode('_', $data['udf_field_4'])[1];
         $order_product_id = explode('_', $data['udf_field_1'])[1];
-        $isprebooked= explode('_', $data['udf_field_1'])[0];
-        
-        
+        $isprebooked = explode('_', $data['udf_field_1'])[0];
+
+
         $txn_id = $data['pine_pg_transaction_id'] ?? '';
         $unique_merchant_txn_id = $data['unique_merchant_txn_id'] ?? '';
-        
-        
+
+
         $msg = $data['txn_response_msg'] ?? '';
-        
-        try{
-            if($isprebooked == 'prebooked'){
-                $order= DB::table('orders')->where('id', $order_id)->first();
+
+        try {
+            if ($isprebooked == 'prebooked') {
+                $order = DB::table('orders')->where('id', $order_id)->first();
                 DB::table('orders')->where('id', $order_id)->update([
                     'order_status_id' => 2,
                     'payment_status' => $msg,
                     'transaction_id' => $txn_id,
-                    'total'=>$order->total + ($data['amount_in_paisa']/100),
-                    'total_paid'=>$order->total + ($data['amount_in_paisa']/100)
+                    'total' => $order->total + ($data['amount_in_paisa'] / 100),
+                    'total_paid' => $order->total + ($data['amount_in_paisa'] / 100)
                 ]);
                 DB::table('order_product')->where('id', $order_product_id)->update([
-                    'product_price'=>$data['amount_in_paisa']/100
+                    'product_price' => $data['amount_in_paisa'] / 100
                 ]);
-            }else{
+            } else {
 
                 DB::table('orders')->where('id', $order_id)->update([
                     'order_status_id' => 2,
@@ -386,41 +382,110 @@ if($pro_storage != ''){
                 ]);
             }
 
-        $order = Order::find($order_id);
-        $items = DB::table('order_product')->where('order_id', $order_id)->get();
-        $customer = User::find($order->customer_id);
+            $order = Order::find($order_id);
+            $items = DB::table('order_product')->where('order_id', $order_id)->get();
+            $customer = User::find($order->customer_id);
 
-        // try{
-        //     $customer=User::find($order->customer_id);
-        // }catch(\Throwable $e){echo $e->getMessage();}
+            // try{
+            //     $customer=User::find($order->customer_id);
+            // }catch(\Throwable $e){echo $e->getMessage();}
 
-        // print_r(env('MAIL_USERNAME'));die();
-        $billing_address = Address::find($order->address_id);
-        $delivery_address = Address::find($order->delivery_address);
-        $currentStatus = DB::table('order_statuses')->where('id', $order->order_status_id)->first();
+            // print_r(env('MAIL_USERNAME'));die();
+            $billing_address = Address::find($order->address_id);
+            $delivery_address = Address::find($order->delivery_address);
+            $currentStatus = DB::table('order_statuses')->where('id', $order->order_status_id)->first();
 
-        Mail::send(
-            'mails.orderInvoice',
-            ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'admin'],
-            function ($m) use ($data) {
-                $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+            Mail::send(
+                'mails.orderInvoice',
+                ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'admin'],
+                function ($m) use ($data) {
+                    $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
 
-                $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order booked successfully.');
-            }
-        );
-        Mail::send(
-            'mails.orderInvoice',
-            ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'user'],
-            function ($m) use ($customer) {
-                $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+                    $m->to(env('MAIL_ADMIN'), env('APP_NAME'))->subject('Order booked successfully.');
+                }
+            );
+            Mail::send(
+                'mails.orderInvoice',
+                ['customer' => $customer, 'items' => $items, 'order' => $order, 'billing_address' => $billing_address, 'delivery_address' => $delivery_address, 'currentStatus' => $currentStatus, 'type' => 'user'],
+                function ($m) use ($customer) {
+                    $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
 
-                $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
-            }
-        );
-        
-         $invoice = "iAD/".date('Y',strtotime($order->created_at))."/#".str_pad($order->id, 4, '0', STR_PAD_LEFT);
-        }catch(\Throwable $e){echo $e->getMessage();die();}
+                    $m->to($customer->email, $customer->name)->subject('Order booked successfully.');
+                }
+            );
+
+            $invoice = "iAD/" . date('Y', strtotime($order->created_at)) . "/#" . str_pad($order->id, 4, '0', STR_PAD_LEFT);
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+            die();
+        }
 
         return redirect()->away('https://www.iadvance.in/ThankYou?transaction_id=TXN' . $txn_id . '&payment_status=' . $msg . '&invoiceId=' . $invoice);
+    }
+
+
+    function checkValidCouponcode(Request $request)
+    {
+        $data = $request->all();
+        $header = $request->header('Authorization');
+        if ($header) {
+            if ($data['user_id'] != '' && $data['coupon_code'] != '') {
+                $order = Order::where([
+                    'customer_id' => $data['user_id'],
+                    'coupon_code' => $data['coupon_code'],
+                    'payment' => 'Success',
+                ])->first();
+                if ($order) {
+                    return response()->json([
+                        "status" => "0",
+                        "message" => "Invalid Coupon Code.",
+                    ]);
+                } else {
+                    $coupon = Promocode::where('promocode_name', $data['coupon_code'])->where('promocode_status',1)->first();
+                    if ($coupon) {
+                        $today = strtotime(date('Y-m-d'));
+                        $from = strtotime($coupon->promocode_start_date);
+                        $to = strtotime($coupon->promocode_expiry_date);
+                        // print_r(1);
+                        // die;
+                        if ($today >= $from && $today <= $to) {
+                            return response()->json([
+                                "status" => "1",
+                                "message" => "Coupon Applied.",
+                                "data" => [
+                                    'coupon' => [
+                                        'amount' => $coupon->promocode_amount,
+                                        'percent' => $coupon->promocode_percent,
+                                        'min_order' => $coupon->min_order_amount,
+                                        'max_order' => $coupon->max_order_amount,
+                                        'description' => $coupon->description
+                                    ]
+                                ]
+                            ]);
+                        } else {
+                            return response()->json([
+                                "status" => "0",
+                                "message" => "Coupon Expired.",
+                            ]);
+                        }
+                    } else {
+                        return response()->json([
+                            "status" => "0",
+                            "message" => "Invalid Coupon Code.",
+                        ]);
+                    }
+                }
+            } else {
+                return response()->json([
+                    "status" => "0",
+                    "message" => "Missing parameters. Coupon code and user id is required.",
+                ]);
+            }
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
     }
 }

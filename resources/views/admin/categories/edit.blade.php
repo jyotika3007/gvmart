@@ -46,10 +46,10 @@
                     <input type="file" name="cover" id="cover" class="form-control">
                 </div>
 
-                <div class="form-group ">
+                <!-- <div class="form-group ">
                     @include('admin.shared.featured', ['featured' => $category->is_featured])
                     <p>If yes, then will show in menu</p>
-                </div>
+                </div> -->
 
                 
                 <div class="form-group ">

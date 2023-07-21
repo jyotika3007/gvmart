@@ -21,8 +21,8 @@ class ProductController extends Controller
         $product = Product::find($product_id);
         $product_images = ProductImage::where('product_id', $product_id)->get();
 
-        $related_accessories = DB::table('related_products')->JOIN('products', 'products.id', 'related_products.related_product_id')->where('type', 'accessory')->where('product_id', $product_id)->where('products.status', 1)->get(['products.id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);
-        $related_products = DB::table('related_products')->JOIN('products', 'products.id', 'related_products.related_product_id')->where('type', 'product')->where('product_id', $product_id)->where('products.status', 1)->get(['products.id', 'slug', 'name', 'cover', 'price', 'sale_price', 'discount', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);
+        $related_accessories = DB::table('related_products')->JOIN('products', 'products.id', 'related_products.related_product_id')->where('type', 'accessory')->where('product_id', $product_id)->where('products.status', 1)->get(['products.id', 'slug', 'name', 'cover', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);
+        $related_products = DB::table('related_products')->JOIN('products', 'products.id', 'related_products.related_product_id')->where('type', 'product')->where('product_id', $product_id)->where('products.status', 1)->get(['products.id', 'slug', 'name', 'cover', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);
         $data['related_services'] = DB::table('related_products')->JOIN('apple_services', 'apple_services.id', 'related_products.related_product_id')->where('type', 'apple_service')->where('product_id', $product_id)->where('apple_services.status', 1)->get(['apple_services.id', 'service_name', 'service_cover', 'service_description', 'service_price']);
 
         $final_related_products = [];
@@ -90,8 +90,6 @@ class ProductController extends Controller
                         array_push($colors_arr, $color_data);
                     }
                 }
-
-
 
                 $variants_data = [
                     'Storage_id' => $st->id ?? '',

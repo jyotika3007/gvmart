@@ -55,8 +55,9 @@ class SliderController extends Controller
             $file=$request->cover;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/sliders/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'sliders/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/sliders/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'sliders/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         // var_dump($data); die;
@@ -99,8 +100,9 @@ class SliderController extends Controller
             $file=$request->cover;
             
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/sliders/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'sliders/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/sliders/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'sliders/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
         $slider = Slider::where('id',$id)->update($data);
 

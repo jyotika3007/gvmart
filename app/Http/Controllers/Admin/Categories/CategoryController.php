@@ -124,8 +124,9 @@ class CategoryController extends Controller
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/categories/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'categories/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/categories/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'categories/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
         
         $category = Category::create($data);
@@ -174,8 +175,9 @@ class CategoryController extends Controller
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/categories/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'categories/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/categories/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'categories/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $category = Category::where('id',$id)->update($data);

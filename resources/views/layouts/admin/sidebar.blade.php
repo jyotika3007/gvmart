@@ -193,14 +193,14 @@ $company = DB::table('company_details')->first();
             <!-- For Customers -->
             <li class="treeview @if(request()->segment(2) == 'sliders') active @endif">
                 <a href="#" class="side-menu">
-                    <i class="fa fa-thumbs-up"></i> <span>Manage Promocode</span>
+                    <i class="fa fa-thumbs-up"></i> <span>Manage Coupon Codes</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
                     <!-- <li><a href="{{ route('admin.dashboard') }}">  Manage Category Discount</a></li> -->
-                    <li><a href="{{ route('admin.promocodes.index') }}"> Manage Promocode</a></li>
+                    <li><a href="{{ route('admin.promocodes.index') }}"> Manage Coupon Code</a></li>
 
                 </ul>
             </li>

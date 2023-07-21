@@ -14,6 +14,7 @@ class Promocode extends Model
     	'promocode_expiry_date',
     	'promocode_status',
     	'min_order_amount',
-    	'max_order_amount'
+    	'max_order_amount',
+		"description"
     ];
 }

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Shop\CompanyDetail\CompanyDetail;
 use App\Shop\Cms\Cms;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 
 class CmsController extends Controller

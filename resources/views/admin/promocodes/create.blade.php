@@ -6,7 +6,7 @@
     @include('layouts.errors-and-messages')
     <div class="box">
     <div class="form-title">
-        <h3>Add New Promocode</h3>
+        <h3>Add New Coupon</h3>
         </div>
         <form action="{{ route('admin.promocodes.store') }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
@@ -14,24 +14,24 @@
                 <div class="col-md-12">
                     <br>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="promocode_name">Promocode Name <span class="text-danger">*</span></label>
-                                <input type="text" name="promocode_name" id="promocode_name" placeholder="promocode_name" class="form-control" value="{{ old('promocode_name') }}" required="required">
+                                <label for="promocode_name">Coupon Name <span class="text-danger">*</span></label>
+                                <input type="text" name="promocode_name" id="promocode_name" placeholder="Coupon name" class="form-control" value="{{ old('promocode_name') }}" required="required">
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="promocode_amount">Promocode Amount </label>
-                                <input type="number" name="promocode_amount" id="promocode_amount" placeholder="promocode_amount" class="form-control" value="slider" required="required" value="0.00">
+                                <label for="promocode_amount">Coupon Amount </label>
+                                <input type="number" name="promocode_amount" id="promocode_amount" placeholder="Coupon amount" class="form-control" value="slider"  value="0.00">
                             </div> 
                         </div> 
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="promocode_percent">Promocode Percent </label>
-                                <input type="number" name="promocode_percent" id="promocode_percent" placeholder="promocode_percent" class="form-control" value="slider" required="required" value="0.00" onkeyup="handleDiscount(this)">
+                                <label for="promocode_percent">Coupon Percent </label>
+                                <input type="number" name="promocode_percent" id="promocode_percent" placeholder="Coupon percent" class="form-control" value="slider"  value="0.00" onkeyup="handleDiscount(this)">
                             </div> 
                         </div> 
 
@@ -52,22 +52,22 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="promocode_start_date">Promocode Start Date </label>
+                                <label for="promocode_start_date">Coupon Start Date </label>
                                 <input type="date" name="promocode_start_date" id="promocode_start_date" class="form-control" required="required">
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="promocode_expiry_date">Promocode Expiry Date </label>
+                                <label for="promocode_expiry_date">Coupon Expiry Date </label>
                                 <input type="date" name="promocode_expiry_date" id="promocode_expiry_date" class="form-control" required="required">
                             </div>
                         </div>
 
                         
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="promocode_status">Promocode Status </label>
+                                <label for="promocode_status">Coupon Status </label>
                                 <select name="promocode_status" id="promocode_status" class="form-control select2">
                                     <option value="0" >Disable</option>
                                     <option value="1" >Enable</option>

@@ -71,8 +71,9 @@ public function searchList(Request $request)
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/blogs/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'blogs/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/blogs/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'blogs/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $blog =Blog::create($data);
@@ -114,8 +115,9 @@ public function searchList(Request $request)
         if ($request->hasFile('cover')) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/blogs/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'blogs/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/blogs/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'blogs/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $blog = Blog::where('id',$id)->update($data);

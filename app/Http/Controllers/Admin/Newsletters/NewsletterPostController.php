@@ -51,8 +51,9 @@ class NewsletterPostController extends Controller
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/newsletters/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $data['cover'] = 'newsletters/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/newsletters/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $data['cover'] = 'newsletters/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $newPost->post_title = $data['post_title'];
@@ -147,8 +148,9 @@ class NewsletterPostController extends Controller
         if ($request->hasFile('cover') ) {
             $file=$request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-            $file->move(public_path(). '/storage/newsletters/', time().'.'.$file_ext[count($file_ext)-1]);   
-            $cover = 'newsletters/'.time().'.'.$file_ext[count($file_ext)-1];
+$random = rand(10000,999999);
+            $file->move(public_path(). '/storage/newsletters/', $random.time().'.'.$file_ext[count($file_ext)-1]);   
+            $cover = 'newsletters/'.$random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $news->post_title = $request->post_title;
