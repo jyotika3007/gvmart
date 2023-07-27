@@ -18,7 +18,7 @@
                 {{ csrf_field() }}
               
                 
-                <div class="form-group">
+                <div class="form-group" style="display: none">
                     <label for="parent">Parent Category</label>
                     <select name="parent_id" id="parent_id" class="form-control select2">
                         <option value="">None</option>

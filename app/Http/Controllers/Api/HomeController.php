@@ -75,7 +75,7 @@ class HomeController extends Controller
 
     public function home_main()
     {
-        $sliders = Slider::where('status', 1)->where('type', 'slider')->get(['id', 'title', 'cover', 'priority']);
+        $sliders = Slider::where('status', 1)->where('type', 'slider')->get(['id', 'title', 'cover', 'mobile_cover', 'priority']);
         $offers = Banner::where('status', 1)->orderBy('priority', 'ASC')->limit(3)->get();
         $testimonials = Testimonial::where('status', 1)->orderBy('id', 'DESC')->get();
         $categories = Category::where('parent_id', NULL)->where('status', 1)->get();

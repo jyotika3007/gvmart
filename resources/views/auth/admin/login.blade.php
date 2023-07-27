@@ -142,7 +142,7 @@ cursor: pointer
         @include('layouts.errors-and-messages')
         <div class="login-box-body">
             <div class="login-logo">
-                <a href="{{ url('/') }}"><img src="{{ asset('storage/'.$company_detail->company_logo ?? '') }}" style="height: 150px; width: auto;"></a>
+                <a href="{{ url('/') }}"><img src="{{ asset('storage/'.$company_detail->company_logo ?? '') }}" style="width: 200px;"></a>
             </div>
             <h3>SIGN IN</h3>
             <p class="login-box-msg">Sign in to start your session</p>

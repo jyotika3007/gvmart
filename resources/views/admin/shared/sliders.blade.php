@@ -4,7 +4,8 @@
         <tr>
             <th >Created At</th>
             <th>Title</th>
-            <th>Cover</th>
+            <th>Desktop Image</th>
+            <th>Mobile Image</th>
             <th>Priority</th>
             <th>Status</th>
             <th>Date</th>
@@ -20,7 +21,16 @@
                         <a href="{{ route('admin.sliders.show', $slider->id) }}">{{ $slider->title }}</a>
                    
                 </td>
-                <td><img src="{{ asset('storage/'.$slider->cover) }}" alt="" class="img-responsive" style="height: 75px;"></td>
+                <td>
+                    @if(isset($slider->cover) && $slider->cover!='')
+                    <img src="{{ asset('storage/'.$slider->cover) }}" alt="" class="img-responsive" style="height: 75px;">
+                    @endif
+                </td>
+                <td>
+                    @if(isset($slider->mobile_cover) && $slider->mobile_cover!='')
+                    <img src="{{ asset('storage/'.$slider->mobile_cover) }}" alt="" class="img-responsive" style="height: 75px;">
+                    @endif
+                </td>
                 <td>{{ $slider->priority }}</td>
                 <td>@include('layouts.status', ['status' => $slider->status])</td>
                 <td>
@@ -34,7 +44,7 @@
 
                             <a href="{{ route('admin.sliders.edit', $slider->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             
-                            <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
+                            <button onclick="return confirm('Are you sure you want to delete this slider?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button>
                             
 
                             </div>
@@ -45,3 +55,10 @@
         </tbody>
     </table>
 @endif
+
+
+@section('js')
+<script>
+   
+</script>
+@endsection

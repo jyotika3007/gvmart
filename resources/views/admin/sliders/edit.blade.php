@@ -13,24 +13,23 @@
                     <!-- <input type="hidden" name="_method" value="put"> -->
                     <div class="col-md-12">
                         <!-- Nav tabs -->
-                        
+
                         <!-- Tab panes -->
                         <div class="tab-content" id="tabcontent">
                             <div role="tabpanel" class="tab-pane @if(!request()->has('combination')) active @endif" id="info">
                                 <div class="row">
                                     <div class="col-md-8">
-                    <h3> Edit Slider Detail - {{ ucfirst($slider->title) }}</h3>
-                    <br>
+                                        <h3> Edit Slider Detail - {{ ucfirst($slider->title) }}</h3>
+                                        <br>
                                         <div class="form-group">
                                             <label for="title">Title <span class="text-danger">*</span></label>
-                                            <input type="text" name="title" id="title" placeholder="xxxxx" class="form-control" value="{!! $slider->title ?? '' !!}" >
+                                            <input type="text" name="title" id="title" placeholder="xxxxx" class="form-control" value="{!! $slider->title ?? '' !!}">
                                         </div>
-                                        
+
                                         <div class="form-group" style="display: none;">
                                             <label for="description">Type </label>
-                                            <input type="text" name="type" id="type" placeholder="xxxxx" class="form-control" value="slider" required="required"
-                                            >
-                                        </div> 
+                                            <input type="text" name="type" id="type" placeholder="xxxxx" class="form-control" value="slider" required="required">
+                                        </div>
 
                                         <div class="form-group">
                                             <label for="priority">Display Priority </label>
@@ -47,23 +46,40 @@
                                             <input type="date" name="end_date" id="end_date" class="form-control" value="{!! $slider->end_date ?? '' !!}">
                                         </div>
 
+                                        @if(isset($slider->cover) && $slider->cover!='')
                                         <div class="form-group">
-                                            <div class="col-md-3">
-                                                <div class="row">
+                                            <div class="row">
+                                                <div class="col-md-4">
                                                     <img src="{{ asset('storage/'.$slider->cover) }}" alt="" class="img-responsive img-thumbnail">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row"></div>
+                                        @endif
+                                        
                                         <div class="form-group">
-                                            <label for="cover">Cover </label>
+                                            <label for="cover">Desktop Image </label>
                                             <input type="file" name="cover" id="cover" class="form-control">
                                         </div>
+
+                                        @if(isset($slider->mobile_cover) && $slider->mobile_cover!='')
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <img src="{{ asset('storage/'.$slider->mobile_cover) }}" alt="" class="img-responsive img-thumbnail">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
                                         
+                                        <div class="form-group">
+                                            <label for="mobile_cover">Mobile Image </label>
+                                            <input type="file" name="mobile_cover" id="mobile_cover" class="form-control">
+                                        </div>
+
                                         <div class="form-group">
                                             @include('admin.shared.status-select', ['status' => $slider->status])
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="row">
@@ -75,7 +91,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -93,20 +109,25 @@
         display: block;
         margin-bottom: 5px;
     }
-    label.checkbox-inline > input[type="checkbox"] {
+
+    label.checkbox-inline>input[type="checkbox"] {
         margin-left: 10px;
     }
-    ul.attribute-lists > li > label:hover {
+
+    ul.attribute-lists>li>label:hover {
         background: #3c8dbc;
         color: #fff;
     }
-    ul.attribute-lists > li {
+
+    ul.attribute-lists>li {
         background: #eee;
     }
-    ul.attribute-lists > li:hover {
+
+    ul.attribute-lists>li:hover {
         background: #ccc;
     }
-    ul.attribute-lists > li {
+
+    ul.attribute-lists>li {
         margin-bottom: 15px;
         padding: 15px;
     }

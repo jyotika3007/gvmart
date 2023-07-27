@@ -11,6 +11,7 @@ class Slider extends Model
         'slug',
         'type',
         'cover',
+        'mobile_cover',
         'status',
         'user_id',
         'start_date',

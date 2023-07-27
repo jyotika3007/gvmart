@@ -16,7 +16,8 @@
                 {{ csrf_field() }}
                 
                 <br>
-                <div class="form-group" @if($parent_id>0){{ 'style=display:none;' }}@endif>
+                <div class="form-group" style="display:none;">
+                <!-- <div class="form-group" @if($parent_id>0){{ 'style=display:none;' }}@endif> -->
                     <label for="parent">Parent Category</label>
                     <select name="parent_id" id="parent_id" class="form-control select2">
                         <option value="">None</option>

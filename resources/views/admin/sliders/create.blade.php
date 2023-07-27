@@ -40,8 +40,12 @@
                         </div>
                       
                      <div class="form-group">
-                            <label for="cover">Image </label>
+                            <label for="cover">Desktop Image  </label>
                             <input type="file" name="cover" id="cover" class="form-control" required="required">
+                        </div>
+                     <div class="form-group">
+                            <label for="mobile_cover">Mobile Image </label>
+                            <input type="file" name="mobile_cover" id="mobile_cover" class="form-control" required="required">
                         </div>
                       
                     
