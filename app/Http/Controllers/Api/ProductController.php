@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Shop\Banners\Banner;
 use App\Shop\ProductImages\ProductImage;
 use App\Shop\ProductReviews\ProductReview;
 use Illuminate\Http\Request;
@@ -18,8 +19,17 @@ class ProductController extends Controller
      */
     public function index($product_id)
     {
-        $product = Product::find($product_id);
+        $product = Product::where('id',$product_id)->first(['id','name','sku','slug','description','key_features','meta_title','meta_description','search_keywords as meta_keywords','gst','return_period','is_prelaunched','prelaunch_price','delivery_days']);
         $product_images = ProductImage::where('product_id', $product_id)->get();
+
+        $store_offer = Banner::where('product_id',$product_id)->where('status',1)->first();
+
+        if($store_offer){
+            $product->store_offer = [
+                'value' => $store_offer->store_offer,
+                'type' => $store_offer->store_offer_type
+            ];
+        }
 
         $related_accessories = DB::table('related_products')->JOIN('products', 'products.id', 'related_products.related_product_id')->where('type', 'accessory')->where('product_id', $product_id)->where('products.status', 1)->get(['products.id', 'slug', 'name', 'cover', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);
         $related_products = DB::table('related_products')->JOIN('products', 'products.id', 'related_products.related_product_id')->where('type', 'product')->where('product_id', $product_id)->where('products.status', 1)->get(['products.id', 'slug', 'name', 'cover', 'stock_quantity', 'prelaunch_price', 'prelaunch_price']);

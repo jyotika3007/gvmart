@@ -199,18 +199,7 @@ Route::namespace('Admin')->group(function () {
 });
 
 
-
-
-
-
-
-
-
-
-
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-
-
 
     Route::get('product_reviews', 'Admin\Products\ProductController@getReviews');
     Route::get('product_reviews/{id}', 'Admin\Products\ProductController@getReviewsDetail');
@@ -224,6 +213,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('export_dump_data', 'Exports\ExportController@exportProductDump');
 
         Route::get('export_products', 'Exports\ExportController@export');
+        
 
 // print_r(1); die;
 
@@ -334,6 +324,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::post('banner/{id}/delete', 'BannerController@destroy')->name('banners.destroy');
 
             Route::get('search_banners', 'BannerController@searchList')->name('banners.search_banners');
+            Route::get('getCategoryProducts', 'BannerController@getCategoryProducts');
         });
 
 
