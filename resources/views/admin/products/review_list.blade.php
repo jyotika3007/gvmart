@@ -23,7 +23,7 @@
                                     <label style="margin-top: 6px; float: right;">Search Here</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by shop name, owner ...">
+                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by product name ...">
                                 </div>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                             <a href="{{ url('admin/product_reviews') }}" name="search" id="reset" vaule="reset" class="btn btn-warning">Reset</a>
                         </div>
                         <div class="col-sm-2">
-                            <a href="{{ route('admin.categories.create') }}"  class="btn btn-primary">Add New</a>
+                            <!--<a href="{{ route('admin.categories.create') }}"  class="btn btn-primary">Add New</a>-->
                         </div>
                     </div>
                 </form>

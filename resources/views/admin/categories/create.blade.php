@@ -8,8 +8,13 @@
     <div class="box">
 
         <div class="form-title">
-            <h3>Categories >> Add Category @if(!empty($parent_category)) {{ ' Under' }} <i><b>'{{ $parent_category->name ?? '' }}' @endif</b></i></h3>
+            @if(!empty($parent_category))
+            <h3>Categories >> Add Sub Category @if(!empty($parent_category)) {{ ' Under' }} <i><b>'{{ $parent_category->name ?? '' }}' </b>@endif</i></h3>
+            @else
+            <h3>Categories >> Add Category</i></h3>
+            @endif
         </div>
+            
         
         <form action="{{ route('admin.categories.store') }}" method="post" class="form" enctype="multipart/form-data">
             <div class="box-body">
@@ -30,12 +35,16 @@
                     <label for="name">Name <span class="text-danger">*</span></label>
                     <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}" required="required">
                 </div>
+                <!--<div class="form-group">-->
+                <!--    <label for="description">Description </label>-->
+                <!--    <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description">{{ old('description') }}</textarea>-->
+                <!--</div>-->
                 <div class="form-group">
-                    <label for="description">Description </label>
-                    <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description">{{ old('description') }}</textarea>
-                </div>
-                <div class="form-group">
+                    @if(!empty($parent_category))
+                    <label for="cover">Icon </label>
+                    @else
                     <label for="cover">Cover </label>
+                    @endif
                     <input type="file" name="cover" id="cover" class="form-control">
                 </div>
                 
@@ -48,11 +57,17 @@
                 <!--    <p>If yes, then will show in menu</p>-->
                 <!--</div>-->
                 
-                <div class="form-group ">
+                @if(!empty($parent_category))
+                    <div class="form-group" style="display: none">
                     @include('admin.shared.top', ['top' => 0])
-                </div>
+                    </div>
+                @else
+                    <div class="form-group ">
+                    @include('admin.shared.top', ['top' => 1])
+                    </div>
+                @endif
                 
-                @include('admin.shared.status-select', ['status' => 0])
+                @include('admin.shared.status-select', ['status' => 1])
                 
             </div>
             <!-- /.box-body -->

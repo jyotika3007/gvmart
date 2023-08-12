@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\AppleService;
 use App\Shop\Categories\Category;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 
 
 class AppleServiceController extends Controller
@@ -16,14 +16,17 @@ class AppleServiceController extends Controller
     {
         $data = '';
 
-        try {
-            $data = AppleService::join('categories', 'categories.id', 'apple_services.category_id')->select(['apple_services.*','categories.name'])->paginate(50);
-        } catch (\Throwable $e) {
-            echo $e->getMessage();
-        }
+try{
+        $data = AppleService::paginate(50);
+}
+catch(\Throwable $e){
+    echo $e->getMessage();
+}
+// dd($data);
 
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
+        // print_r(1); die;
 
         return view('admin.apple_services.list', ['services' => $data]);
     }
@@ -34,12 +37,11 @@ class AppleServiceController extends Controller
         $data = '';
 
         $user = Auth::user();
-        // if (!empty($user) && $user->user_role == 'vendor') {
-        //     $data = AppleService::where('user_id', $user->id)->where('name', 'LIKE', '%' . $request->keyword . '%')->paginate(50);
-        // } else {
-        //    $data = AppleService::where('name', 'LIKE', '%' . $request->keyword . '%')->paginate(50);
-        // }
-        $data = AppleService::where('name', 'LIKE', '%' . $request->keyword . '%')->paginate(50);
+        if (!empty($user) && $user->user_role == 'vendor') {
+            $data = AppleService::where('user_id', $user->id)->where('name', 'LIKE', '%' . $request->keyword . '%')->paginate(50);
+        } else {
+            $data = AppleService::where('name', 'LIKE', '%' . $request->keyword . '%')->paginate(50);
+        }
 
         $previous = $_SERVER['REQUEST_URI'];
         session()->put('previous_url', $previous);
@@ -51,7 +53,7 @@ class AppleServiceController extends Controller
     public function create()
     {
         // print_r(1); die;
-        $categories = Category::orderBy('id', 'DESC')->where('status', 1)->get();
+        $categories = Category::orderBy('id','DESC')->where('status',1)->get();
         return view('admin.apple_services.create', ['categories' => $categories]);
     }
 
@@ -60,12 +62,16 @@ class AppleServiceController extends Controller
     {
         $data = $request->except('_token', '_mthod');
 
+        // print_r($data); die;
+
+        // $data['user_id'] = Auth::user()->id;
+
         if ($request->hasFile('service_cover')) {
             $file = $request->service_cover;
-            $file_ext = explode('.', $file->getClientOriginalName());
-            $random = rand(10000, 999999);
-            $file->move(public_path() . '/storage/apple_services/', $random . time() . '.' . $file_ext[count($file_ext) - 1]);
-            $data['service_cover'] = 'apple_services/' . $random . time() . '.' . $file_ext[count($file_ext) - 1];
+            $file_ext = explode('.',$file->getClientOriginalName());
+$random = rand(10000,999999);
+            $file->move(public_path() . '/storage/apple_services/', $random.time().'.'.$file_ext[count($file_ext)-1]);
+            $data['service_cover'] = 'apple_services/' . $random.time().'.'.$file_ext[count($file_ext)-1];
         }
         // print_r($data); die;
         $brand = AppleService::create($data);
@@ -76,10 +82,8 @@ class AppleServiceController extends Controller
     public function edit($id)
     {
         $service = AppleService::find($id);
-        $categories = Category::orderBy('id', 'DESC')->where('status', 1)->get();
+        $categories = Category::orderBy('id','DESC')->where('status',1)->get();
         $previous = session()->get('previous_url');
-
-        // dd($service);
 
         return view('admin.apple_services.edit', ['service' => $service, 'categories' =>  $categories, 'previous' => $previous]);
     }
@@ -94,10 +98,10 @@ class AppleServiceController extends Controller
         $data = $request->except('_token', '_method');
         if ($request->hasFile('service_cover')) {
             $file = $request->service_cover;
-            $file_ext = explode('.', $file->getClientOriginalName());
-            $random = rand(10000, 999999);
-            $file->move(public_path() . '/storage/apple_services/', $random . time() . '.' . $file_ext[count($file_ext) - 1]);
-            $data['service_cover'] = 'apple_services/' . $random . time() . '.' . $file_ext[count($file_ext) - 1];
+            $file_ext = explode('.',$file->getClientOriginalName());
+$random = rand(10000,999999);
+            $file->move(public_path() . '/storage/apple_services/', $random.time().'.'.$file_ext[count($file_ext)-1]);
+            $data['service_cover'] = 'apple_services/' . $random.time().'.'.$file_ext[count($file_ext)-1];
         }
 
         $brand = AppleService::where('id', $id)->update($data);

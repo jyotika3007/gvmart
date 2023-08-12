@@ -31,10 +31,10 @@
                     <label for="name">Name <span class="text-danger">*</span></label>
                     <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{!! $category->name ?: old('name')  !!}" required="required">
                 </div>
-                <div class="form-group">
-                    <label for="description">Description </label>
-                    <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description">{!! $category->description ?: old('description')  !!}</textarea>
-                </div>
+                <!--<div class="form-group">-->
+                <!--    <label for="description">Description </label>-->
+                <!--    <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description">{!! $category->description ?: old('description')  !!}</textarea>-->
+                <!--</div>-->
                 @if(isset($category->cover))
                 <div class="form-group">
                     <img src="{{ asset('storage/'.$category->cover) }}" alt="" class="img-responsive" style="height: 150px;"> <br/>

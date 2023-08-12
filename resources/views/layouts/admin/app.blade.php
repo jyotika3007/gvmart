@@ -17,6 +17,8 @@
 
     <title>@if(!empty($admin)){{ ucfirst($admin->user_role ) }}@else{{ 'Adminstrator' }}@endif - {{ config('app.name') }}</title>
 
+    <link rel="icon" sizes="57x57" href="{{ asset('favicons/favicon.png')}}">
+    
     <link rel="stylesheet" href="{{ asset('css/admin.min.css') }}">
     @yield('css')
  
@@ -32,11 +34,10 @@
 
         <meta name="_t" content="{{ csrf_token() }}" />
         
-    <link rel="apple-touch-icon" href="{{ asset('favicons/apple.png')}}">
-
-    <link rel="icon" type="image/png" href="{{ asset('favicons/apple.png')}}">
     <link rel="manifest" href="{{ asset('favicons/manifest.json')}}">
-    
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ asset('favicons/favicon.png')}}">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body class="hold-transition skin-purple sidebar-mini">
 <noscript>

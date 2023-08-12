@@ -62,6 +62,8 @@ class ProductController extends Controller
     {
 
         $list = '';
+        
+        // dd(1);
 
         $user = Auth::user();
         if (!empty($user) && $user->user_role == 'vendor') {
@@ -185,7 +187,7 @@ class ProductController extends Controller
             $brands = Brand::all();
         }
 
-        $categories = Category::orderBy('id', 'DESC')->get();
+        $categories = Category::where('parent_id',null)->where('status',1)->orderBy('name', 'ASC')->get();
         $services = AppleService::all();
         
         $res_products = Product::where('status', 1)->get(['id', 'name']);
@@ -204,6 +206,12 @@ class ProductController extends Controller
             'services' => $services
         ]);
     }
+    
+    public function getSubCategories($id){
+        $list = Category::where('parent_id',$id)->where('status',1)->orderBy('name', 'ASC')->get();
+        
+        return response()->json($list);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -214,14 +222,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->except('_token', '_method', 'units', 'related_services', 'related_products', 'related_accessories');
+        $data = $request->except('_token', '_method', 'units', 'related_services', 'related_products', 'related_accessories', 'category_id','sub_category_id');
 
         $data['slug'] = str_replace(' ', '-', $request->input('name'));
 
         if ($request->hasFile('cover')) {
             $file = $request->cover;
             $file_ext = explode('.',$file->getClientOriginalName());
-$random = rand(10000,999999);
+            $random = rand(10000,999999);
             $file_name = $random.time().'.'.$file_ext[count($file_ext)-1];
             $file->move(public_path() . '/storage/products/', $file_name);
             $data['cover'] = 'products/' . $file_name;
@@ -237,6 +245,13 @@ $random = rand(10000,999999);
             dd($e->getMessage());
         }
 
+
+        DB::table('category_product')->insert([
+            'category_id' => $request->category_id ?? '',
+            'sub_category_id' => $request->sub_category_id ?? '',
+            'product_id' => $lastProduct->id ?? '',
+        ]);
+
         if ($request->hasFile('image')) {
             $images = $request->image ?? [];
             foreach ($images as $img) {
@@ -244,7 +259,7 @@ $random = rand(10000,999999);
 
                 $file = $img;
                 $file_ext = explode('.',$file->getClientOriginalName());
-$random = rand(10000,999999);
+                $random = rand(10000,999999);
                 $file_name = $random.time().'.'.$file_ext[count($file_ext)-1];
                 $file->move(public_path() . '/storage/products/', $file_name);
 

@@ -25,7 +25,7 @@
                                     <label style="margin-top: 6px; float: right;">Search Here</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by shop name, owner ...">
+                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by sub category name ...">
                                 </div>
                             </div>
                         </div>
@@ -55,11 +55,11 @@
                     <tr>
                         <td>Created At</td>
                         <td>Category Name</td>
-                        <td>Sub Categories</td>
-                        <td>Cover</td>
+                        <!--<td>Sub Categories</td>-->
+                        <td>Icon</td>
                         <td>Status</td>
-                        <td>Is Featured</td>
-                        <td>Top Categories</td>
+                        <!--<td>Is Featured</td>-->
+                        <!--<td>Top Categories</td>-->
                         <td>Actions</td>
                     </tr>
                 </thead>
@@ -72,17 +72,17 @@
                         <td>
                             <a href="{{ route('admin.categories.show', $category->id) }}">{{ $category->name }}</a>
                         </td>
-                            <td>
-                                <a href="{{ url('admin/sub_categories',$category->id) }}" class="btn btn-default">View Sub Categories</a>
-                            </td>
+                            <!--<td>-->
+                            <!--    <a href="{{ url('admin/sub_categories',$category->id) }}" class="btn btn-default">View Sub Categories</a>-->
+                            <!--</td>-->
                                 <td>
                                     @if(isset($category->cover))
-                                    <img src="{{ asset("storage/$category->cover") }}" alt="" class="img-responsive" style="100px;">
+                                    <img src="{{ asset("storage/$category->cover") }}" alt="" class="img-responsive" style="height: 100px;">
                                     @endif
                                 </td>
                                 <td>@include('layouts.status', ['status' => $category->status])</td>
-                                <td>@include('layouts.status', ['status' => $category->is_featured])</td>
-                                <td>@include('layouts.status', ['status' => $category->is_top])</td>
+                                <!--<td>@include('layouts.status', ['status' => $category->is_featured])</td>-->
+                                <!--<td>@include('layouts.status', ['status' => $category->is_top])</td>-->
                                 <td>
                                     <form action="{{ route('admin.categories.destroy', $category->id) }}" method="post" class="form-horizontal">
                                         {{ csrf_field() }}

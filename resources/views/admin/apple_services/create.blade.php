@@ -16,12 +16,12 @@
 
                 <br>
 
-                <div class="form-group">
+                <div class="form-group" style="display: none">
                     <label for="category_id">Category <span class="text-danger">*</span></label>
                     @if(isset($categories) && count($categories)>0)
 
-                    <select name="category_id" id="category_id" class="form-control select2" required>
-                        <option value=""></option>
+                    <select name="category_id" id="category_id" class="form-control select2" >
+                        <option value="">Select Category</option>
                         @foreach($categories as $cat)
                         <option value="{{$cat->id ?? ''}}">{{ $cat->name ?? '' }}</option>
                         @endforeach

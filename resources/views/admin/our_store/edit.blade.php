@@ -36,6 +36,11 @@
                     <label for="contact">Contact <span class="text-danger">*</span></label>
                     <input type="text" name="contact" id="contact" placeholder="Contact" class="form-control" value="{{ $store->contact ?? '' }}" required="required">
                 </div>
+                
+                <div class="form-group">
+                    <label for="contact">Map Link </label>
+                    <input type="text" name="map_link" id="map_link" placeholder="Map Link" class="form-control" value="{{ $store->map_link ?? '' }}" >
+                </div>
 
                 @include('admin.shared.show-to-footer', ['status' => $store->show_to_footer])
 

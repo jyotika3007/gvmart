@@ -35,6 +35,11 @@
                     <label for="contact">Contact <span class="text-danger">*</span></label>
                     <input type="text" name="contact" id="contact" placeholder="Contact" class="form-control" value="{{ old('contact') }}" required="required">
                 </div>
+                
+                <div class="form-group">
+                    <label for="contact">Map Link </label>
+                    <input type="text" name="map_link" id="map_link" placeholder="Map Link" class="form-control" value="" >
+                </div>
 
                 @include('admin.shared.show-to-footer', ['status' => 1])
 

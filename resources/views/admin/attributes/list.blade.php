@@ -21,7 +21,7 @@
                                     <label style="margin-top: 6px; float: right;">Search Here</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by brand name ...">
+                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by attribute name ...">
                                 </div>
                             </div>
                         </div>

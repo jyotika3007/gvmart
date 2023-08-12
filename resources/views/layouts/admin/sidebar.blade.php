@@ -76,7 +76,7 @@ $company = DB::table('company_details')->first();
                     <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
                     <li><a href="{{ route('admin.products.create') }}"> Add Product</a></li>
                     <li><a href="{{ route('admin.products.index') }}"> Products List</a></li>
-                    <li><a href="{{ route('admin.brands.index') }}"> Brands</a></li>
+                    <!--<li><a href="{{ route('admin.brands.index') }}"> Brands</a></li>-->
                     <li><a href="{{ route('admin.attributes.index') }}"> Attributes</a></li>
                     <li><a href="{{ url('admin/product_reviews') }}"> Reviews</a></li>
                     <li><a href="{{ url('admin/prelaunchProducts') }}"> Prelaunch List</a></li>
@@ -124,7 +124,7 @@ $company = DB::table('company_details')->first();
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="{{ route('admin.our_store.create') }}"> Add Our Srore</a></li>
-                <li><a href="{{ route('admin.our_store.index') }}"> Our  Store List</a></li>
+                <li><a href="{{ url('admin/our_store') }}"> Our Store List</a></li>
                 </ul>
             </li>
 
@@ -213,14 +213,14 @@ $company = DB::table('company_details')->first();
  <!-- For Request -->
  <li class="treeview @if(request()->segment(2) == 'policies') active @endif">
                 <a href="#" class="side-menu">
-                    <i class="  fa fa-ambulance"></i> <span>Policies</span>
+                    <i class="  fa fa-ambulance"></i> <span>Cancellation Policies</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="{{ route('admin.policies.index') }}"> Policies List</a></li>
-                    <li><a href="#"> Add Policy</a></li>
+                    <li><a href="{{ route('admin.policies.create') }}"> Add Policy</a></li>
                 </ul>
             </li>
 

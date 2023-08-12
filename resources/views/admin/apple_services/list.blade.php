@@ -9,7 +9,7 @@
 
 
         <div class="form-title">
-            <h3>Apple Services >> Apple Services List @if(isset($keyqord) && !empty($keyword)) - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
+            <h3>Apple Services >> Apple Services List @if(isset($keyword) && !empty($keyword)) - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
         </div>
 
         <div class="box-body">
@@ -22,7 +22,7 @@
                                 <label style="margin-top: 6px; float: right;">Search Here</label>
                             </div>
                             <div class="col-sm-9">
-                                <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by service name ...">
+                                <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by apple service name ...">
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                     <tr>
                         <th>Created At</th>
                         <th>Title</th>
-                        <th>Category</th>
+                        <!--<th>Category</th>-->
                         <th>Price</th>
                         <th>Cover</th>
                         <th>Status</th>
@@ -58,8 +58,8 @@
                         <td>
                             <a href="{{ route('admin.apple_services.show', $service->id) }}">{{ $service->service_name }}</a>
                         </td>
-                        <td>{{ $service->name ?? '' }}</td>
-                        <td>{{ $service->service_price ?? 0 }}</td>
+                        <!--<td>{{ $service->name ?? '' }}</td>-->
+                        <td>Rs.{{ $service->service_price ?? 0 }}</td>
                         <td>
                             @if(!empty($service->service_cover)&& $service->service_cover!='')
                             <img src="{{ asset('storage/'.$service->service_cover ?? '') }}" style="height: 75px;">

@@ -10,7 +10,7 @@
                 <div class="box-body">
                     <h2>Customers - Search result for <b><i>"{{ $keyword }}"</i></b></h2>
 
-                     @include('layouts.search', ['route' => route('admin.customers.search_customers'), 'placeholder' => 'Search by customers name, email name ... ' , 'keyword' => $keyword])
+                     @include('layouts.search', ['route' => route('admin.customers.search_customers'), 'placeholder' => 'Search by users name, email name ... ' , 'keyword' => $keyword])
         @if($customers)
 
         <table class="table">

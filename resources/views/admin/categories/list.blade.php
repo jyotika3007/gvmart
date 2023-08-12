@@ -21,7 +21,7 @@
                                     <label style="margin-top: 6px; float: right;">Search Here</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by shop name, owner ...">
+                                    <input type="text" name="keyword" id="keyword" value="@if(!empty($keyword)){{$keyword}}@endif" class="form-control" placeholder="Search by category name ...">
                                 </div>
                             </div>
                         </div>
@@ -48,8 +48,8 @@
                         <td>Sub Categories</td>
                         <td>Cover</td>
                         <td>Status</td>
-                        <td>Is Featured</td>
-                        <td>Is Prelaunched</td>
+                        <!--<td>Is Featured</td>-->
+                        <!--<td>Is Prelaunched</td>-->
                         <td>Top Categories</td>
                         <td>Actions</td>
                     </tr>
@@ -72,8 +72,8 @@
                                     @endif
                                 </td>
                                 <td>@include('layouts.status', ['status' => $category->status])</td>
-                                <td>@include('layouts.status', ['status' => $category->is_featured])</td>
-                                <td>@include('layouts.status', ['status' => $category->is_prelaunched])</td>
+                                <!--<td>@include('layouts.status', ['status' => $category->is_featured])</td>-->
+                                <!--<td>@include('layouts.status', ['status' => $category->is_prelaunched])</td>-->
                                 <td>@include('layouts.status', ['status' => $category->is_top])</td>
                                 <td>
                                     <form action="{{ route('admin.categories.destroy', $category->id) }}" method="post" class="form-horizontal">

@@ -11,7 +11,7 @@
             <div class="box">
                 <div class="box-body">
                     <h2>Complaints - Search result for <b><i>"{{ $keyword }}"</i></b></h2>
-                     @include('layouts.search', ['route' => route('admin.complaints.search_complaints'), 'placeholder' => 'Search by user name, email, phone no ... '])
+                     @include('layouts.search', ['route' => route('admin.complaints.search_complaints'), 'placeholder' => 'Search by customer name, subject ... '])
         @if(count($complaints)>0)
                     <table class="table">
                         <thead>

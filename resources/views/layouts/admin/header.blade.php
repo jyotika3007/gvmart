@@ -26,15 +26,15 @@ $companyInfor = DB::table('company_details')->first();
 
 <header class="main-header">
     <!-- Logo -->
-    <a href="{{route('admin.dashboard')}}" class="logo">
+    <a href="{{route('admin.dashboard')}}" class="logo" style="background-color: #efefef;">
 
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><img src="{{ asset('storage/'.$companyInfor->company_logo ?? '') }}" style="height: 70px;"></span>
+        <span class="logo-mini"><img src="{{ asset('storage/'.$companyInfor->company_logo ?? '') }}" style="width: 100%;"></span>
         <!-- <span class="logo-mini">{{ config('app.name') }}</span> -->
 
         <!-- logo for regular state and mobile devices -->
         <!-- <span class="logo-lg">{{ config('app.name') }}</span> -->
-        <span class="logo-lg"><img src="{{ asset('storage/'.$companyInfor->company_logo ?? '') }}" style="height: 70px;"></span>
+        <span class="logo-lg"><img src="{{ asset('storage/'.$companyInfor->company_logo ?? '') }}" style="width: 100%;"></span>
 
     </a>
     <!-- Header Navbar: style can be found in header.less -->
@@ -49,39 +49,14 @@ $companyInfor = DB::table('company_details')->first();
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-                <!-- Messages: style can be found in dropdown.less-->
                
-                <!-- Notifications: style can be found in dropdown.less -->
-                <!-- <li class="dropdown notifications-menu" title="All Notificatons">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-bell-o"></i>
-                        <span class="label label-warning">{{ $total_count }}</span>
+                <li class="dropdown tasks-menu"  title="Pending Orders">
+                    <a href="#" class="dropdown-toggle" >
+                        <span class="logo-mini"><img src="{{ asset('assets/images/logo-footer.png') }}" style="height: 33px"></span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">You have {{$total_count}} notifications</li>
-                        <li>
-                            <ul class="menu">
-                                @if($count_orders>0)
-                                <li>
-                                    <a href="{{ url('admin/notifications/orders') }}">
-                                        <i class="fa fa-users text-aqua"></i> {{ $count_orders }} new orders are received
-                                    </a>
-                                </li>
-                                @endif
-
-
-                                @if($user->user_role == 'admin' &&  $count_registered_shops>0)
-                                <li>
-                                    <a href="{{ url('admin/notifications/shops') }}">
-                                        <i class="fa fa-users text-aqua"></i> {{$count_registered_shops}} new shops are requested to connect with us                                   </a>
-                                </li>
-                                @endif
-                            </ul>
-                        </li>
-                        <li class="footer"><a href="{{ url('admin/notifications/all') }}">View all</a></li>
-                    </ul>
-                </li> -->
-                <!-- Tasks: style can be found in dropdown.less -->
+                   
+                </li>
+               
                 <li class="dropdown tasks-menu"  title="Pending Orders">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-flag-o"></i>

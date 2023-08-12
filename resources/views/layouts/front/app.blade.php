@@ -77,7 +77,7 @@ $parentCategories = Category::where('is_featured',1)->where('status',1)->get();
 
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<link rel="icon" href="{{ asset('favicons/rsz_logo_small.png') }}">
+	<link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicons/favicon.png')}}">
 
 	<!-- CSS
 		============================================ -->

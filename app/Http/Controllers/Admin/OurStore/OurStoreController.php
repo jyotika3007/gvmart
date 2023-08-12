@@ -61,7 +61,7 @@ class OurStoreController extends Controller
         $data = $request->except('_token', '_method');
 
         $data['slug'] = str_replace(' ', '-', $request->input('main_area'));
-\
+
 
         $store = OurStore::where('id', $id)->update($data);
 

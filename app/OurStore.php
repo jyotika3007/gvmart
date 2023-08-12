@@ -11,6 +11,7 @@ class OurStore extends Model
         'address',
         'email',
         'contact',
+        'map_link',
         'show_to_footer',
         'slug',
         'status'

@@ -19,16 +19,12 @@
                         <h3>Products >> Add Product </h3>
                     </div>
                     <br />
+                    
                     <div class="form-group">
-                        <label for="name">Product Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}" required="required">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="name">Category <span class="text-danger">*</span></label>
+                        <label for="category_id">Category <span class="text-danger">*</span></label>
                         @if(isset($categories) && count($categories)>0)
 
-                        <select name="category_id" id="category_id" class="form-control select2" required>
+                        <select name="category_id" id="category_id" class="form-control select2" required onchange="getSubCategories()">
                             <option value=""></option>
                             @foreach($categories as $cat)
                             <option value="{{$cat->id ?? ''}}">{{ $cat->name ?? '' }}</option>
@@ -38,6 +34,22 @@
                         @endif
                     </div>
 
+                    <div class="form-group">
+                        <label for="sub_category_id">Sub Category <span class="text-danger">*</span></label>
+                     
+                        <select name="sub_category_id" id="sub_category_id" class="form-control select2" required>
+                            <option value=""></option>
+                        </select>
+
+                    </div>
+
+                    
+                    <div class="form-group">
+                        <label for="name">Product Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}" required="required">
+                    </div>
+
+                    
                 </div>
 
 
@@ -346,24 +358,26 @@
             </div>
             <div class="col-md-4">
 
-                <div class="cardDiv">
-                    <div class="form-title">
-                        <h3>Additional Info Info </h3>
-                    </div>
-                    <br />
-                    @if(!$brands->isEmpty())
-                    <div class="form-group">
-                        <label for="brand_id">Brand </label>
-                        <select name="brand_id" id="brand_id" class="form-control select2">
-                            <option value=""></option>
-                            @foreach($brands as $brand)
-                            <option @if(old('brand_id')==$brand->id) selected="selected" @endif value="{{ $brand->id }}">{{ $brand->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    @endif
-                </div>
-                <!-- /.box-body -->
+                <!--<div class="cardDiv">-->
+                <!--    <div class="form-title">-->
+                <!--        <h3>Additional Info Info </h3>-->
+                <!--    </div>-->
+                <!--    <br />-->
+                <!--    @if(!$brands->isEmpty())-->
+                <!--    <div class="form-group">-->
+                <!--        <label for="brand_id">Brand </label>-->
+                <!--        <select name="brand_id" id="brand_id" class="form-control select2">-->
+                <!--            <option value=""></option>-->
+                <!--            @foreach($brands as $brand)-->
+                <!--            <option @if(old('brand_id')==$brand->id) selected="selected" @endif value="{{ $brand->id }}">{{ $brand->name }}</option>-->
+                <!--            @endforeach-->
+                <!--        </select>-->
+                <!--    </div>-->
+                <!--    @endif-->
+                <!--</div>-->
+            </div>
+                
+            
 
     </form>
     <!-- </div> -->
@@ -422,6 +436,31 @@
         // alert(id)
         $('#productAtt' + id).remove();
     }
+    
+    
+    function getSubCategories(){
+        let cat_id = $('#category_id').val() ?? '';
+        if(cat_id == ''){
+            alert('First select the categoory');
+            return;
+        }
+        
+        $.ajax({
+            url: '/admin/getSubCategories/'+cat_id,
+            type: 'GET',
+            success: function(response){
+                let options = '<option value=""> -- Select Sub Category -- </option>';
+                
+                for(let i=0; i<response.length; i++){
+                    options+=`<option value="${response[i].id}">${response[i].name}</option>`;
+                }
+                
+                $('#sub_category_id').html(options);
+                
+            }
+        })
+    }
+    
 </script>
 
 @endsection

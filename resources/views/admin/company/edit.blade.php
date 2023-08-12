@@ -59,13 +59,13 @@
 
                         <div class="form-group">
                             <label for="contact">Contact Number</label>
-                            <input type="number" name="contact" id="contact" placeholder="Contact Number" class="form-control" value="{{ $company_detail->contact ?? '' }}"  onkeypress="return isNumberKey(event)" maxlength="10">
+                            <input type="text" name="contact" id="contact" placeholder="Contact Number" class="form-control" value="{{ $company_detail->contact ?? '' }}" >
                             <p>Use comma (,) as a separator for multiple contact numbers</p>
                         </div>
 
                         <div class="form-group">
                             <label for="contact_email">Contact Email </label>
-                            <input type="email" name="contact_email" id="contact_email" placeholder="Contact Email" class="form-control" value="{{ $company_detail->contact_email ?? '' }}">
+                            <input type="text" name="contact_email" id="contact_email" placeholder="Contact Email" class="form-control" value="{{ $company_detail->contact_email ?? '' }}">
                             <p>Use comma (,) as a separator for multiple email ids</p>
                         </div>
                     </div>

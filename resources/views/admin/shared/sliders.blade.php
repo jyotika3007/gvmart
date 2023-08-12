@@ -44,7 +44,7 @@
 
                             <a href="{{ route('admin.sliders.edit', $slider->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             
-                            <button onclick="return confirm('Are you sure you want to delete this slider?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button>
+                            <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
                             
 
                             </div>
@@ -55,10 +55,3 @@
         </tbody>
     </table>
 @endif
-
-
-@section('js')
-<script>
-   
-</script>
-@endsection
